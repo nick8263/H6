@@ -1,0 +1,46 @@
+﻿@page "/HSEQuestionPage/{country}/{site}"
+@page "/HSEQuestionPage"
+
+@using Models
+@inject MockData MockData
+
+<h3>Question List</h3>
+
+@if (questions != null && questions.Any()) {
+<table class="table">
+    <thead>
+        <tr>
+            <th>Active</th>
+            <th>Question</th>
+            <th>Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var question in questions) {
+            <tr>
+                <td><input class="form-check-input" type="checkbox" id="@($"question_{question.Id}")"></td>
+                <td>@question.PossibleQuestion</td>
+                <td>@(question.Options != null ? "Predefined" : "Free Text")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+} else {
+<p>No questions available.</p>
+}
+
+@code {
+    [Parameter]
+    public string Country { get; set; }
+
+    [Parameter]
+    public string Site { get; set; }
+
+    List<Question> questions;
+
+    protected override void OnInitialized() {
+        // Initialize with mock data
+        questions = MockData.GetQuestions();
+    }
+}
+

@@ -27,8 +27,7 @@
             <input type="text" class="form-control" @bind="o.PossibleOption">
             <button type="button" class="btn btn-danger" @onclick="(e) => RemoveOption(o)">Remove Option</button>
         </div>
-    }
-    
+    }    
     <div>
         <button type="button" class="btn btn-primary" @onclick="AddOption">Add Option</button>
     </div>
@@ -50,7 +49,12 @@
         if (newQuestion.PossibleQuestion == null) {
             return;
         }
-        MockData.AddQuestion(newQuestion);
+
+        if (selectedPredefined == "on") {
+            newQuestion.Options = newOptions;
+        }
+
+        MockData.AddQuestion(newQuestion); // Replace with 
 
         // Navigate back to the original page with updated list
         NavigationManager.NavigateTo("/questions");
