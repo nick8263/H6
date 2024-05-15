@@ -1,0 +1,33 @@
+﻿@page "/login"
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@inject NavigationManager Navigation
+
+<CascadingAuthenticationState>
+    <AuthorizeView>
+        <Authorized>
+            <p>You are already logged in.</p>
+            <button @onclick="Logout">Logout</button>
+        </Authorized>
+        <NotAuthorized>
+            <h1>Login</h1>
+            <button @onclick="LoginWithMicrosoft">Login with Microsoft</button>
+        </NotAuthorized>
+    </AuthorizeView>
+</CascadingAuthenticationState>
+
+@code {
+    private async Task LoginWithMicrosoft() {
+        var returnUrl = Navigation.ToAbsoluteUri(Navigation.Uri).ToString();
+        var authenticationProperties = new AuthenticationProperties { RedirectUri = returnUrl };
+        await Task.Run(() =>
+            Navigation.NavigateTo($"authentication/login?scheme=MicrosoftAccount", true)
+        );
+    }
+
+    private async Task Logout() {
+        await Task.Run(() =>
+            Navigation.NavigateTo("authentication/logout", true)
+        );
+    }
+}
