@@ -6,5 +6,6 @@
         public Country Country { get; set; }
         public Area Area { get; set; }
         public List<Answer> Answers { get; set; }
+        public User user { get; set; }
     }
 }
