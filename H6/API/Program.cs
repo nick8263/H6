@@ -1,6 +1,10 @@
 using API.DBContext;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using System;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.Identity.Web;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +14,8 @@ var connectionString = builder.Configuration.GetConnectionString("ApiConnection"
     throw new InvalidOperationException("Connection string 'ApiConnection' not found.");
 
 builder.Services.AddDbContext<DBCon>(options => options.UseMySQL(connectionString));
+
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -37,7 +43,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

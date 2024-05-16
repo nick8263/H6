@@ -19,13 +19,25 @@ namespace API.Migrations
                 .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("AnswerAnswerGroup", b =>
+                {
+                    b.Property<int>("AnswerGroupsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AnswersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AnswerGroupsId", "AnswersId");
+
+                    b.HasIndex("AnswersId");
+
+                    b.ToTable("AnswerAnswerGroup");
+                });
+
             modelBuilder.Entity("Models.Answer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int?>("AnswerGroupId")
                         .HasColumnType("int");
 
                     b.Property<string>("FreeTextAnswer")
@@ -35,9 +47,11 @@ namespace API.Migrations
                     b.Property<int>("QuestionId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<string>("SelectedAnswer")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
-                    b.HasIndex("AnswerGroupId");
+                    b.HasKey("Id");
 
                     b.HasIndex("QuestionId");
 
@@ -56,11 +70,16 @@ namespace API.Migrations
                     b.Property<int>("CountryId")
                         .HasColumnType("int");
 
+                    b.Property<int>("userId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AreaId");
 
                     b.HasIndex("CountryId");
+
+                    b.HasIndex("userId");
 
                     b.ToTable("AnswerGroups");
                 });
@@ -125,12 +144,7 @@ namespace API.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("QuestionGroupId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("QuestionGroupId");
 
                     b.ToTable("Questions");
                 });
@@ -156,12 +170,82 @@ namespace API.Migrations
                     b.ToTable("QuestionGroups");
                 });
 
-            modelBuilder.Entity("Models.Answer", b =>
+            modelBuilder.Entity("Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("AreaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CountryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AreaId");
+
+                    b.HasIndex("CountryId");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("OptionQuestion", b =>
+                {
+                    b.Property<int>("OptionsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuestionsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("OptionsId", "QuestionsId");
+
+                    b.HasIndex("QuestionsId");
+
+                    b.ToTable("OptionQuestion");
+                });
+
+            modelBuilder.Entity("QuestionQuestionGroup", b =>
+                {
+                    b.Property<int>("QuestionGroupsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuestionsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("QuestionGroupsId", "QuestionsId");
+
+                    b.HasIndex("QuestionsId");
+
+                    b.ToTable("QuestionQuestionGroup");
+                });
+
+            modelBuilder.Entity("AnswerAnswerGroup", b =>
                 {
                     b.HasOne("Models.AnswerGroup", null)
-                        .WithMany("Answers")
-                        .HasForeignKey("AnswerGroupId");
+                        .WithMany()
+                        .HasForeignKey("AnswerGroupsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
+                    b.HasOne("Models.Answer", null)
+                        .WithMany()
+                        .HasForeignKey("AnswersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Models.Answer", b =>
+                {
                     b.HasOne("Models.Question", "Question")
                         .WithMany()
                         .HasForeignKey("QuestionId")
@@ -185,9 +269,17 @@ namespace API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Models.User", "user")
+                        .WithMany()
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Area");
 
                     b.Navigation("Country");
+
+                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("Models.Option", b =>
@@ -195,13 +287,6 @@ namespace API.Migrations
                     b.HasOne("Models.Answer", null)
                         .WithMany("Options")
                         .HasForeignKey("AnswerId");
-                });
-
-            modelBuilder.Entity("Models.Question", b =>
-                {
-                    b.HasOne("Models.QuestionGroup", null)
-                        .WithMany("Questions")
-                        .HasForeignKey("QuestionGroupId");
                 });
 
             modelBuilder.Entity("Models.QuestionGroup", b =>
@@ -223,19 +308,58 @@ namespace API.Migrations
                     b.Navigation("Country");
                 });
 
+            modelBuilder.Entity("Models.User", b =>
+                {
+                    b.HasOne("Models.Area", "Area")
+                        .WithMany()
+                        .HasForeignKey("AreaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.Country", "Country")
+                        .WithMany()
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Area");
+
+                    b.Navigation("Country");
+                });
+
+            modelBuilder.Entity("OptionQuestion", b =>
+                {
+                    b.HasOne("Models.Option", null)
+                        .WithMany()
+                        .HasForeignKey("OptionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.Question", null)
+                        .WithMany()
+                        .HasForeignKey("QuestionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("QuestionQuestionGroup", b =>
+                {
+                    b.HasOne("Models.QuestionGroup", null)
+                        .WithMany()
+                        .HasForeignKey("QuestionGroupsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.Question", null)
+                        .WithMany()
+                        .HasForeignKey("QuestionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Models.Answer", b =>
                 {
                     b.Navigation("Options");
-                });
-
-            modelBuilder.Entity("Models.AnswerGroup", b =>
-                {
-                    b.Navigation("Answers");
-                });
-
-            modelBuilder.Entity("Models.QuestionGroup", b =>
-                {
-                    b.Navigation("Questions");
                 });
 #pragma warning restore 612, 618
         }

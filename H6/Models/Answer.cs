@@ -6,6 +6,7 @@
         public Question Question { get; set; }
         public string FreeTextAnswer { get; set; }
         public List<Option> Options { get; set; }
+        public List<AnswerGroup> AnswerGroups { get; set; }
         public string SelectedAnswer { get; set; }
     }
 }
