@@ -1,24 +1,27 @@
-﻿namespace App
+﻿using Models;
+using App.Pages;
+
+namespace App
 {
     public partial class MainPage : ContentPage
-    {
-        int count = 0;
+    {      
+
+        ApiAccess apiAccess { get; set; }
 
         public MainPage()
         {
             InitializeComponent();
+            apiAccess = new ApiAccess();
         }
 
-        private void OnCounterClicked(object sender, EventArgs e)
+        private async Task OnLoginClicked(object sender, EventArgs e)
         {
-            count++;
+            var result = await apiAccess.Login(new User { UserName = userNameEntry.Text, Password = passwordEntry.Text});
 
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
-            else
-                CounterBtn.Text = $"Clicked {count} times";
-
-            SemanticScreenReader.Announce(CounterBtn.Text);
+            if (result.Item2 == null)
+            {
+                await Navigation.PushAsync(new QuestionPage(result.Item1));
+            }
         }
     }
 

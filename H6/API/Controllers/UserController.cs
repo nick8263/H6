@@ -37,7 +37,41 @@ namespace API.Controllers
                 return BadRequest();
             }
 
-            return Ok(userExist);
+            return Ok();
+
+        }
+
+        [AllowAnonymous]
+        [HttpPost("AppLogin")]
+        public async Task<IActionResult> AppLogin(User user)
+        {
+            User? userExist = new();
+            try
+            {
+                userExist = await context.Users.FirstOrDefaultAsync(x => x.UserName == user.UserName && x.Password == user.Password);
+
+                if (userExist == null)
+                {
+                    return BadRequest();
+                }
+
+                QuestionGroup? questionGroup = await context.QuestionGroups
+                   .Include(x => x.Questions)
+                   .ThenInclude(x => x.Options)
+                   .FirstOrDefaultAsync(x => x.Area == user.Area && x.Country == user.Country);
+
+                if (questionGroup == null)
+                {
+                    return BadRequest();
+                }
+
+                return Ok(questionGroup);
+
+            }
+            catch
+            {
+                return BadRequest();
+            }           
 
         }
 
