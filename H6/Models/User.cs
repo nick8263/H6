@@ -13,5 +13,6 @@ namespace Models
         public string Password { get; set; }
         public Country Country { get; set; }
         public Area Area { get; set; }
+        public string Role { get; set; }
     }
 }
