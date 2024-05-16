@@ -1,4 +1,4 @@
-﻿@page "/HSEQuestionPage/{country}/{site}"
+﻿@page "/HSEQuestionPage/{id}"
 @page "/HSEQuestionPage"
 
 @using Models
@@ -31,16 +31,13 @@
 
 @code {
     [Parameter]
-    public string Country { get; set; }
-
-    [Parameter]
-    public string Site { get; set; }
+    public string Id { get; set; }
 
     List<Question> questions;
 
     protected override void OnInitialized() {
         // Initialize with mock data
-        questions = MockData.GetQuestions();
+        questions = MockData.GetQuestionsForID(Int32.Parse(Id));
     }
 }
 
