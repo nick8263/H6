@@ -4,9 +4,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Identity.Client;
+using NuGet.Protocol;
 
 namespace API.Controllers
 {
+    [Authorize()]
     [Route("api/[controller]")]
     [ApiController]
     public class HomeController : Controller
@@ -16,90 +20,148 @@ namespace API.Controllers
         public HomeController(DBCon _context)
         {
             context = _context;
-        }
+        }       
+
+       
 
         #region Create
         [HttpPost("CreateQuestion")]
         public async Task<IActionResult> CreateQuestion(Question question)
         {
-            await context.Questions.AddAsync(question);
-
-            if (await context.SaveChangesAsync() == 0)
+            try
             {
-                return BadRequest();
+                await context.Questions.AddAsync(question);
+
+                if (await context.SaveChangesAsync() == 0)
+                {
+                    return BadRequest("Couldn't add this question");
+                }
             }
+            catch
+            {
+                return BadRequest("Error CQuestion");
+            }
+            
             return Ok();
         }
 
         [HttpPost("CreateCountry")]
         public async Task<IActionResult> CreateCountry(Country country)
         {
-            await context.Countrys.AddAsync(country);
-
-            if (await context.SaveChangesAsync() == 0)
+            try
             {
-                return BadRequest();
+                await context.Countrys.AddAsync(country);
+
+                if (await context.SaveChangesAsync() == 0)
+                {
+                    return BadRequest("Couldn't add this city");
+                }
             }
+            catch
+            {
+                return BadRequest("Error CCountry");
+            }
+            
             return Ok();
         }
 
         [HttpPost("CreateArea")]
         public async Task<IActionResult> CreateArea(Area area)
         {
-            await context.Areas.AddAsync(area);
-
-            if (await context.SaveChangesAsync() == 0)
+            try
             {
-                return BadRequest();
+                await context.Areas.AddAsync(area);
+
+                if (await context.SaveChangesAsync() == 0)
+                {
+                    return BadRequest("Couldn't add this area");
+                }
             }
+            catch
+            {
+                return BadRequest("Error CArea");
+            }
+           
             return Ok();
         }
 
         [HttpPost("CreateOption")]
         public async Task<IActionResult> CreateOption(Option option)
         {
-            await context.Options.AddAsync(option);
-
-            if (await context.SaveChangesAsync() == 0)
+            try
             {
-                return BadRequest();
+                await context.Options.AddAsync(option);
+
+                if (await context.SaveChangesAsync() == 0)
+                {
+                    return BadRequest("Couldn't add this option");
+                }
             }
+            catch
+            {
+                return BadRequest("Error COption");
+            }
+            
             return Ok();
         }
 
         [HttpPost("CreateAnswer")]
         public async Task<IActionResult> CreateAnswer(Answer answer)
         {
-            await context.Answers.AddAsync(answer);
-
-            if (await context.SaveChangesAsync() == 0)
+            try
             {
-                return BadRequest();
+                await context.Answers.AddAsync(answer);
+
+                if (await context.SaveChangesAsync() == 0)
+                {
+                    return BadRequest("Couldn't add this answer");
+                }
             }
+            catch
+            {
+                return BadRequest("Error CAnswer");
+            }
+            
             return Ok();
         }
 
         [HttpPost("CreateAnswerGroup")]
         public async Task<IActionResult> CreateAnswerGroup(AnswerGroup answerGroup)
         {
-            await context.AnswerGroups.AddAsync(answerGroup);
-
-            if (await context.SaveChangesAsync() == 0)
+            try
             {
-                return BadRequest();
+                await context.AnswerGroups.AddAsync(answerGroup);
+
+                if (await context.SaveChangesAsync() == 0)
+                {
+                    return BadRequest("Couldn't add this answergroup");
+                }
             }
+            catch
+            {
+                return BadRequest("Error CAnswerGroup");
+            }
+            
             return Ok();
         }
 
         [HttpPost("CreateQuestionGroup")]
         public async Task<IActionResult> CreateQuestionGroup(QuestionGroup questionGroup)
         {
-            await context.QuestionGroups.AddAsync(questionGroup);
-
-            if (await context.SaveChangesAsync() == 0)
+            try
             {
-                return BadRequest();
+                await context.QuestionGroups.AddAsync(questionGroup);
+
+                if (await context.SaveChangesAsync() == 0)
+                {
+                    return BadRequest("Couldn't add this questiongroup");
+                }
             }
+            catch
+            {
+                return BadRequest("Error CQuestionGroup");
+            }
+           
             return Ok();
         }
         #endregion
@@ -110,13 +172,29 @@ namespace API.Controllers
         [HttpGet("ReadAllQuestions")]
         public async Task<IActionResult> ReadAllQuestions()
         {
-            return Ok(context.Questions);
+            try
+            {
+                return Ok(context.Questions.Include(x => x.Options));
+            }
+            catch
+            {
+                return BadRequest();
+            }
+            
         }
 
         [HttpGet("ReadQuestion")]
         public async Task<IActionResult> ReadQuestion(int id)
         {
-            return Ok(context.Questions.FirstOrDefaultAsync(x => x.Id == id));
+            try
+            {
+                return Ok(context.Questions.Include(x => x.Options).FirstOrDefaultAsync(x => x.Id == id));
+            }
+            catch
+            {
+                return BadRequest();
+            }
+            
         }
         #endregion
 
@@ -124,13 +202,29 @@ namespace API.Controllers
         [HttpGet("ReadAllCountries")]
         public async Task<IActionResult> ReadAllCountries()
         {
-            return Ok(context.Countrys);
+            try
+            {
+                return Ok(context.Countrys);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+            
         }
 
         [HttpGet("ReadCountry")]
         public async Task<IActionResult> ReadCountry(int id)
         {
-            return Ok(context.Countrys.FirstOrDefaultAsync(x => x.Id == id));
+            try
+            {
+                return Ok(context.Countrys.FirstOrDefaultAsync(x => x.Id == id));
+            }
+            catch
+            {
+                return BadRequest();
+            }
+           
         }
         #endregion
 
@@ -138,13 +232,29 @@ namespace API.Controllers
         [HttpGet("ReadAllAreas")]
         public async Task<IActionResult> ReadAllAreas()
         {
-            return Ok(context.Areas);
+            try
+            {
+                return Ok(context.Areas);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+           
         }
 
         [HttpGet("ReadArea")]
         public async Task<IActionResult> ReadArea(int id)
         {
-            return Ok(context.Areas.FirstOrDefaultAsync(x => x.Id == id));
+            try
+            {
+                return Ok(context.Areas.FirstOrDefaultAsync(x => x.Id == id));
+            }
+            catch
+            {
+                return BadRequest();
+            }
+            
         }
         #endregion
 
@@ -152,13 +262,29 @@ namespace API.Controllers
         [HttpGet("ReadAllOptions")]
         public async Task<IActionResult> ReadAllOptions()
         {
-            return Ok(context.Options);
+            try
+            {
+                return Ok(context.Options);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+            
         }
 
         [HttpGet("ReadOption")]
         public async Task<IActionResult> ReadOption(int id)
         {
-            return Ok(context.Options.FirstOrDefaultAsync(x => x.Id == id));
+            try
+            {
+                return Ok(context.Options.FirstOrDefaultAsync(x => x.Id == id));
+            }
+            catch
+            {
+                return BadRequest();
+            }
+            
         }
         #endregion
 
@@ -166,13 +292,29 @@ namespace API.Controllers
         [HttpGet("ReadAllAnswers")]
         public async Task<IActionResult> ReadAllAnswers()
         {
-            return Ok(context.Answers);
+            try
+            {
+                return Ok(context.Answers.Include(x => x.Question).ThenInclude(x => x.Options));
+            }
+            catch
+            {
+                return BadRequest();
+            }
+            
         }
 
         [HttpGet("ReadAnswer")]
         public async Task<IActionResult> ReadAnswer(int id)
         {
-            return Ok(context.Answers.FirstOrDefaultAsync(x => x.Id == id));
+            try
+            {
+                return Ok(context.Answers.Include(x => x.Question).ThenInclude(x => x.Options).FirstOrDefaultAsync(x => x.Id == id));
+            }
+            catch
+            {
+                return BadRequest();    
+            }
+            
         }
         #endregion
 
@@ -180,13 +322,41 @@ namespace API.Controllers
         [HttpGet("ReadAllAnswerGroups")]
         public async Task<IActionResult> ReadAllAnswerGroups()
         {
-            return Ok(context.AnswerGroups);
+            try
+            {
+                return Ok(context.AnswerGroups
+                    .Include(x => x.Country)
+                    .Include(x => x.Area)
+                    .Include(x => x.Answers)
+                    .ThenInclude(x => x.Question)
+                    .ThenInclude(x => x.Options)
+                    );
+            }
+            catch
+            {
+                return BadRequest();
+            }
+            
         }
 
         [HttpGet("ReadAnswerGroup")]
         public async Task<IActionResult> ReadAnswerGroup(int id)
         {
-            return Ok(context.AnswerGroups.FirstOrDefaultAsync(x => x.Id == id));
+            try
+            {
+                return Ok(context.AnswerGroups
+                    .Include(x => x.Country)
+                    .Include(x => x.Area)
+                    .Include(x => x.Answers)
+                    .ThenInclude(x => x.Question)
+                    .ThenInclude(x => x.Options)
+                    .FirstOrDefaultAsync(x => x.Id == id));
+            }
+            catch
+            {
+                return BadRequest();
+            }
+            
         }
         #endregion
 
@@ -194,13 +364,39 @@ namespace API.Controllers
         [HttpGet("ReadAllQuestionGroups")]
         public async Task<IActionResult> ReadAllQuestionGroups()
         {
-            return Ok(context.QuestionGroups);
+            try
+            {
+                return Ok(context.QuestionGroups
+                    .Include(x => x.Area)
+                    .Include(x => x.Country)
+                    .Include(x => x.Questions)
+                    .ThenInclude(x => x.Options)
+                    );
+            }
+            catch
+            {
+                return BadRequest();
+            }
+            
         }
 
         [HttpGet("ReadQuestionGroup")]
         public async Task<IActionResult> ReadQuestionGroup(int id)
         {
-            return Ok(context.QuestionGroups.FirstOrDefaultAsync(x => x.Id == id));
+            try
+            {
+                return Ok(context.QuestionGroups
+                    .Include(x => x.Area)
+                    .Include(x => x.Country)
+                    .Include(x => x.Questions)
+                    .ThenInclude(x => x.Options)
+                    .FirstOrDefaultAsync(x => x.Id == id));
+            }
+            catch
+            {
+                return BadRequest();
+            }
+            
         }
         #endregion
 
@@ -210,105 +406,161 @@ namespace API.Controllers
         [HttpPut("UpdateQuestion")]
         public async Task<IActionResult> UpdateQuestion(Question question)
         {
-            await Task.Run(() => {
-                context.Questions.Update(question);
-            }); 
+            try
+            {
+                await Task.Run(() => {
+                    context.Questions.Update(question);
+                });
 
-            
-            if (await context.SaveChangesAsync() == 0)
+
+                if (await context.SaveChangesAsync() == 0)
+                {
+                    return BadRequest();
+                }
+            }
+            catch
             {
                 return BadRequest();
             }
+            
             return Ok();
         }
 
         [HttpPut("UpdateCountry")]
         public async Task<IActionResult> UpdateCountry(Country country)
         {
-            await Task.Run(() => {
-                context.Countrys.Update(country);
-            });
-           
+            try
+            {
+                await Task.Run(() => {
+                    context.Countrys.Update(country);
+                });
 
-            if (await context.SaveChangesAsync() == 0)
+
+                if (await context.SaveChangesAsync() == 0)
+                {
+                    return BadRequest();
+                }
+            }
+            catch
             {
                 return BadRequest();
             }
+           
             return Ok();
         }
 
         [HttpPut("UpdateArea")]
         public async Task<IActionResult> UpdateArea(Area area)
         {
-            await Task.Run(() => {
-                context.Areas.Update(area);
-            });
-            
+            try
+            {
+                await Task.Run(() => {
+                    context.Areas.Update(area);
+                });
 
-            if (await context.SaveChangesAsync() == 0)
+
+                if (await context.SaveChangesAsync() == 0)
+                {
+                    return BadRequest();
+                }
+            }
+            catch
             {
                 return BadRequest();
             }
+            
             return Ok();
         }
 
         [HttpPut("UpdateOption")]
         public async Task<IActionResult> UpdateOption(Option option)
         {
-            await Task.Run(() => {
-                context.Options.Update(option);
-            });
-           
+            try
+            {
+                await Task.Run(() => {
+                    context.Options.Update(option);
+                });
 
-            if (await context.SaveChangesAsync() == 0)
+
+                if (await context.SaveChangesAsync() == 0)
+                {
+                    return BadRequest();
+                }
+            }
+            catch
             {
                 return BadRequest();
             }
+           
             return Ok();
         }
 
         [HttpPut("UpdateAnswer")]
         public async Task<IActionResult> UpdateAnswer(Answer answer)
         {
-            await Task.Run(() => {
-                context.Answers.Update(answer);
-            });
-            
+            try
+            {
+                await Task.Run(() => {
+                    context.Answers.Update(answer);
+                });
 
-            if (await context.SaveChangesAsync() == 0)
+
+                if (await context.SaveChangesAsync() == 0)
+                {
+                    return BadRequest();
+                }
+            }
+            catch
             {
                 return BadRequest();
             }
+           
             return Ok();
         }
 
         [HttpPut("UpdateAnswerGroup")]
         public async Task<IActionResult> UpdateAnswerGroup(AnswerGroup answerGroup)
         {
-            await Task.Run(() => {
-                context.AnswerGroups.Update(answerGroup);
-            });
-            
+            try
+            {
+                await Task.Run(() => {
+                    context.AnswerGroups.Update(answerGroup);
+                });
 
-            if (await context.SaveChangesAsync() == 0)
+
+                if (await context.SaveChangesAsync() == 0)
+                {
+                    return BadRequest();
+                }
+            }
+            catch
             {
                 return BadRequest();
             }
+            
             return Ok();
         }
 
         [HttpPut("UpdateQuestionGroup")]
         public async Task<IActionResult> UpdateQuestionGroup(QuestionGroup questionGroup)
         {
-            await Task.Run(() => {
-                context.QuestionGroups.Update(questionGroup);
-            });
-            
+            try
+            {
+                await Task.Run(() => {
+                    context.QuestionGroups.Update(questionGroup);
+                });
 
-            if (await context.SaveChangesAsync() == 0)
+
+                if (await context.SaveChangesAsync() == 0)
+                {
+                    return BadRequest();
+                }
+            }
+            catch
             {
                 return BadRequest();
             }
+           
             return Ok();
         }
         #endregion
@@ -317,98 +569,154 @@ namespace API.Controllers
         [HttpDelete("DeleteQuestion")]
         public async Task<IActionResult> DeleteQuestion(int id)
         {
-            Question question = new() { Id = id };
-            context.Questions.Attach(question);
-            context.Questions.Remove(question);
+            try
+            {
+                Question question = new() { Id = id };
+                context.Questions.Attach(question);
+                context.Questions.Remove(question);
 
-            if (await context.SaveChangesAsync() == 0)
+                if (await context.SaveChangesAsync() == 0)
+                {
+                    return BadRequest();
+                }
+            }
+            catch
             {
                 return BadRequest();
             }
+            
             return Ok();
         }
 
         [HttpDelete("DeleteCountry")]
         public async Task<IActionResult> DeleteCountry(int id)
         {
-            Country country = new() { Id = id };
-            context.Countrys.Attach(country);
-            context.Countrys.Remove(country);
+            try
+            {
+                Country country = new() { Id = id };
+                context.Countrys.Attach(country);
+                context.Countrys.Remove(country);
 
-            if (await context.SaveChangesAsync() == 0)
+                if (await context.SaveChangesAsync() == 0)
+                {
+                    return BadRequest();
+                }
+            }
+            catch
             {
                 return BadRequest();
             }
+            
             return Ok();
         }
 
         [HttpDelete("DeleteArea")]
         public async Task<IActionResult> DeleteArea(int id)
         {
-            Area area = new() { Id = id };
-            context.Areas.Attach(area);
-            context.Areas.Remove(area);
+            try
+            {
+                Area area = new() { Id = id };
+                context.Areas.Attach(area);
+                context.Areas.Remove(area);
 
-            if (await context.SaveChangesAsync() == 0)
+                if (await context.SaveChangesAsync() == 0)
+                {
+                    return BadRequest();
+                }
+            }
+            catch
             {
                 return BadRequest();
             }
+           
             return Ok();
         }
 
         [HttpDelete("DeleteOption")]
         public async Task<IActionResult> DeleteOption(int id)
         {
-            Option option = new() { Id = id };
-            context.Options.Attach(option);
-            context.Options.Remove(option);
+            try
+            {
+                Option option = new() { Id = id };
+                context.Options.Attach(option);
+                context.Options.Remove(option);
 
-            if (await context.SaveChangesAsync() == 0)
+                if (await context.SaveChangesAsync() == 0)
+                {
+                    return BadRequest();
+                }
+            }
+            catch
             {
                 return BadRequest();
             }
+            
             return Ok();
         }
 
         [HttpDelete("DeleteAnswer")]
         public async Task<IActionResult> DeleteAnswer(int id)
         {
-            Answer answer = new() { Id = id };
-            context.Answers.Attach(answer);
-            context.Answers.Remove(answer);
+            try
+            {
+                Answer answer = new() { Id = id };
+                context.Answers.Attach(answer);
+                context.Answers.Remove(answer);
 
-            if (await context.SaveChangesAsync() == 0)
+                if (await context.SaveChangesAsync() == 0)
+                {
+                    return BadRequest();
+                }
+            }
+            catch
             {
                 return BadRequest();
             }
+            
             return Ok();
         }
 
         [HttpDelete("DeleteAnswerGroup")]
         public async Task<IActionResult> DeleteAnswerGroup(int id)
         {
-            AnswerGroup answerGroup = new() { Id = id };
-            context.AnswerGroups.Attach(answerGroup);
-            context.AnswerGroups.Remove(answerGroup);
+            try
+            {
+                AnswerGroup answerGroup = new() { Id = id };
+                context.AnswerGroups.Attach(answerGroup);
+                context.AnswerGroups.Remove(answerGroup);
 
-            if (await context.SaveChangesAsync() == 0)
+                if (await context.SaveChangesAsync() == 0)
+                {
+                    return BadRequest();
+                }
+            }
+            catch
             {
                 return BadRequest();
             }
+            
             return Ok();
         }
 
         [HttpDelete("DeleteQuestionGroup")]
         public async Task<IActionResult> DeleteQuestionGroup(int id)
         {
-            QuestionGroup questionGroup = new() { Id = id };
-            context.QuestionGroups.Attach(questionGroup);
-            context.QuestionGroups.Remove(questionGroup);
+            try
+            {
+                QuestionGroup questionGroup = new() { Id = id };
+                context.QuestionGroups.Attach(questionGroup);
+                context.QuestionGroups.Remove(questionGroup);
 
-            if (await context.SaveChangesAsync() == 0)
+                if (await context.SaveChangesAsync() == 0)
+                {
+                    return BadRequest();
+                }
+            }
+            catch
             {
                 return BadRequest();
             }
+            
             return Ok();
         }
         #endregion

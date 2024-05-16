@@ -4,5 +4,6 @@
     {
         public int Id { get; set; }
         public string PossibleOption { get; set; }
+        public List<Question> Questions { get; set; }
     }
 }

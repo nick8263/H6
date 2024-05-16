@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using MySqlX.XDevAPI.Common;
 
 
 namespace API.DBContext
@@ -16,6 +17,7 @@ namespace API.DBContext
         public DbSet<Option> Options { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<QuestionGroup> QuestionGroups { get; set; }
+        public DbSet<User> Users { get; set; }
 
 
         public DBCon()
@@ -28,7 +30,7 @@ namespace API.DBContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
+           
         }
     }
 }
