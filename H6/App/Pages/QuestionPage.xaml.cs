@@ -3,8 +3,9 @@ using Models;
 public partial class QuestionPage : ContentPage
 {
 
-	public QuestionPage(QuestionGroup questionGroup)
+	public QuestionPage()
 	{
-		questionStack.Children.Add(new Entry() { Text = "hej"});
-	}
+        InitializeComponent();
+        questionStack.Children.Add(new Entry() { Text = "hej" });
+    }
 }
