@@ -63,6 +63,10 @@ namespace WebSite.Components {
             }
         }
 
+        public Question GetQuestion(int id) {
+            return _questions.FirstOrDefault(q => q.Id == id);
+        }
+
         public Area GetArea(int id) {
             return _areas.FirstOrDefault(a => a.Id == id);
         }
