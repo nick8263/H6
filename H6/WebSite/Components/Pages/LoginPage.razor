@@ -1,33 +1,65 @@
 ﻿@page "/login"
-@using Microsoft.AspNetCore.Components.Authorization
-@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
-@inject NavigationManager Navigation
+@using WebSite.Components.Managers
+@using Models
+@inject NavigationManager NavigationManager
+@inject MockData MockData
+@inject ISessionService ServiceManager
 
-<CascadingAuthenticationState>
-    <AuthorizeView>
-        <Authorized>
-            <p>You are already logged in.</p>
-            <button @onclick="Logout">Logout</button>
-        </Authorized>
-        <NotAuthorized>
-            <h1>Login</h1>
-            <button @onclick="LoginWithMicrosoft">Login with Microsoft</button>
-        </NotAuthorized>
-    </AuthorizeView>
-</CascadingAuthenticationState>
+<h3>Login</h3>
+
+@if (!isAuthenticated) {
+    <form>
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="email" class="form-control" @bind="user.UserName" />
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" class="form-control" @bind="user.Password" />
+        </div>
+        @if (!isAuthenticated && !string.IsNullOrEmpty(errorMessage)) {
+            <div class="alert alert-danger" role="alert">
+                @errorMessage
+            </div>
+        }
+        <button type="button" class="btn btn-primary" @onclick="Submit">Login</button>
+    </form>
+}
 
 @code {
-    private async Task LoginWithMicrosoft() {
-        var returnUrl = Navigation.ToAbsoluteUri(Navigation.Uri).ToString();
-        var authenticationProperties = new AuthenticationProperties { RedirectUri = returnUrl };
-        await Task.Run(() =>
-            Navigation.NavigateTo($"authentication/login?scheme=MicrosoftAccount", true)
-        );
+    private bool isAuthenticated { get; set;} 
+    private string errorMessage { get; set; }
+    private User user { get; set; }
+
+    [Inject]
+    ISessionService SessionManager { get; set; }
+
+    protected override async Task OnInitializedAsync() {
+        user = new User {
+            Area = new Area(),
+            Country = new Country(),
+            Password = "",
+            Id = 0,
+            Role = "",
+            UserName = ""
+        };    
+        if (isAuthenticated) {
+            // Redirect to another page if the user is already authenticated
+            NavigationManager.NavigateTo("/dashboard");
+        }
+
+        base.OnInitialized();
     }
 
-    private async Task Logout() {
-        await Task.Run(() =>
-            Navigation.NavigateTo("authentication/logout", true)
-        );
+    private async Task Submit() {
+        user = MockData.GetUser(user.UserName, user.Password);
+        if (user == null) {
+            return; // Implement error handling
+        }
+        SessionManager.MarkUserAsAuthenticated(user);
+        if (SessionManager.GetAuthenticationState()) {
+            NavigationManager.NavigateTo("/dashboard");
+        }
     }
+
 }

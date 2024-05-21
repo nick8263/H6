@@ -6,8 +6,11 @@ using System.Linq;
 namespace WebSite.Components {
     public class MockData {
         private static MockData _instance;
-        private List<Question> _questions;
-        private List<QuestionGroup> _groups = new List<QuestionGroup>();
+        private static List<Question> _questions;
+        private static List<QuestionGroup> _groups = new List<QuestionGroup>();
+        private static List<User> _users = new List<User>();
+        private static List<Area> _areas = new List<Area>();
+        private static List<Country> _countries = new List<Country>();
         private QuestionGroup _group;
         
         public MockData() {
@@ -29,13 +32,26 @@ namespace WebSite.Components {
                 Options = null // No predefined options for this question
             }
             };
+            Area area = new Area { Id = 1, PossibleArea = "Test Area" };
+            _areas.Add(area);
+            Country country = new Country { Id = 1, PossibleCountry = "Test Country" };
+            _countries.Add(country);
             _group = new QuestionGroup() {
                 Id = 1,
                 Questions = _questions,
-                Area = new Area { Id = 1, PossibleArea = "Test Area"},
-                Country = new Country { Id = 1, PossibleCountry = "Test Country"}
+                Area = area,
+                Country = country
             };
             _groups.Add(_group);
+            User user = new User {
+                Area = area,
+                Country = country,
+                Id = 1,
+                Password = "admin",
+                Role = "admin",
+                UserName = "admin"
+            };
+            _users.Add(user);
         }
 
         public static MockData Instance {
@@ -47,12 +63,32 @@ namespace WebSite.Components {
             }
         }
 
+        public Area GetArea(int id) {
+            return _areas.FirstOrDefault(a => a.Id == id);
+        }
+
+        public Country GetCountry(int id) {
+            return _countries.FirstOrDefault(c => c.Id == id);
+        }
+
+        public QuestionGroup GetQuestionGroup(int areaId, int countryId) {
+            return _groups.FirstOrDefault(g => g.Area.Id == areaId && g.Country.Id == countryId);
+        }
+
         public List<Question> GetQuestions() {
             return _questions;
         }
 
         public List<Question> GetQuestionsForID(int id) {
             return _groups.FirstOrDefault(g => g.Id == id).Questions;
+        }
+
+        public User GetUser(string username, string password) {
+            return _users.FirstOrDefault(u => u.UserName == username && u.Password == password);
+        }
+
+        public List<User> GetUsers() {
+            return _users;
         }
 
         public void AddQuestion(Question question) {

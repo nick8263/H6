@@ -1,5 +1,4 @@
-﻿@page "/HSEQuestionPage/{id}"
-@page "/HSEQuestionPage"
+﻿@page "/HSEQuestionPage/"
 
 @using Models
 @inject MockData MockData
@@ -30,7 +29,6 @@
 }
 
 @code {
-    [Parameter]
     public string Id { get; set; }
 
     List<Question> questions;
