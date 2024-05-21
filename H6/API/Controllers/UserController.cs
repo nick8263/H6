@@ -2,7 +2,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using Models;
+using NuGet.Common;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace API.Controllers
 {
@@ -12,13 +18,23 @@ namespace API.Controllers
     public class UserController : Controller
     {
         private DBCon context;
-
-        public UserController(DBCon _context)
+        private IConfiguration _config;
+        public UserController(DBCon _context, IConfiguration config)
         {
             context = _context;
+            _config = config;
         }
 
         [AllowAnonymous]
+        [HttpGet("GetToken")]
+        public async Task<IActionResult> GetToken()
+        {
+            
+
+            return Ok(GenerateJSONWebToken());
+
+        }
+
         [HttpPost("Login")]
         public async Task<IActionResult> Login(User user)
         {
@@ -27,7 +43,7 @@ namespace API.Controllers
             {
                 userExist = await context.Users.FirstOrDefaultAsync(x => x.UserName == user.UserName && x.Password == user.Password) == null;
 
-                if (!userExist)
+                if (userExist)
                 {
                     return BadRequest();
                 }
@@ -166,6 +182,20 @@ namespace API.Controllers
             }
 
             return Ok();
+        }
+
+        private string GenerateJSONWebToken()
+        {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(_config["Jwt:Issuer"],
+              _config["Jwt:Issuer"],
+              null,
+              expires: DateTime.Now.AddMinutes(120),
+              signingCredentials: credentials);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }
