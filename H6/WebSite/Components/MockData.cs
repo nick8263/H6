@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace WebSite.Components {
     public class MockData {
@@ -52,6 +53,48 @@ namespace WebSite.Components {
                 UserName = "admin"
             };
             _users.Add(user);
+
+            area = new Area { Id = 2, PossibleArea = "Test Area 2" };
+            _areas.Add(area);
+            country = new Country { Id = 2, PossibleCountry = "Test Country 2" };
+            _countries.Add(country);
+            user = new User {
+                Area = area,
+                Country = country,
+                Id = 2,
+                Password = "hse",
+                Role = "hse",
+                UserName = "hse"
+            };
+            _users.Add(user);
+
+            List<Question> temp = new List<Question> {
+            new Question {
+                Id = 3,
+                PossibleQuestion = "What is your favorite color?",
+                Options = new List<Option>
+                {
+                    new Option { Id = 4, PossibleOption = "Purple" },
+                    new Option { Id = 5, PossibleOption = "White" },
+                    new Option { Id = 6, PossibleOption = "Black" }
+                }
+            },
+            new Question {
+                Id = 4,
+                PossibleQuestion = "How old are you now?",
+                Options = null // No predefined options for this question
+            }
+            };
+            foreach (Question question in temp) {
+                _questions.Add(question);
+            }
+            _group = new QuestionGroup() {
+                Id = 2,
+                Questions = temp,
+                Area = area,
+                Country = country
+            };
+            _groups.Add(_group);
         }
 
         public static MockData Instance {

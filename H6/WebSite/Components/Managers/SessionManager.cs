@@ -12,15 +12,12 @@ namespace WebSite.Components.Managers {
         private static User loggenInUser;  
         private static QuestionGroup QuestionGroup;
 
-        [Inject]
-        MockData MockData { get; set; }
-
         public event Action AuthenticationStateChanged;
 
         private void NotifyStateChanged() => AuthenticationStateChanged?.Invoke();
 
-        public void ChangeGroup(int countryId, int areaId) {
-            QuestionGroup = MockData.GetQuestionGroup(areaId, countryId);
+        public void ChangeGroup(QuestionGroup questionGroup) {
+            QuestionGroup = questionGroup;
         }
 
         public Area GetArea() {
@@ -51,13 +48,14 @@ namespace WebSite.Components.Managers {
             return loggenInUser;
         }
 
-        public void MarkUserAsAuthenticated(User user) {
+        public void MarkUserAsAuthenticated(User user, QuestionGroup questionGroup) {
             User temp = user;   
             if (temp != null) {
                 loggenInUser = user;
                 isAuthenticated = true;
                 isAdmin = user.Role == "admin";
                 isHSEAdmin = user.Role == "hse";
+                QuestionGroup = questionGroup;
             }
             NotifyStateChanged();
         }

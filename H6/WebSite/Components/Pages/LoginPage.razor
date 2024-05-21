@@ -56,7 +56,8 @@
         if (user == null) {
             return; // Implement error handling
         }
-        SessionManager.MarkUserAsAuthenticated(user);
+        QuestionGroup questionGroup = MockData.GetQuestionGroup(user.Area.Id, user.Country.Id);
+        SessionManager.MarkUserAsAuthenticated(user, questionGroup);
         if (SessionManager.GetAuthenticationState()) {
             NavigationManager.NavigateTo("/dashboard");
         }

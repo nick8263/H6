@@ -11,8 +11,8 @@ namespace WebSite.Components.Managers {
         Country GetCountry();
         string GetRole();
         QuestionGroup GetQuestionGroup();
-        void ChangeGroup(int countryId, int areaId);
-        void MarkUserAsAuthenticated(User user);
+        void ChangeGroup(QuestionGroup questionGroup);
+        void MarkUserAsAuthenticated(User user, QuestionGroup questionGroup);
         void MarkUserAsLoggedOut();
         User GetUser();
     }

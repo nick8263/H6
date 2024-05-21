@@ -64,6 +64,7 @@
 
     void SaveChanges() {
         // Update question in database
+        MockData.EditQuestion(question);
         NavigationManager.NavigateTo("/questions");
     }
 }
