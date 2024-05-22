@@ -148,20 +148,56 @@ namespace API.Controllers
         [HttpPost("CreateQuestionGroup")]
         public async Task<IActionResult> CreateQuestionGroup(QuestionGroup questionGroup)
         {
+
+            // Ensure the Area and Country exist
+            var existingArea = await context.Areas.FindAsync(questionGroup.Area.Id);
+            var existingCountry = await context.Countrys.FindAsync(questionGroup.Country.Id);
+
+            if (existingArea == null || existingCountry == null)
+            {
+                return NotFound("Specified Area or Country not found");
+            }
+
+            // Initialize the QuestionGroup with existing references
+            var newQuestionGroup = new QuestionGroup
+            {
+                Country = existingCountry,
+                Area = existingArea,
+                Questions = new List<Question>()
+            };
+
+            // Adding the questions to the QuestionGroup
+            foreach (var question in questionGroup.Questions)
+            {
+                // Create a new Question with its Options
+                var newQuestion = new Question
+                {
+                    PossibleQuestion = question.PossibleQuestion,
+                    IsMultiple = question.IsMultiple,
+                    Options = question.Options?.Select(option => new Option
+                    {
+                        PossibleOption = option.PossibleOption
+                    }).ToList()
+                };
+
+                newQuestionGroup.Questions.Add(newQuestion);
+            }
+
+            // Add the new QuestionGroup to the context
+            await context.QuestionGroups.AddAsync(newQuestionGroup);
+
             try
             {
-                await context.QuestionGroups.AddAsync(questionGroup);
-
                 if (await context.SaveChangesAsync() == 0)
                 {
-                    return BadRequest("Couldn't add this questiongroup");
+                    return BadRequest("Couldn't add this question group");
                 }
             }
-            catch
+            catch (Exception e)
             {
-                return BadRequest("Error CQuestionGroup");
+                return BadRequest("Error creating QuestionGroup\n" + e.Message);
             }
-           
+
             return Ok();
         }
         #endregion

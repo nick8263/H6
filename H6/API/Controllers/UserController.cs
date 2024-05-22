@@ -36,7 +36,7 @@ namespace API.Controllers
         }
 
         [HttpPost("Login")]
-        public async Task<IActionResult> Login(User user)
+        public async Task<IActionResult> Login(LoginModel user)
         {
             bool userExist = false;
             try
@@ -59,7 +59,7 @@ namespace API.Controllers
 
         [AllowAnonymous]
         [HttpPost("AppLogin")]
-        public async Task<IActionResult> AppLogin(User user)
+        public async Task<IActionResult> AppLogin(LoginModel user)
         {
             User? userExist = new();
             try
@@ -74,7 +74,7 @@ namespace API.Controllers
                 QuestionGroup? questionGroup = await context.QuestionGroups
                    .Include(x => x.Questions)
                    .ThenInclude(x => x.Options)
-                   .FirstOrDefaultAsync(x => x.Area == user.Area && x.Country == user.Country);
+                   .FirstOrDefaultAsync(x => x.Area == userExist.Area && x.Country == userExist.Country);
 
                 if (questionGroup == null)
                 {
@@ -96,16 +96,21 @@ namespace API.Controllers
         {
             try
             {
+                user.Country = await context.Countrys.FindAsync(user.Country.Id);
+                user.Area = await context.Areas.FindAsync(user.Area.Id);
+
                 await context.Users.AddAsync(user);
+
+
 
                 if (await context.SaveChangesAsync() == 0)
                 {
                     return BadRequest("Couldn't add this user");
                 }
             }
-            catch
+            catch (Exception e)
             {
-                return BadRequest("Error CUser");
+                return BadRequest("Error CUser \n" + e.Message);
             }
 
             return Ok();
