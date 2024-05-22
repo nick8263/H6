@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using WebSite.Components.Pages;
 
 namespace WebSite.Components {
     public class MockData {
@@ -106,6 +107,14 @@ namespace WebSite.Components {
             }
         }
 
+        public List<Area> GetAreas() {
+            return _areas;
+        }
+
+        public List<Country> GetCountries() {
+            return _countries;
+        }
+
         public Question GetQuestion(int id) {
             return _questions.FirstOrDefault(q => q.Id == id);
         }
@@ -156,6 +165,29 @@ namespace WebSite.Components {
             var questionToRemove = _questions.FirstOrDefault(q => q.Id == questionId);
             if (questionToRemove != null) {
                 _questions.Remove(questionToRemove);
+            }
+        }
+
+        public void AddUser(User user) {
+            user.Id = _users.Any() ? _users.Max(u => u.Id) + 1 : 1;
+            _users.Add(user);
+        }
+
+        public void UpdateUser(User updatedUser) {
+            var existingUser = _users.FirstOrDefault(u => u.Id == updatedUser.Id);
+            if (existingUser != null) {
+                existingUser.Area = updatedUser.Area;
+                existingUser.UserName = updatedUser.UserName;
+                existingUser.Role = updatedUser.Role;
+                existingUser.Country = updatedUser.Country;
+                existingUser.Password = updatedUser.Password;
+            }
+        }
+
+        public void DeleteUser(int userId) {
+            var UserToRemove = _users.FirstOrDefault(u => u.Id == userId);
+            if (UserToRemove != null) {
+                _users.Remove(UserToRemove);
             }
         }
     }
