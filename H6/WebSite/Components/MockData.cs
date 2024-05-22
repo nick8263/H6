@@ -177,6 +177,30 @@ namespace WebSite.Components {
             _users.Add(user);
         }
 
+        public void AddArea(Area area) {
+            area.Id = _areas.Any() ? _areas.Max(a => a.Id) + 1 : 1;
+            _areas.Add(area);
+        }
+
+        public void DeleteArea(int areaId) {
+            var areaToDelete = _areas.FirstOrDefault(a => a.Id == areaId);
+            if (areaToDelete != null) {
+                _areas.Remove(areaToDelete);
+            }
+        }
+
+        public void AddCountry(Country country) {
+            country.Id = _countries.Any() ? _countries.Max(c => c.Id) + 1 : 1;
+            _countries.Add(country);
+        }
+
+        public void DeleteCountry(int countryId) {
+            var countryToDelete = _countries.FirstOrDefault(c => c.Id == countryId);
+            if (countryToDelete != null) {
+                _countries.Remove(countryToDelete);
+            }
+        }
+
         public void UpdateUser(User updatedUser) {
             var existingUser = _users.FirstOrDefault(u => u.Id == updatedUser.Id);
             if (existingUser != null) {
