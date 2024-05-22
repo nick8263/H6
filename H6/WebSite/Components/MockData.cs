@@ -143,6 +143,10 @@ namespace WebSite.Components {
             return _users.FirstOrDefault(u => u.UserName == username && u.Password == password);
         }
 
+        public User GetUser(int id) {
+            return _users.FirstOrDefault(u => u.Id == id);
+        }
+
         public List<User> GetUsers() {
             return _users;
         }

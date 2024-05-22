@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace WebSite.Components.Managers {
     public class SessionManager : ISessionService {
+        private static SessionManager _instance;
         private static bool isAuthenticated = false;
         private static bool isHSEAdmin = false;
         private static bool isAdmin = false;
@@ -15,6 +16,15 @@ namespace WebSite.Components.Managers {
         public event Action AuthenticationStateChanged;
 
         private void NotifyStateChanged() => AuthenticationStateChanged?.Invoke();
+
+        public static SessionManager Instance {
+            get {
+                if (_instance == null) {
+                    _instance = new SessionManager();
+                }
+                return _instance;
+            }
+        }
 
         public void ChangeGroup(QuestionGroup questionGroup) {
             QuestionGroup = questionGroup;

@@ -1,0 +1,68 @@
+﻿@page "/edituser/{Id}"
+
+@using Models
+@using Components.Managers
+
+@inject ISessionService SessionManager
+@inject MockData MockData
+@inject NavigationManager NavigationManager
+
+<h3>EditUser</h3>
+
+@if (user == null) {
+    <p>Loading...</p>
+} else {
+    <div class="form-group">
+        <label for="question">Question:</label>
+        <input type="text" class="form-control" @bind="user.UserName">
+    </div>
+    <div class="form-group">
+        <label for="country">Country:</label>
+        <select class="form-control" @bind="user.Country.Id">
+            <option value="">Select Country</option>
+            @if (countries != null && countries.Count > 0) {
+                @foreach (var country in countries) {
+                    <option value="@country.Id">@country.PossibleCountry</option>
+                }
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="area">Area:</label>
+        <select class="form-control" @bind="user.Area.Id">
+            <option value="">Select Area</option>
+            @if (areas != null && areas.Count > 0) {
+                @foreach (var area in areas) {
+                    <option value="@area.Id">@area.PossibleArea</option>
+                }
+            }
+        </select>
+    </div>
+
+    <div>
+        <button type="button" class="btn btn-primary" @onclick="SaveChanges">Save Changes</button>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    public User user;
+
+    private List<Country> countries { get; set; } = new List<Country>();
+    private List<Area> areas { get; set; } = new List<Area>();
+
+    protected override void OnInitialized() {
+        int userId = Int32.Parse(Id);
+        user = MockData.GetUser(userId);
+        countries = MockData.GetCountries();
+        areas = MockData.GetAreas();
+    }
+
+    void SaveChanges() {
+        // Update question in database
+        MockData.UpdateUser(user);
+        NavigationManager.NavigateTo("/useradministration");
+    }
+}
