@@ -30,7 +30,7 @@ namespace API.DBContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-           
+            
         }
     }
 }
