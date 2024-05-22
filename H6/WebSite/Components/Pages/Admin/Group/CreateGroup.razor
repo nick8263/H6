@@ -6,59 +6,65 @@
 @inject MockData MockData
 @inject ISessionService SessionManager
 
-<h3>Existing Areas</h3>
-<ul>
-    @foreach (var area in areas) {
-        <li>
-            @area.PossibleArea
-            <button class="btn btn-danger" @onclick="() => DeleteArea(area.Id)">Delete</button>
-        </li>
-    }
-</ul>
+@if (isAdmin) {
+    <h3>Existing Areas</h3>
+    <ul>
+        @foreach (var area in areas) {
+            <li>
+                @area.PossibleArea
+                <button class="btn btn-danger" @onclick="() => DeleteArea(area.Id)">Delete</button>
+            </li>
+        }
+    </ul>
 
-<h3>Create Area</h3>
+    <h3>Create Area</h3>
 
-<EditForm Model="@newArea" OnValidSubmit="HandleValidSubmitArea">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-    <div>
-        <label for="area">Area:</label>
-        <InputText id="area" @bind-Value="newArea.PossibleArea" />
-    </div>
-    <button class="btn btn-success" type="submit">Create Area</button>
-</EditForm>
+    <EditForm Model="@newArea" OnValidSubmit="HandleValidSubmitArea">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div>
+            <label for="area">Area:</label>
+            <InputText id="area" @bind-Value="newArea.PossibleArea" />
+        </div>
+        <button class="btn btn-success" type="submit">Create Area</button>
+    </EditForm>
 
-<h3>Existing Countries</h3>
-<ul>
-    @foreach (var country in countries) {
-        <li>
-            @country.PossibleCountry
-            <button class="btn btn-danger" @onclick="() => DeleteCountry(country.Id)">Delete</button>
-        </li>
-    }
-</ul>
+    <h3>Existing Countries</h3>
+    <ul>
+        @foreach (var country in countries) {
+            <li>
+                @country.PossibleCountry
+                <button class="btn btn-danger" @onclick="() => DeleteCountry(country.Id)">Delete</button>
+            </li>
+        }
+    </ul>
 
-<h3>Create Country</h3>
+    <h3>Create Country</h3>
 
-<EditForm Model="@newCountry" OnValidSubmit="HandleValidSubmitCountry">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-    <div>
-        <label for="country">Country:</label>
-        <InputText id="country" @bind-Value="newCountry.PossibleCountry" />
-    </div>
-    <button class="btn btn-success" type="submit">Create Country</button>
-</EditForm>
+    <EditForm Model="@newCountry" OnValidSubmit="HandleValidSubmitCountry">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div>
+            <label for="country">Country:</label>
+            <InputText id="country" @bind-Value="newCountry.PossibleCountry" />
+        </div>
+        <button class="btn btn-success" type="submit">Create Country</button>
+    </EditForm>
+} else {
+    <p>Not authrorized</p>
+}
 
 @code {
     private Area newArea = new Area();
     private Country newCountry = new Country();
     private List<Area> areas = new List<Area>();
     private List<Country> countries = new List<Country>();
+    private bool isAdmin;
 
     protected override void OnInitialized() {
         areas = MockData.GetAreas();
         countries = MockData.GetCountries();
+        isAdmin = SessionManager.IsAdmin();
     }
 
     private void HandleValidSubmitArea() {

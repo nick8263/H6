@@ -5,45 +5,51 @@
 @inject MockData MockData
 @inject ISessionService SessionManager
 
-<h3>Question List</h3>
+@if (isHSE) {
+    <h3>Question List</h3>
 
-@if (questions != null && questions.Any()) {
-<table class="table">
-    <thead>
-        <tr>
-            <th>Active</th>
-            <th>Question</th>
-            <th>Options</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var question in allQuestions) {
-            <tr>
-                    <td>
-                        @if (questions.Contains(question)) {
-                            <button class="btn btn-danger" @onclick="() => RemoveQuestion(question)">Delete</button>
-                        } else {
-                            <button class="btn btn-primary" @onclick="() => AddQuestion(question)">Add</button>
-                        }
-                    </td>
-                <td>@question.PossibleQuestion</td>
-                <td>@(question.Options != null ? "Predefined" : "Free Text")</td>
-            </tr>
-        }
-    </tbody>
-</table>
+    @if (questions != null && questions.Any()) {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Active</th>
+                    <th>Question</th>
+                    <th>Options</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var question in allQuestions) {
+                    <tr>
+                        <td>
+                            @if (questions.Contains(question)) {
+                                <button class="btn btn-danger" @onclick="() => RemoveQuestion(question)">Delete</button>
+                            } else {
+                                <button class="btn btn-primary" @onclick="() => AddQuestion(question)">Add</button>
+                            }
+                        </td>
+                        <td>@question.PossibleQuestion</td>
+                        <td>@(question.Options != null ? "Predefined" : "Free Text")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    } else {
+        <p>No questions available.</p>
+    }
 } else {
-<p>No questions available.</p>
+    <p>Not authorized</p>
 }
 
 @code {
     List<Question> questions;
     List<Question> allQuestions;
+    bool isHSE;
 
     protected override void OnInitialized() {
         // Initialize with mock data
         questions = SessionManager.GetQuestionGroup().Questions;
         allQuestions = MockData.GetQuestions();
+        isHSE = SessionManager.IsHSEAdmin();
     }
 
     void AddQuestion(Question question) {

@@ -4,45 +4,51 @@
 @using Components.Managers
 
 @inject MockData MockData
-@inject ISessionService SerssionManager
+@inject ISessionService SessionManager
 @inject NavigationManager NavigationManager
 
-<h3>User Administration</h3>
+@if (isAdmin) {
+    <h3>User Administration</h3>
 
-<button class="btn btn-success" @onclick="CreateUser">Create new user</button>
+    <button class="btn btn-success" @onclick="CreateUser">Create new user</button>
 
-@if (users != null && users.Count > 0) {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Username</th>
-                <th>Role</th>
-                <th>Area</th>
-                <th>Country</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var user in users) {
+    @if (users != null && users.Count > 0) {
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@user.UserName</td>
-                    <td>@user.Role</td>
-                    <td>@user.Area.PossibleArea</td>
-                    <td>@user.Country.PossibleCountry</td>
-                    <td>
-                        <button class="btn btn-danger" @onclick="() => DeleteUser(user)">Delete</button>
-                        <button class="btn btn-primary" @onclick="() => EditUser(user)">Edit</button>
-                    </td>
+                    <th>Username</th>
+                    <th>Role</th>
+                    <th>Area</th>
+                    <th>Country</th>
+                    <th>Action</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var user in users) {
+                    <tr>
+                        <td>@user.UserName</td>
+                        <td>@user.Role</td>
+                        <td>@user.Area.PossibleArea</td>
+                        <td>@user.Country.PossibleCountry</td>
+                        <td>
+                            <button class="btn btn-danger" @onclick="() => DeleteUser(user)">Delete</button>
+                            <button class="btn btn-primary" @onclick="() => EditUser(user)">Edit</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+} else {
+    <p>Not authorized</p>
 }
 
 @code {
     List<User> users;
+    bool isAdmin;
 
     protected override void OnInitialized() {
+        isAdmin = SessionManager.IsAdmin();
         users = MockData.GetUsers();
     }
 

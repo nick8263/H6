@@ -1,35 +1,41 @@
 ﻿@page "/editQuestion/{QuestionId}"
 
 @using Models
+@using Components.Managers
 @inject NavigationManager NavigationManager
 @inject MockData MockData
+@inject ISessionService SessionManager
 
-<h3>Edit Question</h3>
+@if (isAdmin) {
+    <h3>Edit Question</h3>
 
-@if (question == null) {
-    <p>Loading...</p>
-} else {
-    <div class="form-group">
-        <label for="question">Question:</label>
-        <input type="text" class="form-control" @bind="question.PossibleQuestion">
-    </div>
+    @if (question == null) {
+        <p>Loading...</p>
+    } else {
+        <div class="form-group">
+            <label for="question">Question:</label>
+            <input type="text" class="form-control" @bind="question.PossibleQuestion">
+        </div>
 
-    @if (question.Options != null) {
-        @foreach (Option o in question.Options) {
-            <div class="form-group">
-                <label for="option">Option:</label>
-                <input type="text" class="form-control" @bind="o.PossibleOption">
-                <button type="button" class="btn btn-danger" @onclick="(e) => RemoveOption(o)">Remove Option</button>
+        @if (question.Options != null) {
+            @foreach (Option o in question.Options) {
+                <div class="form-group">
+                    <label for="option">Option:</label>
+                    <input type="text" class="form-control" @bind="o.PossibleOption">
+                    <button type="button" class="btn btn-danger" @onclick="(e) => RemoveOption(o)">Remove Option</button>
+                </div>
+            }
+            <div>
+                <button type="button" class="btn btn-primary" @onclick="AddOption">Add Option</button>
             </div>
         }
+
         <div>
-            <button type="button" class="btn btn-primary" @onclick="AddOption">Add Option</button>
+            <button type="button" class="btn btn-primary" @onclick="SaveChanges">Save Changes</button>
         </div>
     }
-
-    <div>
-        <button type="button" class="btn btn-primary" @onclick="SaveChanges">Save Changes</button>
-    </div>
+} else {
+    <p>Not authorized</p>
 }
 
 @code {
@@ -38,7 +44,10 @@
 
     Question question;
 
+    bool isAdmin;
+
     protected override async Task OnInitializedAsync() {
+        isAdmin = SessionManager.IsAdmin();
         int id = Int32.Parse(QuestionId);
         question = MockData.GetQuestion(id);
     }

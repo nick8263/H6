@@ -7,52 +7,58 @@
 @inject NavigationManager NavigationManager
 @inject ISessionService SessionManager
 
-<h3>Create New User</h3>
+@if (isAdmin) {
+    <h3>Create New User</h3>
 
-<div class="form-group">
-    <label for="userName">User Name:</label>
-    <input type="text" class="form-control" @bind="newUser.UserName" />
-</div>
-<div class="form-group">
-    <label for="password">Password:</label>
-    <input type="password" class="form-control" @bind="newUser.Password" />
-</div>
-<div class="form-group">
-    <label for="country">Country:</label>
-    <select class="form-control" @bind="newUser.Country.Id">
-        <option value="">Select Country</option>
-        @if (countries != null && countries.Count > 0) {
-            @foreach (var country in countries) {
-                <option value="@country.Id">@country.PossibleCountry</option>
+    <div class="form-group">
+        <label for="userName">User Name:</label>
+        <input type="text" class="form-control" @bind="newUser.UserName" />
+    </div>
+    <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" class="form-control" @bind="newUser.Password" />
+    </div>
+    <div class="form-group">
+        <label for="country">Country:</label>
+        <select class="form-control" @bind="newUser.Country.Id">
+            <option value="">Select Country</option>
+            @if (countries != null && countries.Count > 0) {
+                @foreach (var country in countries) {
+                    <option value="@country.Id">@country.PossibleCountry</option>
+                }
             }
-        }        
-    </select>
-</div>
-<div class="form-group">
-    <label for="area">Area:</label>
-    <select class="form-control" @bind="newUser.Area.Id">
-        <option value="">Select Area</option>
-        @if (areas != null && areas.Count > 0) {
-            @foreach (var area in areas) {
-                <option value="@area.Id">@area.PossibleArea</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="area">Area:</label>
+        <select class="form-control" @bind="newUser.Area.Id">
+            <option value="">Select Area</option>
+            @if (areas != null && areas.Count > 0) {
+                @foreach (var area in areas) {
+                    <option value="@area.Id">@area.PossibleArea</option>
+                }
             }
-        }        
-    </select>
-</div>
-<div class="form-group">
-    <label for="role">Role:</label>
-    <input type="text" class="form-control" @bind="newUser.Role" />
-</div>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="role">Role:</label>
+        <input type="text" class="form-control" @bind="newUser.Role" />
+    </div>
 
-<button type="button" class="btn btn-primary" @onclick="CreateUser">Create User</button>
+    <button type="button" class="btn btn-primary" @onclick="CreateUser">Create User</button>
+} else {
+    <p>Not authorized</p>
+}
 
 @code {
     private User newUser = new User();
     private List<Country> countries { get; set; } = new List<Country>();
     private List<Area> areas { get; set; } = new List<Area>();
+    private bool isAdmin;
 
     protected override void OnInitialized()
     {
+        isAdmin = SessionManager.IsAdmin();
         newUser.Area = new Area();
         newUser.Country = new Country();
         countries = MockData.GetCountries();

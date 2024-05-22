@@ -1,42 +1,51 @@
 ﻿@page "/questions"
 
 @using Models
+@using Components.Managers
 @inject NavigationManager NavigationManager
 @inject MockData MockData
+@inject ISessionService SessionManager
 
-<h3>Questions</h3>
+@if (isAdmin) {
+    <h3>Questions</h3>
 
-<button type="button" class="btn btn-primary" @onclick="CreateQuestion">Create New Question</button>
+    <button type="button" class="btn btn-primary" @onclick="CreateQuestion">Create New Question</button>
 
-@if (questions != null && questions.Any()) {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Question</th>
-                <th>Options</th>
-                <th>Edit</th>
-                <th>Delete</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var question in questions) {
+    @if (questions != null && questions.Any()) {
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@question.PossibleQuestion</td>
-                    <td>@(question.Options != null ? "Predefined" : "Free Text")</td>
-                    <td><button class="btn btn-primary" @onclick="() => EditQuestion(question)">Edit</button></td>
-                    <td><button class="btn btn-danger" @onclick="() => DeleteQuestion(question)">Delete</button></td>
+                    <th>Question</th>
+                    <th>Options</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var question in questions) {
+                    <tr>
+                        <td>@question.PossibleQuestion</td>
+                        <td>@(question.Options != null ? "Predefined" : "Free Text")</td>
+                        <td><button class="btn btn-primary" @onclick="() => EditQuestion(question)">Edit</button></td>
+                        <td><button class="btn btn-danger" @onclick="() => DeleteQuestion(question)">Delete</button></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    } else {
+        <p>No questions available.</p>
+    }
 } else {
-    <p>No questions available.</p>
+    <p>Not authorized</p>
 }
 
 @code {
     List<Question> questions;
 
+    bool isAdmin;
+
     protected override async Task OnInitializedAsync() {
+        isAdmin = SessionManager.IsAdmin();
         questions = MockData.Instance.GetQuestions(); // MOCK DATA
     } 
 

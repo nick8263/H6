@@ -7,41 +7,45 @@
 @inject MockData MockData
 @inject NavigationManager NavigationManager
 
-<h3>EditUser</h3>
+@if (isAdmin) {
+    <h3>EditUser</h3>
 
-@if (user == null) {
-    <p>Loading...</p>
+    @if (user == null) {
+        <p>Loading...</p>
+    } else {
+        <div class="form-group">
+            <label for="question">Username:</label>
+            <input type="text" class="form-control" @bind="user.UserName">
+        </div>
+        <div class="form-group">
+            <label for="country">Country:</label>
+            <select class="form-control" @bind="user.Country.Id">
+                <option value="">Select Country</option>
+                @if (countries != null && countries.Count > 0) {
+                    @foreach (var country in countries) {
+                        <option value="@country.Id">@country.PossibleCountry</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="area">Area:</label>
+            <select class="form-control" @bind="user.Area.Id">
+                <option value="">Select Area</option>
+                @if (areas != null && areas.Count > 0) {
+                    @foreach (var area in areas) {
+                        <option value="@area.Id">@area.PossibleArea</option>
+                    }
+                }
+            </select>
+        </div>
+
+        <div>
+            <button type="button" class="btn btn-primary" @onclick="SaveChanges">Save Changes</button>
+        </div>
+    }
 } else {
-    <div class="form-group">
-        <label for="question">Username:</label>
-        <input type="text" class="form-control" @bind="user.UserName">
-    </div>
-    <div class="form-group">
-        <label for="country">Country:</label>
-        <select class="form-control" @bind="user.Country.Id">
-            <option value="">Select Country</option>
-            @if (countries != null && countries.Count > 0) {
-                @foreach (var country in countries) {
-                    <option value="@country.Id">@country.PossibleCountry</option>
-                }
-            }
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="area">Area:</label>
-        <select class="form-control" @bind="user.Area.Id">
-            <option value="">Select Area</option>
-            @if (areas != null && areas.Count > 0) {
-                @foreach (var area in areas) {
-                    <option value="@area.Id">@area.PossibleArea</option>
-                }
-            }
-        </select>
-    </div>
-
-    <div>
-        <button type="button" class="btn btn-primary" @onclick="SaveChanges">Save Changes</button>
-    </div>
+    <p>Not authorized</p>
 }
 
 @code {
@@ -53,7 +57,10 @@
     private List<Country> countries { get; set; } = new List<Country>();
     private List<Area> areas { get; set; } = new List<Area>();
 
+    private bool isAdmin;
+
     protected override void OnInitialized() {
+        isAdmin = SessionManager.IsAdmin();
         int userId = Int32.Parse(Id);
         user = MockData.GetUser(userId);
         countries = MockData.GetCountries();

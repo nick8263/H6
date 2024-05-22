@@ -2,41 +2,47 @@
 
 @using Models
 @using Microsoft.AspNetCore.Components
+@using Components.Managers
 @inject NavigationManager NavigationManager
+@inject ISessionService SessionManager
 @inject MockData MockData
 
-<h3>CreateNewQuestion</h3>
+@if (isAdmin) {
+    <h3>CreateNewQuestion</h3>
 
-<div class="form-group">
-    <label for="question">Question:</label>
-    <input type="text" class="form-control" @bind="newQuestion.PossibleQuestion">
-</div>
-<div class="form-check">
-    <input class="form-check-input" type="radio" name="optionsRadios" id="predefinedOptions" @bind="selectedPredefined">
-    <label class="form-check-label" for="predefinedOptions">Predefined Options</label>
-</div>
-<div class="form-check">
-    <input class="form-check-input" type="radio" name="optionsRadios" id="freeTextAnswer" @bind="selectedFreeText">
-    <label class="form-check-label" for="freeTextAnswer">Free Text Answer</label>
-</div>
-
-@if (selectedPredefined == "on") {
-    foreach (Option o in newOptions) {
-        <div class="form-group">
-            <label for="option">Option:</label>
-            <input type="text" class="form-control" @bind="o.PossibleOption">
-            <button type="button" class="btn btn-danger" @onclick="(e) => RemoveOption(o)">Remove Option</button>
-        </div>
-    }    
-    <div>
-        <button type="button" class="btn btn-primary" @onclick="AddOption">Add Option</button>
+    <div class="form-group">
+        <label for="question">Question:</label>
+        <input type="text" class="form-control" @bind="newQuestion.PossibleQuestion">
     </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="optionsRadios" id="predefinedOptions" @bind="selectedPredefined">
+        <label class="form-check-label" for="predefinedOptions">Predefined Options</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="optionsRadios" id="freeTextAnswer" @bind="selectedFreeText">
+        <label class="form-check-label" for="freeTextAnswer">Free Text Answer</label>
+    </div>
+
+    @if (selectedPredefined == "on") {
+        foreach (Option o in newOptions) {
+            <div class="form-group">
+                <label for="option">Option:</label>
+                <input type="text" class="form-control" @bind="o.PossibleOption">
+                <button type="button" class="btn btn-danger" @onclick="(e) => RemoveOption(o)">Remove Option</button>
+            </div>
+        }
+        <div>
+            <button type="button" class="btn btn-primary" @onclick="AddOption">Add Option</button>
+        </div>
+    }
+
+
+    <div>
+        <button type="button" class="btn btn-primary" @onclick="CreateNew">Create New</button>
+    </div>
+} else {
+    <p>Not authorized</p>
 }
-
-
-<div>
-    <button type="button" class="btn btn-primary" @onclick="CreateNew">Create New</button>
-</div>
 
 @code {
     Question newQuestion = new Question();
@@ -44,6 +50,11 @@
     Option newOption = new Option();
     string selectedPredefined;
     string selectedFreeText;
+    bool isAdmin;
+
+    protected override void OnInitialized() {
+        isAdmin = SessionManager.IsAdmin();
+    }
 
     async Task CreateNew() {
         if (newQuestion.PossibleQuestion == null) {
