@@ -27,7 +27,7 @@
 }
 
 @code {
-    private bool isAuthenticated { get; set;} 
+    private bool isAuthenticated { get; set; } = false;
     private string errorMessage { get; set; }
     private User user { get; set; }
 
@@ -53,7 +53,15 @@
 
     private async Task Submit() {
         user = MockData.GetUser(user.UserName, user.Password);
-        if (user == null) {
+        if (user == null) {            
+            user = new User {
+                    Area = new Area(),
+                    Country = new Country(),
+                    Password = "",
+                    Id = 0,
+                    Role = "",
+                    UserName = ""
+                };
             return; // Implement error handling
         }
         QuestionGroup questionGroup = MockData.GetQuestionGroup(user.Area.Id, user.Country.Id);
