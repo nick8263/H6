@@ -39,12 +39,14 @@
     protected override async Task OnInitializedAsync() {
         questions = MockData.Instance.GetQuestions(); // MOCK DATA
     } 
+
     void EditQuestion(Question question) {
-        // Add logic to edit question
+        NavigationManager.NavigateTo($"/editQuestion/{question.Id.ToString()}");
     }
 
+
     void DeleteQuestion(Question question) {
-        // Add logic to delete question
+        MockData.DeleteQuestion(question.Id);
     }
 
     void CreateQuestion() {

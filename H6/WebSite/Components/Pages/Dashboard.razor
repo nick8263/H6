@@ -1,0 +1,54 @@
+﻿@page "/Dashboard"
+
+@using Models
+@using Components.Managers
+@inject ISessionService SessionManager
+
+@code {
+    // Mock user data
+    private User user { get; set; }
+
+    protected override void OnInitialized() {
+        user = SessionManager.GetUser();
+    }
+
+}
+
+<h3>User Dashboard</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>User Name</th>
+            <th>Country</th>
+            <th>Area</th>
+            <th>Role</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@user.Id</td>
+            <td>@user.UserName</td>
+            <td>@user.Country.PossibleCountry</td>
+            <td>@user.Area.PossibleArea</td>
+            <td>@user.Role</td>
+         </tr>
+    </tbody>
+</table>
+
+<style>
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table, .table th, .table td {
+        border: 1px solid black;
+    }
+
+    .table th, .table td {
+        padding: 8px;
+        text-align: left;
+    }
+</style>
