@@ -6,12 +6,9 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-    public class User : LoginModel
+    public class RoleModel
     {
         public int Id { get; set; }
-       
-        public Country Country { get; set; }
-        public Area Area { get; set; }
-        public RoleModel Role { get; set; }
+        public string Name { get; set; }
     }
 }

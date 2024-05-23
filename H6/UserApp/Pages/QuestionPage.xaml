@@ -16,10 +16,15 @@
             
             <Label x:Name="ValidationLabel" TextColor="Red" IsVisible="False" />
             <Button
-        x:Name="SubmitBtn"
-        Text="Submit" 
-        Clicked="OnSubmitClicked"
-        HorizontalOptions="Fill" />
+                 x:Name="SubmitBtn"
+                 Text="Submit" 
+                 Clicked="OnSubmitClicked"
+                 HorizontalOptions="Fill" />
+            <Button                
+                Text="Cancel" 
+                Clicked="CancelClicked"
+                HorizontalOptions="Fill" />
+            
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

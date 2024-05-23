@@ -49,11 +49,11 @@ public partial class QuestionPage : ContentPage
                         var selectedOption = e.Value ? option : null;
                         if (e.Value)
                         {
-                            _viewModel.AnswerGroup.Answers[Convert.ToInt32(checkBox.ClassId)].Options.Add(selectedOption);
+                            _viewModel.AnswerGroup.Answers[Convert.ToInt32(checkBox.ClassId)].Question.Options.Add(selectedOption);
                         }
                         else
                         {
-                            _viewModel.AnswerGroup.Answers[Convert.ToInt32(checkBox.ClassId)].Options.Remove(selectedOption);
+                            _viewModel.AnswerGroup.Answers[Convert.ToInt32(checkBox.ClassId)].Question.Options.Remove(selectedOption);
                         }
                     };
 
@@ -108,5 +108,10 @@ public partial class QuestionPage : ContentPage
             ValidationLabel.IsVisible = true;
         }
         
+    }
+
+    private async void CancelClicked(object sender, EventArgs e)
+    {
+        await Navigation.PopAsync();
     }
 }

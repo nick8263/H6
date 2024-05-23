@@ -21,7 +21,7 @@ namespace UserApp
             _httpClient = new HttpClient();
         }
 
-        public async Task<(QuestionGroup, string)> Login(User user)
+        public async Task<(User, string)> Login(LoginModel user)
         {
             user.Password = HashPassword(user.Password);
             try
@@ -30,7 +30,7 @@ namespace UserApp
                 string serializedId = JsonConvert.SerializeObject(user);
 
                 // Make a POST request to the API endpoint
-                HttpResponseMessage response = await _httpClient.PostAsync(connectionString + "AppLogin", new StringContent(serializedId, Encoding.UTF8, "application/json"));
+                HttpResponseMessage response = await _httpClient.PostAsync(connectionString + "Login", new StringContent(serializedId, Encoding.UTF8, "application/json"));
 
                 // Read the response content as a string
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -39,10 +39,10 @@ namespace UserApp
                 if (response.IsSuccessStatusCode)
                 {
                     // Deserialize the response JSON to User object
-                    QuestionGroup retrievedQuestionGrou = JsonConvert.DeserializeObject<QuestionGroup>(responseContent);
+                    User retrievedUser = JsonConvert.DeserializeObject<User>(responseContent);
 
                     // Return the retrieved user
-                    return (retrievedQuestionGrou, null);
+                    return (retrievedUser, null);
                 }
                 else if (response.StatusCode == HttpStatusCode.NotFound)
                 {
@@ -59,6 +59,41 @@ namespace UserApp
             }
         }
 
+        public async Task<(bool, string)> UpdateUser(User user)
+        {
+            user.Password = HashPassword(user.Password);
+            try
+            {
+                // Serialize the user object to JSON
+                string serializedId = JsonConvert.SerializeObject(user);
+
+                // Make a POST request to the API endpoint
+                HttpResponseMessage response = await _httpClient.PostAsync(connectionString + "UpdateUser", new StringContent(serializedId, Encoding.UTF8, "application/json"));
+
+                // Read the response content as a string
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                // Check if the request was successful
+                if (response.IsSuccessStatusCode)
+                {          
+
+                    // Return the retrieved user
+                    return (true, null);
+                }
+                else if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return (false, responseContent);
+                }
+                else
+                {
+                    return (false, "Failed to update user. Status code: " + response.StatusCode);
+                }
+            }
+            catch
+            {
+                return (false, "Something went wrong, contact customer support");
+            }
+        }
         public string HashPassword(string password)
         {
             // Generate a random salt

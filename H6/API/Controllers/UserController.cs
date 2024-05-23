@@ -33,55 +33,26 @@ namespace API.Controllers
 
             return Ok(GenerateJSONWebToken());
 
-        }
-
-        [HttpPost("Login")]
-        public async Task<IActionResult> Login(LoginModel user)
-        {
-            bool userExist = false;
-            try
-            {
-                userExist = await context.Users.FirstOrDefaultAsync(x => x.UserName == user.UserName && x.Password == user.Password) == null;
-
-                if (userExist)
-                {
-                    return BadRequest();
-                }
-            }
-            catch
-            {
-                return BadRequest();
-            }
-
-            return Ok();
-
-        }
+        }        
 
         [AllowAnonymous]
-        [HttpPost("AppLogin")]
-        public async Task<IActionResult> AppLogin(LoginModel user)
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login(LoginModel user)
         {
             User? userExist = new();
             try
             {
-                userExist = await context.Users.FirstOrDefaultAsync(x => x.UserName == user.UserName && x.Password == user.Password);
+                userExist = await context.Users
+                    .Include(x => x.Area)
+                    .Include(x => x.Country)
+                    .FirstOrDefaultAsync(x => x.UserName == user.UserName && x.Password == user.Password);
 
                 if (userExist == null)
                 {
                     return BadRequest();
-                }
+                }           
 
-                QuestionGroup? questionGroup = await context.QuestionGroups
-                   .Include(x => x.Questions)
-                   .ThenInclude(x => x.Options)
-                   .FirstOrDefaultAsync(x => x.Area == userExist.Area && x.Country == userExist.Country);
-
-                if (questionGroup == null)
-                {
-                    return BadRequest();
-                }
-
-                return Ok(questionGroup);
+                return Ok(userExist);
 
             }
             catch
@@ -135,7 +106,7 @@ namespace API.Controllers
         {
             try
             {
-                return Ok(context.Users.FirstOrDefaultAsync(x => x.Id == id));
+                return Ok(await context.Users.FirstOrDefaultAsync(x => x.Id == id));
             }
             catch
             {
@@ -166,6 +137,7 @@ namespace API.Controllers
 
             return Ok();
         }
+
 
         [HttpDelete("DeleteUser")]
         public async Task<IActionResult> DeleteUser(int id)
