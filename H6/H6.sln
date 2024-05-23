@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebSite", "WebSite\WebSite.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{D608FF59-0AF4-433D-A6CC-829F534447C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserApp", "UserApp\UserApp.csproj", "{60C80735-DFEA-473B-8E18-5B8FA64316DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserApp", "UserApp\UserApp.csproj", "{60C80735-DFEA-473B-8E18-5B8FA64316DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

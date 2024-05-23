@@ -1,0 +1,100 @@
+﻿@page "/Dashboard"
+
+@using Models
+@using Components.Managers
+@inject ISessionService SessionManager
+@inject MockData MockData
+
+<h3>User Dashboard</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>User Name</th>
+            <th>Country</th>
+            <th>Area</th>
+            <th>Role</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@user.Id</td>
+            <td>@user.UserName</td>
+            <td>@user.Country.PossibleCountry</td>
+            <td>@user.Area.PossibleArea</td>
+            <td>@user.Role</td>
+         </tr>
+    </tbody>
+</table>
+
+<button class="btn btn-primary" @onclick="ToggleChangePasswordFields">
+    @if (showChangePasswordFields) {
+        <text>Cancel</text>
+    } else {
+        <text>Change Password</text>
+    }
+</button>
+
+@if (showChangePasswordFields) {
+    <div class="mt-3">
+        <div class="form-group">
+            <label for="newPassword">New Password</label>
+            <input type="password" id="newPassword" class="form-control" @bind="newPassword" />
+        </div>
+        <div class="form-group">
+            <label for="confirmPassword">Confirm New Password</label>
+            <input type="password" id="confirmPassword" class="form-control" @bind="confirmPassword" />
+        </div>
+        @if (!string.IsNullOrEmpty(errorMessage)) {
+            <div class="alert alert-danger">@errorMessage</div>
+        }
+        <button class="btn btn-success" @onclick="ChangePassword">Submit</button>
+    </div>
+}
+
+@code {
+    // Mock user data
+    private User user { get; set; }
+    private bool showChangePasswordFields = false;
+    private string newPassword = string.Empty;
+    private string confirmPassword = string.Empty;
+    private string errorMessage = string.Empty;
+
+    protected override void OnInitialized() {
+        user = SessionManager.GetUser();
+    }
+
+    private void ToggleChangePasswordFields() {
+        showChangePasswordFields = !showChangePasswordFields;
+    }
+
+    private void ChangePassword() {
+        if (newPassword != confirmPassword) {
+            errorMessage = "Passwords do not match.";
+        } else {
+            errorMessage = string.Empty;
+            // Add logic to change the password here
+            // For example, SessionManager.ChangePassword(user.Id, newPassword);
+            MockData.UpdateUser(user);
+            showChangePasswordFields = false;
+            // Notify the user that the password has been changed successfully
+        }
+    }
+}
+
+<style>
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table, .table th, .table td {
+        border: 1px solid black;
+    }
+
+    .table th, .table td {
+        padding: 8px;
+        text-align: left;
+    }
+</style>

@@ -143,6 +143,10 @@ namespace WebSite.Components {
             return _users.FirstOrDefault(u => u.UserName == username && u.Password == password);
         }
 
+        public User GetUser(int id) {
+            return _users.FirstOrDefault(u => u.Id == id);
+        }
+
         public List<User> GetUsers() {
             return _users;
         }
@@ -171,6 +175,30 @@ namespace WebSite.Components {
         public void AddUser(User user) {
             user.Id = _users.Any() ? _users.Max(u => u.Id) + 1 : 1;
             _users.Add(user);
+        }
+
+        public void AddArea(Area area) {
+            area.Id = _areas.Any() ? _areas.Max(a => a.Id) + 1 : 1;
+            _areas.Add(area);
+        }
+
+        public void DeleteArea(int areaId) {
+            var areaToDelete = _areas.FirstOrDefault(a => a.Id == areaId);
+            if (areaToDelete != null) {
+                _areas.Remove(areaToDelete);
+            }
+        }
+
+        public void AddCountry(Country country) {
+            country.Id = _countries.Any() ? _countries.Max(c => c.Id) + 1 : 1;
+            _countries.Add(country);
+        }
+
+        public void DeleteCountry(int countryId) {
+            var countryToDelete = _countries.FirstOrDefault(c => c.Id == countryId);
+            if (countryToDelete != null) {
+                _countries.Remove(countryToDelete);
+            }
         }
 
         public void UpdateUser(User updatedUser) {
