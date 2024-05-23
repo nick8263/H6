@@ -45,7 +45,7 @@
     List<Question> allQuestions;
     bool isHSE;
 
-    protected override void OnInitialized() {
+    protected override async Task OnInitializedAsync() {
         // Initialize with mock data
         questions = SessionManager.GetQuestionGroup().Questions;
         allQuestions = MockData.GetQuestions();

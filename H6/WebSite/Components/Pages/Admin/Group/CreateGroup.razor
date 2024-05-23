@@ -61,7 +61,7 @@
     private List<Country> countries = new List<Country>();
     private bool isAdmin;
 
-    protected override void OnInitialized() {
+    protected override async Task OnInitializedAsync() {
         areas = MockData.GetAreas();
         countries = MockData.GetCountries();
         isAdmin = SessionManager.IsAdmin();

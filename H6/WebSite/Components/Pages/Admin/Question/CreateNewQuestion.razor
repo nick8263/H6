@@ -52,7 +52,7 @@
     string selectedFreeText;
     bool isAdmin;
 
-    protected override void OnInitialized() {
+    protected override async Task OnInitializedAsync() {
         isAdmin = SessionManager.IsAdmin();
     }
 

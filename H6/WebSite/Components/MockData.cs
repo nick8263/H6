@@ -13,6 +13,7 @@ namespace WebSite.Components {
         private static List<User> _users = new List<User>();
         private static List<Area> _areas = new List<Area>();
         private static List<Country> _countries = new List<Country>();
+        private static List<RoleModel> _roles = new List<RoleModel>();
         private QuestionGroup _group;
         
         public MockData() {
@@ -45,12 +46,17 @@ namespace WebSite.Components {
                 Country = country
             };
             _groups.Add(_group);
+            RoleModel role = new RoleModel {
+                Id = 1,
+                Name = "admin"
+            };
+            _roles.Add(role);
             User user = new User {
                 Area = area,
                 Country = country,
                 Id = 1,
                 Password = "admin",
-                Role = "admin",
+                Role = role,
                 UserName = "admin"
             };
             _users.Add(user);
@@ -59,13 +65,33 @@ namespace WebSite.Components {
             _areas.Add(area);
             country = new Country { Id = 2, PossibleCountry = "Test Country 2" };
             _countries.Add(country);
+            role = new RoleModel {
+                Id = 2,
+                Name = "hse"
+            };
+            _roles.Add(role);
             user = new User {
                 Area = area,
                 Country = country,
                 Id = 2,
                 Password = "hse",
-                Role = "hse",
+                Role = role,
                 UserName = "hse"
+            };
+            _users.Add(user);
+
+            role = new RoleModel {
+                Id = 3,
+                Name = "regular"
+            };
+            _roles.Add(role);
+            user = new User {
+                Area = area,
+                Country = country,
+                Id = 3,
+                Password = "regular",
+                Role = role,
+                UserName = "regular"
             };
             _users.Add(user);
 
@@ -105,6 +131,22 @@ namespace WebSite.Components {
                 }
                 return _instance;
             }
+        }
+
+        public List<RoleModel> GetRoles() { 
+            return _roles; 
+        }
+
+        public void DeleteRole(int roleId) {
+            var roleToRemove = _roles.FirstOrDefault(r => r.Id == roleId);
+            if (roleToRemove != null) {
+                _roles.Remove(roleToRemove);
+            }
+        }
+
+        public void AddRole(RoleModel role) {
+            role.Id = _roles.Any() ? _roles.Max(r => r.Id) + 1 : 1;
+            _roles.Add(role);
         }
 
         public List<Area> GetAreas() {

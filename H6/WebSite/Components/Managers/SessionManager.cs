@@ -51,7 +51,7 @@ namespace WebSite.Components.Managers {
         }
 
         public string GetRole() {
-            return loggenInUser.Role;
+            return loggenInUser.Role.Name;
         }
 
         public User GetUser() {
@@ -63,8 +63,8 @@ namespace WebSite.Components.Managers {
             if (temp != null) {
                 loggenInUser = user;
                 isAuthenticated = true;
-                isAdmin = user.Role == "admin";
-                isHSEAdmin = user.Role == "hse";
+                isAdmin = user.Role.Name == "admin";
+                isHSEAdmin = user.Role.Name == "hse";
                 QuestionGroup = questionGroup;
             }
             NotifyStateChanged();

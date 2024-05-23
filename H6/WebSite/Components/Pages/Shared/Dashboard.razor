@@ -23,7 +23,7 @@
             <td>@user.UserName</td>
             <td>@user.Country.PossibleCountry</td>
             <td>@user.Area.PossibleArea</td>
-            <td>@user.Role</td>
+            <td>@user.Role.Name</td>
          </tr>
     </tbody>
 </table>
@@ -61,7 +61,7 @@
     private string confirmPassword = string.Empty;
     private string errorMessage = string.Empty;
 
-    protected override void OnInitialized() {
+    protected override async Task OnInitializedAsync() {
         user = SessionManager.GetUser();
     }
 

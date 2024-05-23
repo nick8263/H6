@@ -1,0 +1,38 @@
+﻿@page "/createrole"
+
+@using Models
+@using Components.Managers
+
+@inject ISessionService SessionManager
+@inject MockData MockData
+@inject NavigationManager NavigationManager
+
+@if (isAdmin) {
+    <h3>Create Role</h3>
+
+    <EditForm Model="@newRole" OnValidSubmit="HandleValidSubmitRole">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div>
+            <label for="newRole">Role:</label>
+            <InputText id="area" @bind-Value="newRole.Name" />
+        </div>
+        <button class="btn btn-success" type="submit">Create Role</button>
+    </EditForm>
+} else {
+    <p>Not Authorized</p>
+}
+
+@code {
+    private bool isAdmin;
+    private RoleModel newRole = new RoleModel();
+
+    protected override async Task OnInitializedAsync() {
+        isAdmin = SessionManager.IsAdmin();
+    }
+
+    private void HandleValidSubmitRole() {
+        MockData.AddRole(newRole);
+        NavigationManager.NavigateTo("/roleadministration");
+    }
+}

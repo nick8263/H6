@@ -27,7 +27,7 @@
                 @foreach (var user in users) {
                     <tr>
                         <td>@user.UserName</td>
-                        <td>@user.Role</td>
+                        <td>@user.Role.Name</td>
                         <td>@user.Area.PossibleArea</td>
                         <td>@user.Country.PossibleCountry</td>
                         <td>
@@ -47,7 +47,7 @@
     List<User> users;
     bool isAdmin;
 
-    protected override void OnInitialized() {
+    protected override async Task OnInitializedAsync() {
         isAdmin = SessionManager.IsAdmin();
         users = MockData.GetUsers();
     }
