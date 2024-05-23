@@ -20,7 +20,7 @@ namespace API.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    PossibleArea = table.Column<string>(type: "longtext", nullable: false)
+                    PossibleArea = table.Column<string>(type: "longtext", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -34,11 +34,25 @@ namespace API.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    PossibleCountry = table.Column<string>(type: "longtext", nullable: false)
+                    PossibleCountry = table.Column<string>(type: "longtext", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Countrys", x => x.Id);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Options",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    PossibleOption = table.Column<string>(type: "longtext", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Options", x => x.Id);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
@@ -48,7 +62,8 @@ namespace API.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    PossibleQuestion = table.Column<string>(type: "longtext", nullable: false)
+                    PossibleQuestion = table.Column<string>(type: "longtext", nullable: false),
+                    IsMultiple = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -89,10 +104,11 @@ namespace API.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    UserName = table.Column<string>(type: "longtext", nullable: false),
-                    Password = table.Column<string>(type: "longtext", nullable: false),
                     CountryId = table.Column<int>(type: "int", nullable: false),
-                    AreaId = table.Column<int>(type: "int", nullable: false)
+                    AreaId = table.Column<int>(type: "int", nullable: false),
+                    Role = table.Column<string>(type: "longtext", nullable: false),
+                    UserName = table.Column<string>(type: "longtext", nullable: false),
+                    Password = table.Column<string>(type: "longtext", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -135,7 +151,32 @@ namespace API.Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "QuestionQuestionGroup",
+                name: "OptionQuestion",
+                columns: table => new
+                {
+                    OptionsId = table.Column<int>(type: "int", nullable: false),
+                    QuestionsId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OptionQuestion", x => new { x.OptionsId, x.QuestionsId });
+                    table.ForeignKey(
+                        name: "FK_OptionQuestion_Options_OptionsId",
+                        column: x => x.OptionsId,
+                        principalTable: "Options",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OptionQuestion_Questions_QuestionsId",
+                        column: x => x.QuestionsId,
+                        principalTable: "Questions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "QuestionGroupQuestion",
                 columns: table => new
                 {
                     QuestionGroupsId = table.Column<int>(type: "int", nullable: false),
@@ -143,15 +184,15 @@ namespace API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_QuestionQuestionGroup", x => new { x.QuestionGroupsId, x.QuestionsId });
+                    table.PrimaryKey("PK_QuestionGroupQuestion", x => new { x.QuestionGroupsId, x.QuestionsId });
                     table.ForeignKey(
-                        name: "FK_QuestionQuestionGroup_QuestionGroups_QuestionGroupsId",
+                        name: "FK_QuestionGroupQuestion_QuestionGroups_QuestionGroupsId",
                         column: x => x.QuestionGroupsId,
                         principalTable: "QuestionGroups",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_QuestionQuestionGroup_Questions_QuestionsId",
+                        name: "FK_QuestionGroupQuestion_Questions_QuestionsId",
                         column: x => x.QuestionsId,
                         principalTable: "Questions",
                         principalColumn: "Id",
@@ -194,26 +235,6 @@ namespace API.Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Options",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    PossibleOption = table.Column<string>(type: "longtext", nullable: false),
-                    AnswerId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Options", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Options_Answers_AnswerId",
-                        column: x => x.AnswerId,
-                        principalTable: "Answers",
-                        principalColumn: "Id");
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "AnswerAnswerGroup",
                 columns: table => new
                 {
@@ -233,31 +254,6 @@ namespace API.Migrations
                         name: "FK_AnswerAnswerGroup_Answers_AnswersId",
                         column: x => x.AnswersId,
                         principalTable: "Answers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "OptionQuestion",
-                columns: table => new
-                {
-                    OptionsId = table.Column<int>(type: "int", nullable: false),
-                    QuestionsId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OptionQuestion", x => new { x.OptionsId, x.QuestionsId });
-                    table.ForeignKey(
-                        name: "FK_OptionQuestion_Options_OptionsId",
-                        column: x => x.OptionsId,
-                        principalTable: "Options",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_OptionQuestion_Questions_QuestionsId",
-                        column: x => x.QuestionsId,
-                        principalTable: "Questions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -294,9 +290,9 @@ namespace API.Migrations
                 column: "QuestionsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Options_AnswerId",
-                table: "Options",
-                column: "AnswerId");
+                name: "IX_QuestionGroupQuestion_QuestionsId",
+                table: "QuestionGroupQuestion",
+                column: "QuestionsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_QuestionGroups_AreaId",
@@ -307,11 +303,6 @@ namespace API.Migrations
                 name: "IX_QuestionGroups_CountryId",
                 table: "QuestionGroups",
                 column: "CountryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_QuestionQuestionGroup_QuestionsId",
-                table: "QuestionQuestionGroup",
-                column: "QuestionsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_AreaId",
@@ -334,10 +325,13 @@ namespace API.Migrations
                 name: "OptionQuestion");
 
             migrationBuilder.DropTable(
-                name: "QuestionQuestionGroup");
+                name: "QuestionGroupQuestion");
 
             migrationBuilder.DropTable(
                 name: "AnswerGroups");
+
+            migrationBuilder.DropTable(
+                name: "Answers");
 
             migrationBuilder.DropTable(
                 name: "Options");
@@ -349,16 +343,13 @@ namespace API.Migrations
                 name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Answers");
+                name: "Questions");
 
             migrationBuilder.DropTable(
                 name: "Areas");
 
             migrationBuilder.DropTable(
                 name: "Countrys");
-
-            migrationBuilder.DropTable(
-                name: "Questions");
         }
     }
 }

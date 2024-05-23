@@ -17,6 +17,8 @@
             <Entry x:Name="userNameEntry"/>
             <Entry x:Name="passwordEntry"  IsPassword="True"/>
 
+            <Label x:Name="errorLabel" TextColor="Red" IsEnabled="False"/>
+
 
             <Button
              x:Name="loginBtn"

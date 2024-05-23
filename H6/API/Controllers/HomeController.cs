@@ -125,26 +125,40 @@ namespace API.Controllers
             return Ok();
         }
 
+        [AllowAnonymous]
         [HttpPost("CreateAnswerGroup")]
         public async Task<IActionResult> CreateAnswerGroup(AnswerGroup answerGroup)
         {
+            // Ensure the Area and Country exist
+            answerGroup.Area = await context.Areas.FindAsync(answerGroup.Area.Id);
+            answerGroup.Country = await context.Countrys.FindAsync(answerGroup.Country.Id);
+
+            foreach (Answer i in answerGroup.Answers)
+            {
+                i.Question = await context.Questions.FindAsync(i.Question.Id);
+            }
+
+            answerGroup.user = await context.Users.FindAsync(answerGroup.user.Id);
+
+            // Add the new QuestionGroup to the context
+            await context.AnswerGroups.AddAsync(answerGroup);
+
             try
             {
-                await context.AnswerGroups.AddAsync(answerGroup);
-
                 if (await context.SaveChangesAsync() == 0)
                 {
-                    return BadRequest("Couldn't add this answergroup");
+                    return BadRequest("Couldn't add this question group");
                 }
             }
-            catch
+            catch (Exception e)
             {
-                return BadRequest("Error CAnswerGroup");
+                return BadRequest("Error creating QuestionGroup\n" + e.Message);
             }
-            
+
             return Ok();
         }
 
+        
         [HttpPost("CreateQuestionGroup")]
         public async Task<IActionResult> CreateQuestionGroup(QuestionGroup questionGroup)
         {

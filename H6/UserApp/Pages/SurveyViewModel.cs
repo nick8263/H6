@@ -54,8 +54,8 @@ namespace UserApp.Pages
             {
                 AnswerGroup.Answers.Add(new Answer
                 {
-                    Question = question,
-                    Options = new List<Option>()
+                    Question = question
+                    
                 });
             }
         }
@@ -75,7 +75,7 @@ namespace UserApp.Pages
                 }
                 else if (answer.Question.IsMultiple)
                 {
-                    if (answer.Options == null || answer.Options.Count == 0)
+                    if (answer.Question.Options == null || answer.Question.Options.Count == 0)
                     {
                         validationMessage = $"Please select at least one option for the question: '{answer.Question.PossibleQuestion}'";
                         return false;

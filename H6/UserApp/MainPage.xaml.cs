@@ -15,51 +15,18 @@ namespace UserApp
 
         private async void OnLoginClicked(object sender, EventArgs e)
         {
-            //var result = await apiAccess.Login(new User { UserName = userNameEntry.Text, Password = passwordEntry.Text });
-            //if (result.Item2 == null)
-            //{
-            //    await Navigation.PushAsync(new QuestionPage(result.Item1));
-            //}
+            var user = await apiAccess.Login(new LoginModel { UserName = userNameEntry.Text, Password = passwordEntry.Text});
 
-            var result = new QuestionGroup
+            if (user.Item2 == null)
             {
-                Id = 1,
-                Country = new Country { PossibleCountry = "Kibæk" },
-                Area = new Area { PossibleArea = "Finger" },
-                Questions = new()
+                errorLabel.IsEnabled = false;
+                await Navigation.PushAsync(new MenuPage(user.Item1));
+            }   
+            else
             {
-                new Question(){
-                    PossibleQuestion = "Hvad er en hund",
-                    IsMultiple = false,
-                    Options = null
-                },
-                new Question()
-                {
-                    PossibleQuestion = "Hvilken af disse dyr er en Kat",
-                    IsMultiple = false,
-                    Options = new()
-                    {
-                        new Option{Id = 4, PossibleOption = "Hund"},
-                        new Option{Id = 4, PossibleOption = "Kat"},
-                        new Option{Id = 4, PossibleOption = "Hest"},
-                        new Option{Id = 4, PossibleOption = "Ged"}
-                    }
-                },
-                new Question()
-                {
-                    PossibleQuestion = "Hvilken af disse dyr er ikke en Kat",
-                    IsMultiple = true,
-                    Options = new()
-                    {
-                        new Option{Id = 4, PossibleOption = "Hund"},
-                        new Option{Id = 4, PossibleOption = "Kat"},
-                        new Option{Id = 4, PossibleOption = "Hest"},
-                        new Option{Id = 4, PossibleOption = "Ged"}
-                    }
-                }
+                errorLabel.Text = user.Item2;
+                errorLabel.IsEnabled = true;
             }
-            };
-            await Navigation.PushAsync(new QuestionPage(result));
         }
     }
 }

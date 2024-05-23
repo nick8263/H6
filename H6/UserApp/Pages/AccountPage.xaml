@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="UserApp.Pages.AccountPage"
+             Title="AccountPage">
+    <VerticalStackLayout>
+        <Label 
+            Text="Account"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+
+        <Label 
+             Text="User Name"
+             x:Name="userNameLabel"
+             VerticalOptions="Center" 
+             HorizontalOptions="Center" />
+        <Label 
+             Text="Country"
+             x:Name="countryLabel"
+             VerticalOptions="Center" 
+             HorizontalOptions="Center" />
+        <Label 
+            Text="Area"
+            x:Name="areaLabel"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+        <Label 
+            Text="Role"
+            x:Name="roleLabel"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+
+        <Button           
+            Text="Change Password" 
+            Clicked="ChangePasswordClicked"
+            HorizontalOptions="Fill" />
+        <Button           
+             Text="Back" 
+             Clicked="BackClicked"
+             HorizontalOptions="Fill" />
+    </VerticalStackLayout>
+</ContentPage>
