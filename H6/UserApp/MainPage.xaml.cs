@@ -1,21 +1,22 @@
 ﻿using Models;
 using UserApp.Pages;
+using ApiAccess;
 namespace UserApp
 {
     public partial class MainPage : ContentPage
     {
 
-        ApiAccess apiAccess { get; set; }
+        UserAccess userAccess { get; set; }
 
         public MainPage()
         {
             InitializeComponent();
-            apiAccess = new ApiAccess();
+            userAccess = new UserAccess();
         }        
 
         private async void OnLoginClicked(object sender, EventArgs e)
         {
-            var user = await apiAccess.Login(new LoginModel { UserName = userNameEntry.Text, Password = passwordEntry.Text});
+            var user = await userAccess.Login(new LoginModel { UserName = userNameEntry.Text, Password = passwordEntry.Text});
 
             if (user.Item2 == null)
             {

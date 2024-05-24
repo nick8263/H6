@@ -92,7 +92,11 @@ namespace API.Controllers
         {
             try
             {
-                return Ok(context.Users);
+                return Ok(context.Users
+                    .Include(x => x.Country)
+                    .Include(x => x.Area)
+                    .Include(x => x.Role)
+                    );
             }
             catch
             {
@@ -106,7 +110,11 @@ namespace API.Controllers
         {
             try
             {
-                return Ok(await context.Users.FirstOrDefaultAsync(x => x.Id == id));
+                return Ok(await context.Users
+                    .Include(x => x.Country)
+                    .Include(x => x.Area)
+                    .Include(x => x.Role)
+                    .FirstOrDefaultAsync(x => x.Id == id));
             }
             catch
             {

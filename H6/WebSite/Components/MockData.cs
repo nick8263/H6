@@ -50,7 +50,7 @@ namespace WebSite.Components {
                 Country = country,
                 Id = 1,
                 Password = "admin",
-                Role = "admin",
+                Role = new RoleModel { Name = "admin" } ,
                 UserName = "admin"
             };
             _users.Add(user);
@@ -64,7 +64,7 @@ namespace WebSite.Components {
                 Country = country,
                 Id = 2,
                 Password = "hse",
-                Role = "hse",
+                Role = new RoleModel { Name = "hse"},
                 UserName = "hse"
             };
             _users.Add(user);

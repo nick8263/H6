@@ -7,6 +7,7 @@ using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Identity.Client;
 using NuGet.Protocol;
+using System.Diagnostics.Metrics;
 
 namespace API.Controllers
 {
@@ -214,6 +215,31 @@ namespace API.Controllers
 
             return Ok();
         }
+
+        [HttpPost("CreateRole")]
+        public async Task<IActionResult> CreateRole(RoleModel role)
+        {
+            try
+            {
+                if (await context.Roles.FirstOrDefaultAsync(x => x.Name == role.Name) != null)
+                {
+                    return BadRequest("This role already exist");
+                }
+                await context.Roles.AddAsync(role);
+
+                if (await context.SaveChangesAsync() == 0)
+                {
+                    return BadRequest("Couldn't add this role");
+                }
+            }
+            catch
+            {
+                return BadRequest("Error CCountry");
+            }
+
+            return Ok();
+
+        }
         #endregion
 
         #region Read
@@ -238,7 +264,7 @@ namespace API.Controllers
         {
             try
             {
-                return Ok(context.Questions.Include(x => x.Options).FirstOrDefaultAsync(x => x.Id == id));
+                return Ok(await context.Questions.Include(x => x.Options).FirstOrDefaultAsync(x => x.Id == id));
             }
             catch
             {
@@ -268,7 +294,7 @@ namespace API.Controllers
         {
             try
             {
-                return Ok(context.Countrys.FirstOrDefaultAsync(x => x.Id == id));
+                return Ok(await context.Countrys.FirstOrDefaultAsync(x => x.Id == id));
             }
             catch
             {
@@ -298,7 +324,7 @@ namespace API.Controllers
         {
             try
             {
-                return Ok(context.Areas.FirstOrDefaultAsync(x => x.Id == id));
+                return Ok(await context.Areas.FirstOrDefaultAsync(x => x.Id == id));
             }
             catch
             {
@@ -328,7 +354,7 @@ namespace API.Controllers
         {
             try
             {
-                return Ok(context.Options.FirstOrDefaultAsync(x => x.Id == id));
+                return Ok(await context.Options.FirstOrDefaultAsync(x => x.Id == id));
             }
             catch
             {
@@ -358,7 +384,7 @@ namespace API.Controllers
         {
             try
             {
-                return Ok(context.Answers.Include(x => x.Question).ThenInclude(x => x.Options).FirstOrDefaultAsync(x => x.Id == id));
+                return Ok(await context.Answers.Include(x => x.Question).ThenInclude(x => x.Options).FirstOrDefaultAsync(x => x.Id == id));
             }
             catch
             {
@@ -394,7 +420,7 @@ namespace API.Controllers
         {
             try
             {
-                return Ok(context.AnswerGroups
+                return Ok(await context.AnswerGroups
                     .Include(x => x.Country)
                     .Include(x => x.Area)
                     .Include(x => x.Answers)
@@ -435,7 +461,7 @@ namespace API.Controllers
         {
             try
             {
-                return Ok(context.QuestionGroups
+                return Ok(await context.QuestionGroups
                     .Include(x => x.Area)
                     .Include(x => x.Country)
                     .Include(x => x.Questions)
@@ -447,6 +473,36 @@ namespace API.Controllers
                 return BadRequest();
             }
             
+        }
+        #endregion
+
+        #region Role
+        [HttpGet("ReadAllRoles")]
+        public async Task<IActionResult> ReadAllRoles()
+        {
+            try
+            {
+                return Ok(context.Roles);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+
+        }
+
+        [HttpGet("ReadRole")]
+        public async Task<IActionResult> ReadRole(int id)
+        {
+            try
+            {
+                return Ok(await context.Roles.FirstOrDefaultAsync(x => x.Id == id));
+            }
+            catch
+            {
+                return BadRequest();
+            }
+
         }
         #endregion
 
@@ -613,6 +669,29 @@ namespace API.Controllers
            
             return Ok();
         }
+
+        [HttpPut("UpdateRole")]
+        public async Task<IActionResult> UpdateRole(RoleModel role)
+        {
+            try
+            {
+                await Task.Run(() => {
+                    context.Roles.Update(role);
+                });
+
+
+                if (await context.SaveChangesAsync() == 0)
+                {
+                    return BadRequest();
+                }
+            }
+            catch
+            {
+                return BadRequest();
+            }
+
+            return Ok();
+        }
         #endregion
 
         #region Delete
@@ -767,6 +846,28 @@ namespace API.Controllers
                 return BadRequest();
             }
             
+            return Ok();
+        }
+
+        [HttpDelete("DeleteRole")]
+        public async Task<IActionResult> DeleteRole(int id)
+        {
+            try
+            {
+                RoleModel role = new() { Id = id };
+                context.Roles.Attach(role);
+                context.Roles.Remove(role);
+
+                if (await context.SaveChangesAsync() == 0)
+                {
+                    return BadRequest();
+                }
+            }
+            catch
+            {
+                return BadRequest();
+            }
+
             return Ok();
         }
         #endregion

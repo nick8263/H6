@@ -1,5 +1,4 @@
 ﻿using Models;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,15 +7,15 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UserApp
+namespace ApiAccess
 {
-    public class ApiAccess
+    public class UserAccess
     {
         private HttpClient _httpClient;
         //string connectionString = "https://localhost:7089/api/User/";
         string connectionString = "https://localhost:7184/api/User/";
 
-        public ApiAccess()
+        public UserAccess()
         {
             _httpClient = new HttpClient();
         }
@@ -75,7 +74,7 @@ namespace UserApp
 
                 // Check if the request was successful
                 if (response.IsSuccessStatusCode)
-                {          
+                {
 
                     // Return the retrieved user
                     return (true, null);
@@ -134,3 +133,4 @@ namespace UserApp
         }
     }
 }
+1
