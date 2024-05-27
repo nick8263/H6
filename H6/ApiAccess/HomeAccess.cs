@@ -694,7 +694,7 @@ namespace ApiAccess
         }
 
     
-        public async Task<(AnswerGroup, string)> ReadAnswerGroup(int areaId,  int countryId)
+        public async Task<(List<AnswerGroup>, string)> ReadAnswerGroup(int areaId,  int countryId)
         {
             // Serialize the user object to JSON
             string serializedId = JsonConvert.SerializeObject((areaId, countryId));
@@ -709,9 +709,9 @@ namespace ApiAccess
                 // Check if the request was successful
                 if (response.IsSuccessStatusCode)
                 {
-                    AnswerGroup answerGroup = JsonConvert.DeserializeObject<AnswerGroup>(responseContent);
+                    List<AnswerGroup> answerGroups = JsonConvert.DeserializeObject<List<AnswerGroup>>(responseContent);
 
-                    return (answerGroup, null);
+                    return (answerGroups, null);
                 }
                 else if (response.StatusCode == HttpStatusCode.NotFound)
                 {
@@ -719,7 +719,7 @@ namespace ApiAccess
                 }
                 else
                 {
-                    return (null, "Failed to get answerGroup. Status code: " + response.StatusCode);
+                    return (null, "Failed to get answerGroups. Status code: " + response.StatusCode);
                 }
             }
             catch
