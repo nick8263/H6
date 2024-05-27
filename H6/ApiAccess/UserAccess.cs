@@ -6,6 +6,9 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+
+
 
 namespace ApiAccess
 {
@@ -18,6 +21,7 @@ namespace ApiAccess
         public UserAccess()
         {
             _httpClient = new HttpClient();
+            
         }
 
         public async Task<(User, string)> Login(LoginModel user)
@@ -27,7 +31,7 @@ namespace ApiAccess
             {
                 // Serialize the user object to JSON
                 string serializedId = JsonConvert.SerializeObject(user);
-
+                
                 // Make a POST request to the API endpoint
                 HttpResponseMessage response = await _httpClient.PostAsync(connectionString + "Login", new StringContent(serializedId, Encoding.UTF8, "application/json"));
 
@@ -55,7 +59,111 @@ namespace ApiAccess
             catch
             {
                 return (null, "Something went wrong, contact customer support");
+                
             }
+        }
+
+        
+        public async Task<(bool, string)> CreateUser(User user)
+        {
+            user.Password = HashPassword(user.Password);
+            try
+            {
+                // Serialize the user object to JSON
+                string serializedId = JsonConvert.SerializeObject(user);
+
+                // Make a POST request to the API endpoint
+                HttpResponseMessage response = await _httpClient.PostAsync(connectionString + "CreateUser", new StringContent(serializedId, Encoding.UTF8, "application/json"));
+
+                // Read the response content as a string
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                // Check if the request was successful
+                if (response.IsSuccessStatusCode)
+                {
+
+                    // Return the retrieved user
+                    return (true, null);
+                }
+                else if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return (false, responseContent);
+                }
+                else
+                {
+                    return (false, "Failed to update user. Status code: " + response.StatusCode);
+                }
+            }
+            catch
+            {
+                return (false, "Something went wrong, contact customer support");
+            }
+        }
+
+        public async Task<(List<User>, string)> ReadAllUser()
+        {
+            try
+            {
+                // Make a POST request to the API endpoint
+                HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"ReadAllUser");
+
+                // Read the response content as a string
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                // Check if the request was successful
+                if (response.IsSuccessStatusCode)
+                {
+                    List<User> users = JsonConvert.DeserializeObject<List<User>>(responseContent);
+
+                    return (users, null);
+                }
+                else if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return (null, responseContent);
+                }
+                else
+                {
+                    return (null, "Failed to update user. Status code: " + response.StatusCode);
+                }
+            }
+            catch
+            {
+                return (null, "Something went wrong, contact customer support");
+            }
+
+        }
+
+        public async Task<(User, string)> ReadUser(int id)
+        {            
+            try
+            {
+                // Make a POST request to the API endpoint
+                HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"ReadUser?id={id}");
+
+                // Read the response content as a string
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                // Check if the request was successful
+                if (response.IsSuccessStatusCode)
+                {
+                    User user = JsonConvert.DeserializeObject<User>(responseContent);
+                   
+                    return (user, null);
+                }
+                else if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return (null, responseContent);
+                }
+                else
+                {
+                    return (null, "Failed to update user. Status code: " + response.StatusCode);
+                }
+            }
+            catch
+            {
+                return (null, "Something went wrong, contact customer support");
+            }
+
         }
 
         public async Task<(bool, string)> UpdateUser(User user)
@@ -93,6 +201,43 @@ namespace ApiAccess
                 return (false, "Something went wrong, contact customer support");
             }
         }
+
+        public async Task<(bool, string)> DeleteUser(int id)
+        {          
+            try
+            {                
+
+                // Make a POST request to the API endpoint
+                HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"DeleteUser?id={id}");
+
+                // Read the response content as a string
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                // Check if the request was successful
+                if (response.IsSuccessStatusCode)
+                {
+
+                    // Return the retrieved user
+                    return (true, null);
+                }
+                else if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return (false, responseContent);
+                }
+                else
+                {
+                    return (false, "Failed to update user. Status code: " + response.StatusCode);
+                }
+            }
+            catch
+            {
+                return (false, "Something went wrong, contact customer support");
+            }
+        }
+
+
+
+
         public string HashPassword(string password)
         {
             // Generate a random salt
@@ -133,4 +278,3 @@ namespace ApiAccess
         }
     }
 }
-1
