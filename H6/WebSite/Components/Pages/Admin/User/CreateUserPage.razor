@@ -3,7 +3,7 @@
 @using Models
 @using Components.Managers
 
-@inject MockData MockData
+@inject IData Data
 @inject NavigationManager NavigationManager
 @inject ISessionService SessionManager
 
@@ -41,8 +41,15 @@
         </select>
     </div>
     <div class="form-group">
-        <label for="role">Role:</label>
-        <input type="text" class="form-control" @bind="newUser.Role" />
+        <label for="area">Role:</label>
+        <select class="form-control" @bind="newUser.Role.Id">
+            <option value="">Select Area</option>
+            @if (roles != null && roles.Count > 0) {
+                @foreach (var role in roles) {
+                    <option value="@role.Id">@role.Name</option>
+                }
+            }
+        </select>
     </div>
 
     <button type="button" class="btn btn-primary" @onclick="CreateUser">Create User</button>
@@ -54,22 +61,25 @@
     private User newUser = new User();
     private List<Country> countries { get; set; } = new List<Country>();
     private List<Area> areas { get; set; } = new List<Area>();
+    private List<RoleModel> roles { get; set; } = new List<RoleModel>();
     private bool isAdmin;
 
-    protected override void OnInitialized()
-    {
+    protected override async Task OnInitializedAsync() {
         isAdmin = SessionManager.IsAdmin();
         newUser.Area = new Area();
         newUser.Country = new Country();
-        countries = MockData.GetCountries();
-        areas = MockData.GetAreas();
+        newUser.Role = new RoleModel();
+        countries = Data.GetCountries();
+        areas = Data.GetAreas();
+        roles = Data.GetRoles();
     }
 
     private void CreateUser()
     {
         newUser.Country = countries.FirstOrDefault(c => c.Id == newUser.Country.Id);
         newUser.Area = areas.FirstOrDefault(a => a.Id == newUser.Area.Id);
-        MockData.AddUser(newUser);
+        newUser.Role = roles.FirstOrDefault(r => r.Id == newUser.Role.Id);
+        Data.AddUser(newUser);
         NavigationManager.NavigateTo("/useradministration");
     }
 }

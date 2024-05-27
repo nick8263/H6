@@ -1,0 +1,57 @@
+﻿@page "/answers"
+
+@using Models
+@using Components.Managers
+
+@inject ISessionService SessionManager
+@inject IData Data
+
+@if (isHse) {
+    <h3>AnswerPage</h3>
+
+    @if (answerGroups != null && answerGroups.Any()) {
+        <div class="overflow-scroll" style="overflow-x: auto;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        @foreach (var a in answerGroups.First().Answers) {
+                            <th>@a.Question.PossibleQuestion</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var answerGroup in answerGroups) {
+                        <tr>
+                            @foreach (var answer in answerGroup.Answers) {
+                                @if (answer.Question.Options != null) {
+                                    <td>@answer.SelectedAnswer</td>
+                                } else {
+                                    <td>@answer.FreeTextAnswer</td>
+                                }
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    } else {
+        <p>No answers available.</p>
+    }
+} else {
+    <p>Not authorized</p>
+}
+
+
+
+@code {
+    private List<AnswerGroup> answerGroups = new List<AnswerGroup>();
+    private bool isHse;
+    private int columnCount, rowcount;
+    private User user;
+
+    protected override async Task OnInitializedAsync() {
+        user = SessionManager.GetUser();
+        isHse = SessionManager.IsHSEAdmin();
+        answerGroups = Data.GetAnswerGroup(user.Area.Id, user.Country.Id);
+    }
+}

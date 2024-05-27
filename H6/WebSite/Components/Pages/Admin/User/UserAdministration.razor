@@ -3,7 +3,7 @@
 @using Models
 @using Components.Managers
 
-@inject MockData MockData
+@inject IData Data
 @inject ISessionService SessionManager
 @inject NavigationManager NavigationManager
 
@@ -27,7 +27,7 @@
                 @foreach (var user in users) {
                     <tr>
                         <td>@user.UserName</td>
-                        <td>@user.Role</td>
+                        <td>@user.Role.Name</td>
                         <td>@user.Area.PossibleArea</td>
                         <td>@user.Country.PossibleCountry</td>
                         <td>
@@ -47,13 +47,13 @@
     List<User> users;
     bool isAdmin;
 
-    protected override void OnInitialized() {
+    protected override async Task OnInitializedAsync() {
         isAdmin = SessionManager.IsAdmin();
-        users = MockData.GetUsers();
+        users = Data.GetUsers();
     }
 
     void DeleteUser(User user) {
-        MockData.DeleteUser(user.Id);
+        Data.DeleteUser(user.Id);
     }
 
     void EditUser(User user) {

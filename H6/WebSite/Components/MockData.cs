@@ -6,14 +6,16 @@ using System.Text.RegularExpressions;
 using WebSite.Components.Pages;
 
 namespace WebSite.Components {
-    public class MockData {
+    public class MockData : IData {
         private static MockData _instance;
         private static List<Question> _questions;
         private static List<QuestionGroup> _groups = new List<QuestionGroup>();
         private static List<User> _users = new List<User>();
         private static List<Area> _areas = new List<Area>();
         private static List<Country> _countries = new List<Country>();
-        private QuestionGroup _group;
+        private static List<RoleModel> _roles = new List<RoleModel>();
+        private static QuestionGroup _group;
+        private static List<AnswerGroup> _answerGroups = new List<AnswerGroup>();
         
         public MockData() {
             // Initialize mock data
@@ -45,27 +47,87 @@ namespace WebSite.Components {
                 Country = country
             };
             _groups.Add(_group);
+            RoleModel role = new RoleModel {
+                Id = 1,
+                Name = "admin"
+            };
+            _roles.Add(role);
             User user = new User {
                 Area = area,
                 Country = country,
                 Id = 1,
                 Password = "admin",
-                Role = new RoleModel { Name = "admin" } ,
+                Role = role,
                 UserName = "admin"
             };
             _users.Add(user);
+
+            List<Answer> answers = new List<Answer>();
+
+            AnswerGroup answerGroup = new AnswerGroup {
+                Id = 1,
+                Area = area,
+                Country = country,
+                user = user,
+                Answers = new List<Answer>()               
+            };
+
+            Answer answer = new Answer {
+                Id = 1,
+                Question = _questions[0],
+                FreeTextAnswer = null,
+                SelectedAnswer = _questions[0].Options[0].PossibleOption,      
+                AnswerGroups = new List<AnswerGroup>()
+            };            
+            answer.AnswerGroups.Add(answerGroup);
+            answers.Add(answer);
+            answerGroup.Answers.Add(answer);
+
+            answer = new Answer {
+                Id = 2,
+                Question = _questions[1],
+                FreeTextAnswer = "27",
+                SelectedAnswer = null,
+                AnswerGroups = new List<AnswerGroup>()
+            };
+
+            answer.AnswerGroups.Add(answerGroup);
+            answers.Add(answer);
+            answerGroup.Answers.Add(answer);
+            _answerGroups.Add(answerGroup);
+
 
             area = new Area { Id = 2, PossibleArea = "Test Area 2" };
             _areas.Add(area);
             country = new Country { Id = 2, PossibleCountry = "Test Country 2" };
             _countries.Add(country);
+            role = new RoleModel {
+                Id = 2,
+                Name = "hse"
+            };
+            _roles.Add(role);
             user = new User {
                 Area = area,
                 Country = country,
                 Id = 2,
                 Password = "hse",
-                Role = new RoleModel { Name = "hse"},
+                Role = role,
                 UserName = "hse"
+            };
+            _users.Add(user);
+
+            role = new RoleModel {
+                Id = 3,
+                Name = "regular"
+            };
+            _roles.Add(role);
+            user = new User {
+                Area = area,
+                Country = country,
+                Id = 3,
+                Password = "regular",
+                Role = role,
+                UserName = "regular"
             };
             _users.Add(user);
 
@@ -96,6 +158,99 @@ namespace WebSite.Components {
                 Country = country
             };
             _groups.Add(_group);
+
+            answers = new List<Answer>();
+
+            answerGroup = new AnswerGroup {
+                Id = 2,
+                Area = area,
+                Country = country,
+                user = user,
+                Answers = new List<Answer>()
+            };
+
+            answer = new Answer {
+                Id = 3,
+                Question = _questions[0],
+                FreeTextAnswer = null,
+                SelectedAnswer = _questions[0].Options[0].PossibleOption,
+                AnswerGroups = new List<AnswerGroup>()
+            };
+            answer.AnswerGroups.Add(answerGroup);
+            answers.Add(answer);
+            answerGroup.Answers.Add(answer);
+
+            answer = new Answer {
+                Id = 4,
+                Question = _questions[1],
+                FreeTextAnswer = "27",
+                SelectedAnswer = null,
+                AnswerGroups = new List<AnswerGroup>()
+            };
+
+            answer.AnswerGroups.Add(answerGroup);
+            answers.Add(answer);
+            answerGroup.Answers.Add(answer);
+
+            answer = new Answer {
+                Id = 5,
+                Question = _questions[0],
+                FreeTextAnswer = null,
+                SelectedAnswer = _questions[0].Options[2].PossibleOption,
+                AnswerGroups = new List<AnswerGroup>()
+            };
+
+            answer.AnswerGroups.Add(answerGroup);
+            answers.Add(answer);
+            answerGroup.Answers.Add(answer);
+            _answerGroups.Add(answerGroup);
+
+            answers = new List<Answer>();
+
+            answerGroup = new AnswerGroup {
+                Id = 3,
+                Area = area,
+                Country = country,
+                user = user,
+                Answers = new List<Answer>()
+            };
+
+            answer = new Answer {
+                Id = 6,
+                Question = _questions[0],
+                FreeTextAnswer = null,
+                SelectedAnswer = _questions[0].Options[2].PossibleOption,
+                AnswerGroups = new List<AnswerGroup>()
+            };
+            answer.AnswerGroups.Add(answerGroup);
+            answers.Add(answer);
+            answerGroup.Answers.Add(answer);
+
+            answer = new Answer {
+                Id = 7,
+                Question = _questions[1],
+                FreeTextAnswer = "23",
+                SelectedAnswer = null,
+                AnswerGroups = new List<AnswerGroup>()
+            };
+
+            answer.AnswerGroups.Add(answerGroup);
+            answers.Add(answer);
+            answerGroup.Answers.Add(answer);
+
+            answer = new Answer {
+                Id = 8,
+                Question = _questions[0],
+                FreeTextAnswer = null,
+                SelectedAnswer = _questions[0].Options[1].PossibleOption,
+                AnswerGroups = new List<AnswerGroup>()
+            };
+
+            answer.AnswerGroups.Add(answerGroup);
+            answers.Add(answer);
+            answerGroup.Answers.Add(answer);
+            _answerGroups.Add(answerGroup);
+
         }
 
         public static MockData Instance {
@@ -105,6 +260,27 @@ namespace WebSite.Components {
                 }
                 return _instance;
             }
+        }
+
+        public List<AnswerGroup> GetAnswerGroup(int areaId, int countryId) {
+            return _answerGroups.Where(a => a.Area.Id == areaId && a.Country.Id == countryId).ToList();
+        }
+
+
+        public List<RoleModel> GetRoles() { 
+            return _roles; 
+        }
+
+        public void DeleteRole(int roleId) {
+            var roleToRemove = _roles.FirstOrDefault(r => r.Id == roleId);
+            if (roleToRemove != null) {
+                _roles.Remove(roleToRemove);
+            }
+        }
+
+        public void AddRole(RoleModel role) {
+            role.Id = _roles.Any() ? _roles.Max(r => r.Id) + 1 : 1;
+            _roles.Add(role);
         }
 
         public List<Area> GetAreas() {

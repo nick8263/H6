@@ -3,7 +3,7 @@
 @using Models
 @using Components.Managers
 
-@inject MockData MockData
+@inject IData Data
 @inject ISessionService SessionManager
 
 @if (isAdmin) {
@@ -61,29 +61,29 @@
     private List<Country> countries = new List<Country>();
     private bool isAdmin;
 
-    protected override void OnInitialized() {
-        areas = MockData.GetAreas();
-        countries = MockData.GetCountries();
+    protected override async Task OnInitializedAsync() {
+        areas = Data.GetAreas();
+        countries = Data.GetCountries();
         isAdmin = SessionManager.IsAdmin();
     }
 
     private void HandleValidSubmitArea() {
 
-        MockData.AddArea(newArea);
+        Data.AddArea(newArea);
         // Reset form
         newArea = new Area();
     }
 
     private void HandleValidSubmitCountry() {
-        MockData.AddCountry(newCountry);
+        Data.AddCountry(newCountry);
         newCountry = new Country();
     }
 
     private void DeleteCountry(int countryId) {
-        MockData.DeleteCountry(countryId);
+        Data.DeleteCountry(countryId);
     }
 
     private void DeleteArea(int areaId) {
-        MockData.DeleteArea(areaId);
+        Data.DeleteArea(areaId);
     }
 }
