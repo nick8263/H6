@@ -1,10 +1,11 @@
+using ApiAccess;
 using Models;
 
 namespace UserApp.Pages;
 
 public partial class ChangePasswordPage : ContentPage
 {
-    ApiAccess apiAccess = new ApiAccess();
+    UserAccess userAccess = new UserAccess();
     public User User { get; set; }
     public ChangePasswordPage(User _user)
     {
@@ -16,7 +17,7 @@ public partial class ChangePasswordPage : ContentPage
     {
         if (passwordEntry.Text.Length > 4)
         {
-            (bool, string) result = await apiAccess.UpdateUser(User);
+            (bool, string) result = await userAccess.UpdateUser(User);
 
             if (!result.Item1)
             {

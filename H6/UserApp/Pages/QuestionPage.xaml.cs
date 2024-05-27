@@ -98,9 +98,7 @@ public partial class QuestionPage : ContentPage
         if (_viewModel.ValidateAnswers(out string validationMessage))
         {
             // Proceed with submission
-            DisplayAlert("Success", "Survey submitted successfully!", "OK");
-            var a = _viewModel.AnswerGroup;
-            var t = ";";
+            await DisplayAlert("Success", "Survey submitted successfully!", "OK");            
         }
         else
         {

@@ -11,9 +11,9 @@ public partial class AccountPage : ContentPage
         User = _user;
 
         userNameLabel.Text = _user.UserName;
-        countryLabel.Text = _user.Country;
-        areaLabel.Text = _user.Area;
-        roleLabel.Text = _user.Role;
+        countryLabel.Text = _user.Country.PossibleCountry;
+        areaLabel.Text = _user.Area.PossibleArea;
+        roleLabel.Text = _user.Role.Name;
 	}
 
     private async void ChangePasswordClicked(object sender, EventArgs e)

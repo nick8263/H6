@@ -64,6 +64,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\ApiAccess\ApiAccess.csproj" />
 	  <ProjectReference Include="..\Models\Models.csproj" />
 	</ItemGroup>
 
