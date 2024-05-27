@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Identity.Client;
 using NuGet.Protocol;
 using System.Diagnostics.Metrics;
+using Microsoft.CodeAnalysis.Elfie.Serialization;
 
 namespace API.Controllers
 {
@@ -416,7 +417,7 @@ namespace API.Controllers
         }
 
         [HttpGet("ReadAnswerGroup")]
-        public async Task<IActionResult> ReadAnswerGroup(int id)
+        public async Task<IActionResult> ReadAnswerGroup([FromBody] int areaId, [FromBody] int countryId)
         {
             try
             {
@@ -426,7 +427,7 @@ namespace API.Controllers
                     .Include(x => x.Answers)
                     .ThenInclude(x => x.Question)
                     .ThenInclude(x => x.Options)
-                    .FirstOrDefaultAsync(x => x.Id == id));
+                    .FirstOrDefaultAsync(x => x.Country.Id == countryId && x.Area.Id == areaId));
             }
             catch
             {
@@ -457,7 +458,7 @@ namespace API.Controllers
         }
 
         [HttpGet("ReadQuestionGroup")]
-        public async Task<IActionResult> ReadQuestionGroup(int id)
+        public async Task<IActionResult> ReadQuestionGroup([FromBody] int areaId, [FromBody] int countryId)
         {
             try
             {
@@ -465,8 +466,8 @@ namespace API.Controllers
                     .Include(x => x.Area)
                     .Include(x => x.Country)
                     .Include(x => x.Questions)
-                    .ThenInclude(x => x.Options)
-                    .FirstOrDefaultAsync(x => x.Id == id));
+                .ThenInclude(x => x.Options)
+                    .FirstOrDefaultAsync(x => x.Country.Id == countryId && x.Area.Id == areaId));
             }
             catch
             {

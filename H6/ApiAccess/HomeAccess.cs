@@ -694,12 +694,14 @@ namespace ApiAccess
         }
 
     
-        public async Task<(AnswerGroup, string)> ReadAnswerGroup(int id)
+        public async Task<(AnswerGroup, string)> ReadAnswerGroup(int areaId,  int countryId)
         {
+            // Serialize the user object to JSON
+            string serializedId = JsonConvert.SerializeObject((areaId, countryId));
             try
             {
                 // Make a POST request to the API endpoint
-                HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"ReadAnswerGroup?id={id}");
+                HttpResponseMessage response = await _httpClient.PostAsync(connectionString + "ReadAnswerGroup", new StringContent(serializedId, Encoding.UTF8, "application/json"));
 
                 // Read the response content as a string
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -764,12 +766,13 @@ namespace ApiAccess
         }
 
         
-        public async Task<(QuestionGroup, string)> ReadQuestionGroup(int id)
+        public async Task<(QuestionGroup, string)> ReadQuestionGroup(int areaId, int countryId)
         {
+            string serializedId = JsonConvert.SerializeObject((areaId, countryId));
             try
             {
                 // Make a POST request to the API endpoint
-                HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"ReadQuestionGroup?id={id}");
+                HttpResponseMessage response = await _httpClient.PostAsync(connectionString + "ReadQuestionGroup", new StringContent(serializedId, Encoding.UTF8, "application/json"));
 
                 // Read the response content as a string
                 string responseContent = await response.Content.ReadAsStringAsync();
