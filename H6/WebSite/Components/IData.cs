@@ -12,8 +12,7 @@ namespace WebSite.Components {
         Area GetArea(int id);
         Country GetCountry(int id);
         QuestionGroup GetQuestionGroup(int areaId, int countryId);
-        List<Question> GetQuestions();
-        List<Question> GetQuestionsForID(int id);
+        List<Question> GetQuestions();        
         User GetUser(string username, string password);
         User GetUser(int id);
         List<User> GetUsers();
