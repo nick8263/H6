@@ -205,6 +205,52 @@ namespace WebSite.Components {
             answerGroup.Answers.Add(answer);
             _answerGroups.Add(answerGroup);
 
+            answers = new List<Answer>();
+
+            answerGroup = new AnswerGroup {
+                Id = 3,
+                Area = area,
+                Country = country,
+                user = user,
+                Answers = new List<Answer>()
+            };
+
+            answer = new Answer {
+                Id = 6,
+                Question = _questions[0],
+                FreeTextAnswer = null,
+                SelectedAnswer = _questions[0].Options[2].PossibleOption,
+                AnswerGroups = new List<AnswerGroup>()
+            };
+            answer.AnswerGroups.Add(answerGroup);
+            answers.Add(answer);
+            answerGroup.Answers.Add(answer);
+
+            answer = new Answer {
+                Id = 7,
+                Question = _questions[1],
+                FreeTextAnswer = "23",
+                SelectedAnswer = null,
+                AnswerGroups = new List<AnswerGroup>()
+            };
+
+            answer.AnswerGroups.Add(answerGroup);
+            answers.Add(answer);
+            answerGroup.Answers.Add(answer);
+
+            answer = new Answer {
+                Id = 8,
+                Question = _questions[0],
+                FreeTextAnswer = null,
+                SelectedAnswer = _questions[0].Options[1].PossibleOption,
+                AnswerGroups = new List<AnswerGroup>()
+            };
+
+            answer.AnswerGroups.Add(answerGroup);
+            answers.Add(answer);
+            answerGroup.Answers.Add(answer);
+            _answerGroups.Add(answerGroup);
+
         }
 
         public static MockData Instance {
@@ -216,9 +262,10 @@ namespace WebSite.Components {
             }
         }
 
-        public AnswerGroup GetAnswerGroup(int areaId, int countryId) {
-            return _answerGroups.FirstOrDefault(a => a.Area.Id == areaId && a.Country.Id == countryId);
+        public List<AnswerGroup> GetAnswerGroup(int areaId, int countryId) {
+            return _answerGroups.Where(a => a.Area.Id == areaId && a.Country.Id == countryId).ToList();
         }
+
 
         public List<RoleModel> GetRoles() { 
             return _roles; 

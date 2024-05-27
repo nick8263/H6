@@ -45,8 +45,6 @@
 
 @code {
     private List<AnswerGroup> answerGroups = new List<AnswerGroup>();
-    private AnswerGroup answerGroup;
-    private List<Answer> answers;
     private bool isHse;
     private int columnCount, rowcount;
     private User user;
@@ -54,8 +52,6 @@
     protected override async Task OnInitializedAsync() {
         user = SessionManager.GetUser();
         isHse = SessionManager.IsHSEAdmin();
-        answerGroup = Data.GetAnswerGroup(user.Area.Id, user.Country.Id);
-        answers = answerGroup.Answers;
-        answerGroups.Add(answerGroup);
+        answerGroups = Data.GetAnswerGroup(user.Area.Id, user.Country.Id);
     }
 }

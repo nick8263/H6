@@ -2,7 +2,7 @@
 
 namespace WebSite.Components {
     public interface IData {
-        AnswerGroup GetAnswerGroup(int areaId, int countryId);
+        List<AnswerGroup> GetAnswerGroup(int areaId, int countryId);
         List<RoleModel> GetRoles();
         void DeleteRole(int roleId);
         void AddRole(RoleModel role);
