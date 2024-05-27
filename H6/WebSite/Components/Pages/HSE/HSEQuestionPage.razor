@@ -2,7 +2,7 @@
 
 @using Models
 @using Components.Managers
-@inject MockData MockData
+@inject IData Data
 @inject ISessionService SessionManager
 
 @if (isHSE) {
@@ -22,7 +22,7 @@
                     <tr>
                         <td>
                             @if (questions.Contains(question)) {
-                                <button class="btn btn-danger" @onclick="() => RemoveQuestion(question)">Delete</button>
+                                <button class="btn btn-danger" @onclick="() => RemoveQuestion(question)">Remove</button>
                             } else {
                                 <button class="btn btn-primary" @onclick="() => AddQuestion(question)">Add</button>
                             }
@@ -45,10 +45,10 @@
     List<Question> allQuestions;
     bool isHSE;
 
-    protected override void OnInitialized() {
+    protected override async Task OnInitializedAsync() {
         // Initialize with mock data
         questions = SessionManager.GetQuestionGroup().Questions;
-        allQuestions = MockData.GetQuestions();
+        allQuestions = Data.GetQuestions();
         isHSE = SessionManager.IsHSEAdmin();
     }
 

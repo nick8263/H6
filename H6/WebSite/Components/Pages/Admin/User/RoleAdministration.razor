@@ -1,0 +1,57 @@
+﻿@page "/roleadministration"
+
+@using Models
+@using Components.Managers
+
+@inject IData Data
+@inject ISessionService SessionManager
+@inject NavigationManager NavigationManager
+
+@if (isAdmin) {
+    <h3>Role Administration</h3>
+
+    <button class="btn btn-success" @onclick="CreateRole">Create new Role</button>
+
+    @if (roles != null && roles.Count > 0) {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var role in roles) {
+                    <tr>
+                        <td>@role.Id</td>
+                        <td>@role.Name</td>
+                        <td>
+                            <button class="btn btn-danger" @onclick="() => DeleteRole(role)">Delete</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+} else {
+    <p>Not authorized</p>
+}
+
+@code {
+    List<RoleModel> roles;
+    bool isAdmin;
+
+    protected override async Task OnInitializedAsync() {
+        isAdmin = SessionManager.IsAdmin();
+        roles = Data.GetRoles();
+    }
+
+    void DeleteRole(RoleModel role) {
+        Data.DeleteRole(role.Id);
+    }
+
+    void CreateRole() {
+        NavigationManager.NavigateTo("/createrole");
+    }
+}

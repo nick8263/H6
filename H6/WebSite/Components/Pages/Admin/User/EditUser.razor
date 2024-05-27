@@ -4,7 +4,7 @@
 @using Components.Managers
 
 @inject ISessionService SessionManager
-@inject MockData MockData
+@inject IData Data
 @inject NavigationManager NavigationManager
 
 @if (isAdmin) {
@@ -39,6 +39,17 @@
                 }
             </select>
         </div>
+        <div class="form-group">
+            <label for="area">Role:</label>
+            <select class="form-control" @bind="user.Role.Id">
+                <option value="">Select Area</option>
+                @if (roles != null && roles.Count > 0) {
+                    @foreach (var role in roles) {
+                        <option value="@role.Id">@role.Name</option>
+                    }
+                }
+            </select>
+        </div>
 
         <div>
             <button type="button" class="btn btn-primary" @onclick="SaveChanges">Save Changes</button>
@@ -56,20 +67,25 @@
 
     private List<Country> countries { get; set; } = new List<Country>();
     private List<Area> areas { get; set; } = new List<Area>();
+    private List<RoleModel> roles { get; set; } = new List<RoleModel>();
 
     private bool isAdmin;
 
-    protected override void OnInitialized() {
+    protected override async Task OnInitializedAsync() {
         isAdmin = SessionManager.IsAdmin();
         int userId = Int32.Parse(Id);
-        user = MockData.GetUser(userId);
-        countries = MockData.GetCountries();
-        areas = MockData.GetAreas();
+        user = Data.GetUser(userId);
+        countries = Data.GetCountries();
+        areas = Data.GetAreas();
+        roles = Data.GetRoles();
     }
 
     void SaveChanges() {
         // Update question in database
-        MockData.UpdateUser(user);
+        user.Area = areas.FirstOrDefault(a => a.Id == user.Area.Id);
+        user.Country = countries.FirstOrDefault(c => c.Id == user.Country.Id);
+        user.Role = roles.FirstOrDefault(r => r.Id == user.Role.Id);
+        Data.UpdateUser(user);
         NavigationManager.NavigateTo("/useradministration");
     }
 }

@@ -3,7 +3,7 @@
 @using Models
 @using Components.Managers
 @inject NavigationManager NavigationManager
-@inject MockData MockData
+@inject IData Data
 @inject ISessionService SessionManager
 
 @if (isAdmin) {
@@ -49,7 +49,7 @@
     protected override async Task OnInitializedAsync() {
         isAdmin = SessionManager.IsAdmin();
         int id = Int32.Parse(QuestionId);
-        question = MockData.GetQuestion(id);
+        question = Data.GetQuestion(id);
     }
 
     void ToggleOptions(ChangeEventArgs e) {
@@ -73,7 +73,7 @@
 
     void SaveChanges() {
         // Update question in database
-        MockData.EditQuestion(question);
+        Data.EditQuestion(question);
         NavigationManager.NavigateTo("/questions");
     }
 }

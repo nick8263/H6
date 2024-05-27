@@ -3,7 +3,7 @@
 @using Models
 @using Components.Managers
 @inject ISessionService SessionManager
-@inject MockData MockData
+@inject IData Data
 
 <h3>User Dashboard</h3>
 
@@ -23,7 +23,7 @@
             <td>@user.UserName</td>
             <td>@user.Country.PossibleCountry</td>
             <td>@user.Area.PossibleArea</td>
-            <td>@user.Role</td>
+            <td>@user.Role.Name</td>
          </tr>
     </tbody>
 </table>
@@ -61,7 +61,7 @@
     private string confirmPassword = string.Empty;
     private string errorMessage = string.Empty;
 
-    protected override void OnInitialized() {
+    protected override async Task OnInitializedAsync() {
         user = SessionManager.GetUser();
     }
 
@@ -76,7 +76,7 @@
             errorMessage = string.Empty;
             // Add logic to change the password here
             // For example, SessionManager.ChangePassword(user.Id, newPassword);
-            MockData.UpdateUser(user);
+            Data.UpdateUser(user);
             showChangePasswordFields = false;
             // Notify the user that the password has been changed successfully
         }

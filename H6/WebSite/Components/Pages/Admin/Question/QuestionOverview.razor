@@ -3,7 +3,7 @@
 @using Models
 @using Components.Managers
 @inject NavigationManager NavigationManager
-@inject MockData MockData
+@inject IData Data
 @inject ISessionService SessionManager
 
 @if (isAdmin) {
@@ -46,7 +46,7 @@
 
     protected override async Task OnInitializedAsync() {
         isAdmin = SessionManager.IsAdmin();
-        questions = MockData.Instance.GetQuestions(); // MOCK DATA
+        questions = Data.GetQuestions();
     } 
 
     void EditQuestion(Question question) {
@@ -55,7 +55,7 @@
 
 
     void DeleteQuestion(Question question) {
-        MockData.DeleteQuestion(question.Id);
+        Data.DeleteQuestion(question.Id);
     }
 
     void CreateQuestion() {
