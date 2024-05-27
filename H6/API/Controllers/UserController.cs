@@ -26,12 +26,12 @@ namespace API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("GetToken")]
-        public async Task<IActionResult> GetToken()
+        [HttpPost("GetToken")]
+        public async Task<string> GetToken()
         {
             
 
-            return Ok(GenerateJSONWebToken());
+            return GenerateJSONWebToken();
 
         }        
 
@@ -52,7 +52,7 @@ namespace API.Controllers
                     return BadRequest();
                 }           
 
-                return Ok(userExist);
+                return Ok((userExist, GenerateJSONWebToken()));
 
             }
             catch
@@ -69,6 +69,7 @@ namespace API.Controllers
             {
                 user.Country = await context.Countrys.FindAsync(user.Country.Id);
                 user.Area = await context.Areas.FindAsync(user.Area.Id);
+                user.Role = await context.Roles.FindAsync(user.Role.Id);
 
                 await context.Users.AddAsync(user);
 

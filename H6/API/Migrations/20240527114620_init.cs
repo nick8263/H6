@@ -72,6 +72,20 @@ namespace API.Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Roles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "longtext", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Roles", x => x.Id);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "QuestionGroups",
                 columns: table => new
                 {
@@ -99,44 +113,14 @@ namespace API.Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    CountryId = table.Column<int>(type: "int", nullable: false),
-                    AreaId = table.Column<int>(type: "int", nullable: false),
-                    Role = table.Column<string>(type: "longtext", nullable: false),
-                    UserName = table.Column<string>(type: "longtext", nullable: false),
-                    Password = table.Column<string>(type: "longtext", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Users_Areas_AreaId",
-                        column: x => x.AreaId,
-                        principalTable: "Areas",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Users_Countrys_CountryId",
-                        column: x => x.CountryId,
-                        principalTable: "Countrys",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "Answers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     QuestionId = table.Column<int>(type: "int", nullable: false),
-                    FreeTextAnswer = table.Column<string>(type: "longtext", nullable: false),
-                    SelectedAnswer = table.Column<string>(type: "longtext", nullable: false)
+                    FreeTextAnswer = table.Column<string>(type: "longtext", nullable: true),
+                    SelectedAnswer = table.Column<string>(type: "longtext", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -170,6 +154,42 @@ namespace API.Migrations
                         name: "FK_OptionQuestion_Questions_QuestionsId",
                         column: x => x.QuestionsId,
                         principalTable: "Questions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    CountryId = table.Column<int>(type: "int", nullable: false),
+                    AreaId = table.Column<int>(type: "int", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: false),
+                    UserName = table.Column<string>(type: "longtext", nullable: false),
+                    Password = table.Column<string>(type: "longtext", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Users_Areas_AreaId",
+                        column: x => x.AreaId,
+                        principalTable: "Areas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Users_Countrys_CountryId",
+                        column: x => x.CountryId,
+                        principalTable: "Countrys",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Users_Roles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Roles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -313,6 +333,11 @@ namespace API.Migrations
                 name: "IX_Users_CountryId",
                 table: "Users",
                 column: "CountryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_RoleId",
+                table: "Users",
+                column: "RoleId");
         }
 
         /// <inheritdoc />
@@ -350,6 +375,9 @@ namespace API.Migrations
 
             migrationBuilder.DropTable(
                 name: "Countrys");
+
+            migrationBuilder.DropTable(
+                name: "Roles");
         }
     }
 }

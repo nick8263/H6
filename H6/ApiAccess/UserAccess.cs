@@ -16,7 +16,7 @@ namespace ApiAccess
     {
         private HttpClient _httpClient;
         //string connectionString = "https://localhost:7089/api/User/";
-        string connectionString = "https://localhost:7184/api/User/";
+        string connectionString = "https://localhost:7012/api/User/";
 
         public UserAccess()
         {
@@ -56,9 +56,9 @@ namespace ApiAccess
                     return (null, "Failed to get user. Status code: " + response.StatusCode);
                 }
             }
-            catch
+            catch (Exception e)
             {
-                return (null, "Something went wrong, contact customer support");
+                return (null, "Something went wrong, contact customer support \n" + e.Message);
                 
             }
         }

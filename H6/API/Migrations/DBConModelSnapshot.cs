@@ -40,14 +40,12 @@ namespace API.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("FreeTextAnswer")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int>("QuestionId")
                         .HasColumnType("int");
 
                     b.Property<string>("SelectedAnswer")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
@@ -165,6 +163,21 @@ namespace API.Migrations
                     b.ToTable("QuestionGroups");
                 });
 
+            modelBuilder.Entity("Models.RoleModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
+                });
+
             modelBuilder.Entity("Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -181,9 +194,8 @@ namespace API.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserName")
                         .IsRequired()
@@ -194,6 +206,8 @@ namespace API.Migrations
                     b.HasIndex("AreaId");
 
                     b.HasIndex("CountryId");
+
+                    b.HasIndex("RoleId");
 
                     b.ToTable("Users");
                 });
@@ -314,9 +328,17 @@ namespace API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Models.RoleModel", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Area");
 
                     b.Navigation("Country");
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("OptionQuestion", b =>

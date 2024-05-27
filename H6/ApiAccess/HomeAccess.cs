@@ -13,7 +13,7 @@ namespace ApiAccess
     {
         private HttpClient _httpClient;
         //string connectionString = "https://localhost:7089/api/Home/";
-        string connectionString = "https://localhost:7184/api/Home/";
+        string connectionString = "https://localhost:7012/api/Home/";
 
         public HomeAccess()
         {

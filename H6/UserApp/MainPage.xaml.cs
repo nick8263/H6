@@ -16,6 +16,19 @@ namespace UserApp
 
         private async void OnLoginClicked(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(userNameEntry.Text))
+            {
+                errorLabel.Text = "Please write your username";
+                errorLabel.IsEnabled = true;
+                return;
+            }
+
+            if (string.IsNullOrEmpty(passwordEntry.Text))
+            {
+                errorLabel.Text = "Please write your password";
+                errorLabel.IsEnabled = true;
+                return;
+            }
             var user = await userAccess.Login(new LoginModel { UserName = userNameEntry.Text, Password = passwordEntry.Text});
 
             if (user.Item2 == null)
