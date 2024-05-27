@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using WebSite.Components.Pages;
 
 namespace WebSite.Components {
-    public class MockData {
+    public class MockData : IData {
         private static MockData _instance;
         private static List<Question> _questions;
         private static List<QuestionGroup> _groups = new List<QuestionGroup>();
@@ -14,7 +14,8 @@ namespace WebSite.Components {
         private static List<Area> _areas = new List<Area>();
         private static List<Country> _countries = new List<Country>();
         private static List<RoleModel> _roles = new List<RoleModel>();
-        private QuestionGroup _group;
+        private static QuestionGroup _group;
+        private static List<AnswerGroup> _answerGroups = new List<AnswerGroup>();
         
         public MockData() {
             // Initialize mock data
@@ -60,6 +61,41 @@ namespace WebSite.Components {
                 UserName = "admin"
             };
             _users.Add(user);
+
+            List<Answer> answers = new List<Answer>();
+
+            AnswerGroup answerGroup = new AnswerGroup {
+                Id = 1,
+                Area = area,
+                Country = country,
+                user = user,
+                Answers = new List<Answer>()               
+            };
+
+            Answer answer = new Answer {
+                Id = 1,
+                Question = _questions[0],
+                FreeTextAnswer = null,
+                SelectedAnswer = _questions[0].Options[0].PossibleOption,      
+                AnswerGroups = new List<AnswerGroup>()
+            };            
+            answer.AnswerGroups.Add(answerGroup);
+            answers.Add(answer);
+            answerGroup.Answers.Add(answer);
+
+            answer = new Answer {
+                Id = 2,
+                Question = _questions[1],
+                FreeTextAnswer = "27",
+                SelectedAnswer = null,
+                AnswerGroups = new List<AnswerGroup>()
+            };
+
+            answer.AnswerGroups.Add(answerGroup);
+            answers.Add(answer);
+            answerGroup.Answers.Add(answer);
+            _answerGroups.Add(answerGroup);
+
 
             area = new Area { Id = 2, PossibleArea = "Test Area 2" };
             _areas.Add(area);
@@ -122,6 +158,53 @@ namespace WebSite.Components {
                 Country = country
             };
             _groups.Add(_group);
+
+            answers = new List<Answer>();
+
+            answerGroup = new AnswerGroup {
+                Id = 2,
+                Area = area,
+                Country = country,
+                user = user,
+                Answers = new List<Answer>()
+            };
+
+            answer = new Answer {
+                Id = 3,
+                Question = _questions[0],
+                FreeTextAnswer = null,
+                SelectedAnswer = _questions[0].Options[0].PossibleOption,
+                AnswerGroups = new List<AnswerGroup>()
+            };
+            answer.AnswerGroups.Add(answerGroup);
+            answers.Add(answer);
+            answerGroup.Answers.Add(answer);
+
+            answer = new Answer {
+                Id = 4,
+                Question = _questions[1],
+                FreeTextAnswer = "27",
+                SelectedAnswer = null,
+                AnswerGroups = new List<AnswerGroup>()
+            };
+
+            answer.AnswerGroups.Add(answerGroup);
+            answers.Add(answer);
+            answerGroup.Answers.Add(answer);
+
+            answer = new Answer {
+                Id = 5,
+                Question = _questions[0],
+                FreeTextAnswer = null,
+                SelectedAnswer = _questions[0].Options[2].PossibleOption,
+                AnswerGroups = new List<AnswerGroup>()
+            };
+
+            answer.AnswerGroups.Add(answerGroup);
+            answers.Add(answer);
+            answerGroup.Answers.Add(answer);
+            _answerGroups.Add(answerGroup);
+
         }
 
         public static MockData Instance {
@@ -131,6 +214,10 @@ namespace WebSite.Components {
                 }
                 return _instance;
             }
+        }
+
+        public AnswerGroup GetAnswerGroup(int areaId, int countryId) {
+            return _answerGroups.FirstOrDefault(a => a.Area.Id == areaId && a.Country.Id == countryId);
         }
 
         public List<RoleModel> GetRoles() { 

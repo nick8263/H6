@@ -3,7 +3,7 @@
 @using Models
 @using Components.Managers
 @inject ISessionService SessionManager
-@inject MockData MockData
+@inject IData Data
 
 <h3>User Dashboard</h3>
 
@@ -76,7 +76,7 @@
             errorMessage = string.Empty;
             // Add logic to change the password here
             // For example, SessionManager.ChangePassword(user.Id, newPassword);
-            MockData.UpdateUser(user);
+            Data.UpdateUser(user);
             showChangePasswordFields = false;
             // Notify the user that the password has been changed successfully
         }

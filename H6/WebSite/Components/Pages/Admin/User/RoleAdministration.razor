@@ -3,7 +3,7 @@
 @using Models
 @using Components.Managers
 
-@inject MockData MockData
+@inject IData Data
 @inject ISessionService SessionManager
 @inject NavigationManager NavigationManager
 
@@ -44,11 +44,11 @@
 
     protected override async Task OnInitializedAsync() {
         isAdmin = SessionManager.IsAdmin();
-        roles = MockData.GetRoles();
+        roles = Data.GetRoles();
     }
 
     void DeleteRole(RoleModel role) {
-        MockData.DeleteRole(role.Id);
+        Data.DeleteRole(role.Id);
     }
 
     void CreateRole() {

@@ -2,7 +2,7 @@
 @using WebSite.Components.Managers
 @using Models
 @inject NavigationManager NavigationManager
-@inject MockData MockData
+@inject IData Data
 @inject ISessionService ServiceManager
 
 <h3>Login</h3>
@@ -52,7 +52,7 @@
     }
 
     private async Task Submit() {
-        user = MockData.GetUser(user.UserName, user.Password);
+        user = Data.GetUser(user.UserName, user.Password);
         if (user == null) {            
             user = new User {
                     Area = new Area(),
@@ -64,7 +64,7 @@
                 };
             return; // Implement error handling
         }
-        QuestionGroup questionGroup = MockData.GetQuestionGroup(user.Area.Id, user.Country.Id);
+        QuestionGroup questionGroup = Data.GetQuestionGroup(user.Area.Id, user.Country.Id);
         SessionManager.MarkUserAsAuthenticated(user, questionGroup);
         if (SessionManager.GetAuthenticationState()) {
             NavigationManager.NavigateTo("/dashboard");

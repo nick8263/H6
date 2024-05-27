@@ -4,7 +4,7 @@
 @using Components.Managers
 
 @inject ISessionService SessionManager
-@inject MockData MockData
+@inject IData Data
 @inject NavigationManager NavigationManager
 
 @if (isAdmin) {
@@ -74,10 +74,10 @@
     protected override async Task OnInitializedAsync() {
         isAdmin = SessionManager.IsAdmin();
         int userId = Int32.Parse(Id);
-        user = MockData.GetUser(userId);
-        countries = MockData.GetCountries();
-        areas = MockData.GetAreas();
-        roles = MockData.GetRoles();
+        user = Data.GetUser(userId);
+        countries = Data.GetCountries();
+        areas = Data.GetAreas();
+        roles = Data.GetRoles();
     }
 
     void SaveChanges() {
@@ -85,7 +85,7 @@
         user.Area = areas.FirstOrDefault(a => a.Id == user.Area.Id);
         user.Country = countries.FirstOrDefault(c => c.Id == user.Country.Id);
         user.Role = roles.FirstOrDefault(r => r.Id == user.Role.Id);
-        MockData.UpdateUser(user);
+        Data.UpdateUser(user);
         NavigationManager.NavigateTo("/useradministration");
     }
 }

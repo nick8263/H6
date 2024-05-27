@@ -3,7 +3,7 @@
 @using Models
 @using Components.Managers
 
-@inject MockData MockData
+@inject IData Data
 @inject NavigationManager NavigationManager
 @inject ISessionService SessionManager
 
@@ -69,9 +69,9 @@
         newUser.Area = new Area();
         newUser.Country = new Country();
         newUser.Role = new RoleModel();
-        countries = MockData.GetCountries();
-        areas = MockData.GetAreas();
-        roles = MockData.GetRoles();
+        countries = Data.GetCountries();
+        areas = Data.GetAreas();
+        roles = Data.GetRoles();
     }
 
     private void CreateUser()
@@ -79,7 +79,7 @@
         newUser.Country = countries.FirstOrDefault(c => c.Id == newUser.Country.Id);
         newUser.Area = areas.FirstOrDefault(a => a.Id == newUser.Area.Id);
         newUser.Role = roles.FirstOrDefault(r => r.Id == newUser.Role.Id);
-        MockData.AddUser(newUser);
+        Data.AddUser(newUser);
         NavigationManager.NavigateTo("/useradministration");
     }
 }

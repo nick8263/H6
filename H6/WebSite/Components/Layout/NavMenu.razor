@@ -1,5 +1,5 @@
 ﻿@using Components.Managers
-@inject MockData MockData
+@inject IData MockData
 @inject ISessionService SessionManager
 @inject NavigationManager NavigationManager
 
@@ -61,6 +61,11 @@
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="HSEQuestionPage">
                     <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> HSE
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="answers">
+                    <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Answers
                 </NavLink>
             </div>
         }

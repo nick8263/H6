@@ -5,7 +5,7 @@
 @using Components.Managers
 @inject NavigationManager NavigationManager
 @inject ISessionService SessionManager
-@inject MockData MockData
+@inject IData Data
 
 @if (isAdmin) {
     <h3>CreateNewQuestion</h3>
@@ -65,7 +65,7 @@
             newQuestion.Options = newOptions;
         }
 
-        MockData.AddQuestion(newQuestion); // Replace with 
+        Data.AddQuestion(newQuestion); // Replace with
 
         // Navigate back to the original page with updated list
         NavigationManager.NavigateTo("/questions");
