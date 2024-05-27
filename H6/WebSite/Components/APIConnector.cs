@@ -52,8 +52,7 @@
             }
 
             public List<AnswerGroup> GetAnswerGroup(int areaId, int countryId) {
-                throw new NotImplementedException();
-                //return HomeAccess.ReadAnswerGroup(areaId, countryId).Result.Item1;
+                return HomeAccess.ReadAnswerGroup(areaId, countryId).Result.Item1;
             }
 
             public Area GetArea(int id) {
