@@ -19,6 +19,7 @@ namespace API.DBContext
         public DbSet<Answer> Answers { get; set; }
         public DbSet<AnswerGroup> AnswerGroups { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<SaltedUser> SaltedUsers { get; set; }
 
 
         public DBCon()

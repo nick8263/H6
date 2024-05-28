@@ -178,6 +178,26 @@ namespace API.Migrations
                     b.ToTable("Roles");
                 });
 
+            modelBuilder.Entity("Models.SaltedUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Salt")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("SaltedUsers");
+                });
+
             modelBuilder.Entity("Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -312,6 +332,17 @@ namespace API.Migrations
                     b.Navigation("Area");
 
                     b.Navigation("Country");
+                });
+
+            modelBuilder.Entity("Models.SaltedUser", b =>
+                {
+                    b.HasOne("Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Models.User", b =>

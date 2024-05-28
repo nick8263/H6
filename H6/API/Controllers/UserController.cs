@@ -1,14 +1,17 @@
 ﻿using API.DBContext;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+
 using Models;
-using NuGet.Common;
+
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Cryptography;
 using System.Text;
-using static Org.BouncyCastle.Math.EC.ECCurve;
+
 
 namespace API.Controllers
 {
@@ -29,48 +32,59 @@ namespace API.Controllers
         [HttpPost("GetToken")]
         public async Task<string> GetToken()
         {
-            
+
 
             return GenerateJSONWebToken();
 
-        }        
+        }
 
         [AllowAnonymous]
         [HttpPost("Login")]
         public async Task<IActionResult> Login(LoginModel user)
         {
-            User? userExist = new();
+
             try
             {
-                userExist = await context.Users
+                User? userExist = await context.Users
                     .Include(x => x.Area)
                     .Include(x => x.Country)
-                    .FirstOrDefaultAsync(x => x.UserName == user.UserName && x.Password == user.Password);
+                    .Include(x => x.Role)
+                    .FirstOrDefaultAsync(x => x.UserName == user.UserName);
 
                 if (userExist == null)
                 {
                     return BadRequest();
-                }           
+                }
 
-                return Ok((userExist, GenerateJSONWebToken()));
+                SaltedUser saltedUser = await context.SaltedUsers.FirstOrDefaultAsync(x => x.User.Id == userExist.Id);
 
+                if (!VerifyPassword(user.Password, userExist.Password, saltedUser.Salt))
+                {
+                    return BadRequest();
+                }
+
+                return Ok(new TokenUser { Token = GenerateJSONWebToken(), User = userExist });
             }
             catch
             {
                 return BadRequest();
-            }           
+            }
 
         }
 
+        [AllowAnonymous]
         [HttpPost("CreateUser")]
         public async Task<IActionResult> CreateUser(User user)
         {
+            string salt;
+            user.Password = HashPasswordCreate(user.Password, out salt);
+
+            SaltedUser _user = new SaltedUser() { Salt = salt, User = user };
             try
             {
                 user.Country = await context.Countrys.FindAsync(user.Country.Id);
                 user.Area = await context.Areas.FindAsync(user.Area.Id);
                 user.Role = await context.Roles.FindAsync(user.Role.Id);
-
                 await context.Users.AddAsync(user);
 
 
@@ -79,6 +93,9 @@ namespace API.Controllers
                 {
                     return BadRequest("Couldn't add this user");
                 }
+
+                await context.SaltedUsers.AddAsync(_user);
+                await context.SaveChangesAsync();
             }
             catch (Exception e)
             {
@@ -125,12 +142,34 @@ namespace API.Controllers
         }
 
         [HttpPut("UpdateUser")]
-        public async Task<IActionResult> UpdateUser(User user)
+        public async Task<IActionResult> UpdateUser(User updatedUser)
         {
             try
             {
-                await Task.Run(() => {
-                    context.Users.Update(user);
+                bool oldUser = await context.Users.AnyAsync(x => x.Password == updatedUser.Password);
+
+                if (!oldUser)
+                {
+                    string salt;
+                    updatedUser.Password = HashPasswordCreate(updatedUser.Password, out salt);
+
+                    SaltedUser _user = await context.SaltedUsers.FirstOrDefaultAsync(x => x.User.Id == updatedUser.Id);
+                    _user.User = updatedUser;
+                    _user.Salt = salt;
+
+                    await Task.Run(() =>
+                    {
+                        context.SaltedUsers.Update(_user);
+                    });
+
+
+                    await context.SaveChangesAsync();
+
+                }
+
+                await Task.Run(() =>
+                {
+                    context.Users.Update(updatedUser);
                 });
 
 
@@ -182,6 +221,65 @@ namespace API.Controllers
               signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        private bool VerifyPassword(string enteredPassword, string storedHash, string storedSalt)
+        {
+            byte[] salt = Convert.FromBase64String(storedSalt);
+
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] passwordBytes = Encoding.UTF8.GetBytes(enteredPassword);
+                byte[] combinedBytes = new byte[passwordBytes.Length + salt.Length];
+                Array.Copy(passwordBytes, 0, combinedBytes, 0, passwordBytes.Length);
+                Array.Copy(salt, 0, combinedBytes, passwordBytes.Length, salt.Length);
+
+                byte[] hash = sha256.ComputeHash(combinedBytes);
+                return Convert.ToBase64String(hash) == storedHash;
+            }
+        }
+
+
+        private string HashPasswordGet(string password)
+        {
+            byte[] salt = GenerateSalt();
+
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
+                byte[] combinedBytes = new byte[passwordBytes.Length + salt.Length];
+                Array.Copy(passwordBytes, 0, combinedBytes, 0, passwordBytes.Length);
+                Array.Copy(salt, 0, combinedBytes, passwordBytes.Length, salt.Length);
+
+                byte[] hash = sha256.ComputeHash(combinedBytes);
+                return Convert.ToBase64String(hash);
+            }
+        }
+        private string HashPasswordCreate(string password, out string saltString)
+        {
+            byte[] salt = GenerateSalt();
+            saltString = Convert.ToBase64String(salt);
+
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
+                byte[] combinedBytes = new byte[passwordBytes.Length + salt.Length];
+                Array.Copy(passwordBytes, 0, combinedBytes, 0, passwordBytes.Length);
+                Array.Copy(salt, 0, combinedBytes, passwordBytes.Length, salt.Length);
+
+                byte[] hash = sha256.ComputeHash(combinedBytes);
+                return Convert.ToBase64String(hash);
+            }
+        }
+
+        private byte[] GenerateSalt()
+        {
+            byte[] salt = new byte[16]; // 16 bytes = 128 bits
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(salt);
+            }
+            return salt;
         }
     }
 }

@@ -255,6 +255,27 @@ namespace API.Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "SaltedUsers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Salt = table.Column<string>(type: "longtext", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SaltedUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SaltedUsers_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "AnswerAnswerGroup",
                 columns: table => new
                 {
@@ -325,6 +346,11 @@ namespace API.Migrations
                 column: "CountryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SaltedUsers_UserId",
+                table: "SaltedUsers",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_AreaId",
                 table: "Users",
                 column: "AreaId");
@@ -351,6 +377,9 @@ namespace API.Migrations
 
             migrationBuilder.DropTable(
                 name: "QuestionGroupQuestion");
+
+            migrationBuilder.DropTable(
+                name: "SaltedUsers");
 
             migrationBuilder.DropTable(
                 name: "AnswerGroups");

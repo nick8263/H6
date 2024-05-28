@@ -74,9 +74,9 @@ namespace WebSite.Components {
             return HomeAccess.ReadQuestion(id).Result.Item1;
         }
 
-        public QuestionGroup GetQuestionGroup(int areaId, int countryId) {
-            return HomeAccess.ReadQuestionGroup(areaId, countryId).Result.Item1;
-        }
+            public QuestionGroup GetQuestionGroup(int areaId, int countryId) {
+                return HomeAccess.ReadQuestionGroup(new GroupAccessModel { AreaId = areaId, CountryId = countryId}).Result.Item1;
+            }
 
         public List<Question> GetQuestions() {
             return HomeAccess.ReadAllQuestions().Result.Item1;

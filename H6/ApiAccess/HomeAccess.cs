@@ -694,10 +694,10 @@ namespace ApiAccess
         }
 
     
-        public async Task<(List<AnswerGroup>, string)> ReadAnswerGroup(int areaId,  int countryId)
+        public async Task<(List<AnswerGroup>, string)> ReadAnswerGroup(GroupAccessModel groupAccess)
         {
             // Serialize the user object to JSON
-            string serializedId = JsonConvert.SerializeObject((areaId, countryId));
+            string serializedId = JsonConvert.SerializeObject(groupAccess);
             try
             {
                 // Make a POST request to the API endpoint
@@ -766,9 +766,9 @@ namespace ApiAccess
         }
 
         
-        public async Task<(QuestionGroup, string)> ReadQuestionGroup(int areaId, int countryId)
+        public async Task<(QuestionGroup, string)> ReadQuestionGroup(GroupAccessModel groupAccess)
         {
-            string serializedId = JsonConvert.SerializeObject((areaId, countryId));
+            string serializedId = JsonConvert.SerializeObject(groupAccess);
             try
             {
                 // Make a POST request to the API endpoint

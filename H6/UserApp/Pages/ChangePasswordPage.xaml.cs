@@ -6,8 +6,8 @@ namespace UserApp.Pages;
 public partial class ChangePasswordPage : ContentPage
 {
     UserAccess userAccess = new UserAccess();
-    public User User { get; set; }
-    public ChangePasswordPage(User _user)
+    public TokenUser User { get; set; }
+    public ChangePasswordPage(TokenUser _user)
     {
         InitializeComponent();
         User = _user;
@@ -17,6 +17,7 @@ public partial class ChangePasswordPage : ContentPage
     {
         if (passwordEntry.Text.Length > 4)
         {
+            User.User.Password = passwordEntry.Text;
             (bool, string) result = await userAccess.UpdateUser(User);
 
             if (!result.Item1)

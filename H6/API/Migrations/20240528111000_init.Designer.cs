@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(DBCon))]
-    [Migration("20240527114620_init")]
+    [Migration("20240528111000_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -181,6 +181,26 @@ namespace API.Migrations
                     b.ToTable("Roles");
                 });
 
+            modelBuilder.Entity("Models.SaltedUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Salt")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("SaltedUsers");
+                });
+
             modelBuilder.Entity("Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -315,6 +335,17 @@ namespace API.Migrations
                     b.Navigation("Area");
 
                     b.Navigation("Country");
+                });
+
+            modelBuilder.Entity("Models.SaltedUser", b =>
+                {
+                    b.HasOne("Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Models.User", b =>
