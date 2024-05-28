@@ -417,7 +417,7 @@ namespace API.Controllers
         }
 
         [HttpGet("ReadAnswerGroup")]
-        public async Task<IActionResult> ReadAnswerGroup([FromBody] int areaId, [FromBody] int countryId)
+        public async Task<IActionResult> ReadAnswerGroup(GroupAccessModel groupAccess)
         {
             try
             {
@@ -427,7 +427,7 @@ namespace API.Controllers
                     .Include(x => x.Answers)
                     .ThenInclude(x => x.Question)
                     .ThenInclude(x => x.Options)
-                    .FirstOrDefaultAsync(x => x.Country.Id == countryId && x.Area.Id == areaId));
+                    .FirstOrDefaultAsync(x => x.Country.Id == groupAccess.CountryId && x.Area.Id == groupAccess.AreaId));
             }
             catch
             {
@@ -458,7 +458,7 @@ namespace API.Controllers
         }
 
         [HttpGet("ReadQuestionGroup")]
-        public async Task<IActionResult> ReadQuestionGroup([FromBody] int areaId, [FromBody] int countryId)
+        public async Task<IActionResult> ReadQuestionGroup(GroupAccessModel groupAccess)
         {
             try
             {
@@ -466,8 +466,8 @@ namespace API.Controllers
                     .Include(x => x.Area)
                     .Include(x => x.Country)
                     .Include(x => x.Questions)
-                .ThenInclude(x => x.Options)
-                    .FirstOrDefaultAsync(x => x.Country.Id == countryId && x.Area.Id == areaId));
+                    .ThenInclude(x => x.Options)
+                    .FirstOrDefaultAsync(x => x.Country.Id == groupAccess.CountryId && x.Area.Id == groupAccess.AreaId));
             }
             catch
             {

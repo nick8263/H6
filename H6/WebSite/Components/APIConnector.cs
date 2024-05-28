@@ -77,7 +77,7 @@
             }
 
             public QuestionGroup GetQuestionGroup(int areaId, int countryId) {
-                return HomeAccess.ReadQuestionGroup(areaId, countryId).Result.Item1;
+                return HomeAccess.ReadQuestionGroup(new GroupAccessModel { AreaId = areaId, CountryId = countryId}).Result.Item1;
             }
 
             public List<Question> GetQuestions() {

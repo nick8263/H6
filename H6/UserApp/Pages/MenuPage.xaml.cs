@@ -5,8 +5,8 @@ namespace UserApp.Pages;
 
 public partial class MenuPage : ContentPage
 {
-    public User User { get; set; }
-    public MenuPage(User _user)
+    public TokenUser User { get; set; }
+    public MenuPage(TokenUser _user)
 	{
 		InitializeComponent();
         User = _user;

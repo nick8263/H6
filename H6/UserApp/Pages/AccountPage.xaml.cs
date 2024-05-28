@@ -4,16 +4,16 @@ namespace UserApp.Pages;
 
 public partial class AccountPage : ContentPage
 {
-    public User User { get; set; }
-    public AccountPage(User _user)
+    public TokenUser User { get; set; }
+    public AccountPage(TokenUser _user)
 	{
 		InitializeComponent();
         User = _user;
 
-        userNameLabel.Text = _user.UserName;
-        countryLabel.Text = _user.Country.PossibleCountry;
-        areaLabel.Text = _user.Area.PossibleArea;
-        roleLabel.Text = _user.Role.Name;
+        userNameLabel.Text = _user.User.UserName;
+        countryLabel.Text = _user.User.Country.PossibleCountry;
+        areaLabel.Text = _user.User.Area.PossibleArea;
+        roleLabel.Text = _user.User.Role.Name;
 	}
 
     private async void ChangePasswordClicked(object sender, EventArgs e)
