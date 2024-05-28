@@ -8,7 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddSingleton<IData, MockData>();
+//builder.Services.AddSingleton<IData, MockData>();
+builder.Services.AddSingleton<IData, APIConnector>();
 builder.Services.AddSingleton<ISessionService, SessionManager>();
 
 var app = builder.Build();
