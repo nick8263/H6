@@ -50,7 +50,7 @@ namespace WebSite.Components {
             _groups.Add(_group);
             RoleModel role = new RoleModel {
                 Id = 1,
-                Name = "admin"
+                Name = "Admin"
             };
             _roles.Add(role);
             User user = new User {
@@ -105,7 +105,7 @@ namespace WebSite.Components {
             _countries.Add(country);
             role = new RoleModel {
                 Id = 2,
-                Name = "hse"
+                Name = "HSE"
             };
             _roles.Add(role);
             user = new User {
@@ -121,7 +121,7 @@ namespace WebSite.Components {
 
             role = new RoleModel {
                 Id = 3,
-                Name = "regular"
+                Name = "Regular"
             };
             _roles.Add(role);
             user = new User {
