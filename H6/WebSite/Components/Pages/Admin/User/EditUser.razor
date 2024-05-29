@@ -63,7 +63,7 @@
     [Parameter]
     public string Id { get; set; }
 
-    public User user;
+    private User user;
     private string token;
 
     private List<Country> countries { get; set; } = new List<Country>();
@@ -73,13 +73,14 @@
     private bool isAdmin;
 
     protected override async Task OnInitializedAsync() {
+        token = SessionManager.GetToken();
         isAdmin = SessionManager.IsAdmin();
         int userId = Int32.Parse(Id);
-        user = await Data.GetUser(userId);
-        countries = await Data.GetCountries();
-        areas = await Data.GetAreas();
-        roles = await Data.GetRoles();
-        token = SessionManager.GetToken();
+        user = await Data.GetUser(userId, token);
+        countries = await Data.GetCountries(token);
+        areas = await Data.GetAreas(token);
+        roles = await Data.GetRoles(token);
+        
     }
 
     void SaveChanges() {

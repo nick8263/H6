@@ -107,7 +107,7 @@
             errorMessage = "Invalid Login";
             return; // Implement error handling
         }
-        QuestionGroup questionGroup = await Data.GetQuestionGroup(user.User.Area.Id, user.User.Country.Id);
+        QuestionGroup questionGroup = await Data.GetQuestionGroup(user.User.Area.Id, user.User.Country.Id, user.Token);
         SessionManager.MarkUserAsAuthenticated(user.User, questionGroup, user.Token);
         if (SessionManager.GetAuthenticationState()) {
             NavigationManager.NavigateTo("/dashboard");

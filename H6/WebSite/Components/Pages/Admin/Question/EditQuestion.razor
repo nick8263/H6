@@ -41,15 +41,15 @@
 @code {
     [Parameter]
     public string QuestionId { get; set; }
-
-    Question question;
-
-    bool isAdmin;
+    private Question question;
+    private bool isAdmin;
+    private string token;
 
     protected override async Task OnInitializedAsync() {
+        token = SessionManager.GetToken();
         isAdmin = SessionManager.IsAdmin();
         int id = Int32.Parse(QuestionId);
-        question = await Data.GetQuestion(id);
+        question = await Data.GetQuestion(id, token);
     }
 
     void ToggleOptions(ChangeEventArgs e) {
@@ -73,7 +73,7 @@
 
     void SaveChanges() {
         // Update question in database
-        Data.EditQuestion(question);
+        Data.EditQuestion(question, token);
         NavigationManager.NavigateTo("/questions");
     }
 }

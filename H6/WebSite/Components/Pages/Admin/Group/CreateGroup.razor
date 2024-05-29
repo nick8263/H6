@@ -60,10 +60,12 @@
     private List<Area> areas = new List<Area>();
     private List<Country> countries = new List<Country>();
     private bool isAdmin;
+    private string token;
 
     protected override async Task OnInitializedAsync() {
-        areas = await Data.GetAreas();
-        countries = await Data.GetCountries();
+        token = SessionManager.GetToken();
+        areas = await Data.GetAreas(token);
+        countries = await Data.GetCountries(token);
         isAdmin = SessionManager.IsAdmin();
         if (areas == null) {
             areas = new List<Area>();
@@ -75,21 +77,21 @@
 
     private void HandleValidSubmitArea() {
 
-        Data.AddArea(newArea);
+        Data.AddArea(newArea, token);
         // Reset form
         newArea = new Area();
     }
 
     private void HandleValidSubmitCountry() {
-        Data.AddCountry(newCountry);
+        Data.AddCountry(newCountry, token);
         newCountry = new Country();
     }
 
     private void DeleteCountry(int countryId) {
-        Data.DeleteCountry(countryId);
+        Data.DeleteCountry(countryId, token);
     }
 
     private void DeleteArea(int areaId) {
-        Data.DeleteArea(areaId);
+        Data.DeleteArea(areaId, token);
     }
 }

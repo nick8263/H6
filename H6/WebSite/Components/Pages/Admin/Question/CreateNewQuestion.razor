@@ -45,15 +45,17 @@
 }
 
 @code {
-    Question newQuestion = new Question();
-    List<Option> newOptions = new List<Option>();
-    Option newOption = new Option();
-    string selectedPredefined;
-    string selectedFreeText;
-    bool isAdmin;
+    private Question newQuestion = new Question();
+    private List<Option> newOptions = new List<Option>();
+    private Option newOption = new Option();
+    private string selectedPredefined;
+    private string selectedFreeText;
+    private bool isAdmin;
+    private string token;
 
     protected override async Task OnInitializedAsync() {
         isAdmin = SessionManager.IsAdmin();
+        token = SessionManager.GetToken();
     }
 
     async Task CreateNew() {
@@ -65,7 +67,7 @@
             newQuestion.Options = newOptions;
         }
 
-        Data.AddQuestion(newQuestion); // Replace with
+        Data.AddQuestion(newQuestion, token); // Replace with
 
         // Navigate back to the original page with updated list
         NavigationManager.NavigateTo("/questions");
