@@ -11,6 +11,7 @@ namespace WebSite.Components {
         private static List<Question> _questions;
         private static List<QuestionGroup> _groups = new List<QuestionGroup>();
         private static List<User> _users = new List<User>();
+        private static List<TokenUser> _tokens = new List<TokenUser>();
         private static List<Area> _areas = new List<Area>();
         private static List<Country> _countries = new List<Country>();
         private static List<RoleModel> _roles = new List<RoleModel>();
@@ -61,6 +62,7 @@ namespace WebSite.Components {
                 UserName = "admin"
             };
             _users.Add(user);
+            _tokens.Add(new TokenUser { Token = "Token1", User = user });
 
             List<Answer> answers = new List<Answer>();
 
@@ -115,6 +117,7 @@ namespace WebSite.Components {
                 UserName = "hse"
             };
             _users.Add(user);
+            _tokens.Add(new TokenUser { Token = "Token2", User = user });
 
             role = new RoleModel {
                 Id = 3,
@@ -130,6 +133,7 @@ namespace WebSite.Components {
                 UserName = "regular"
             };
             _users.Add(user);
+            _tokens.Add(new TokenUser { Token = "Token3", User = user });
 
             List<Question> temp = new List<Question> {
             new Question {
@@ -266,7 +270,6 @@ namespace WebSite.Components {
             return _answerGroups.Where(a => a.Area.Id == areaId && a.Country.Id == countryId).ToList();
         }
 
-
         public List<RoleModel> GetRoles() { 
             return _roles; 
         }
@@ -315,8 +318,8 @@ namespace WebSite.Components {
             return _groups.FirstOrDefault(g => g.Id == id).Questions;
         }
 
-        public User GetUser(string username, string password) {
-            return _users.FirstOrDefault(u => u.UserName == username && u.Password == password);
+        public TokenUser GetUser(string username, string password) {
+            return _tokens.FirstOrDefault(u => u.User.UserName == username && u.User.Password == password);
         }
 
         public User GetUser(int id) {
@@ -377,14 +380,14 @@ namespace WebSite.Components {
             }
         }
 
-        public void UpdateUser(User updatedUser) {
-            var existingUser = _users.FirstOrDefault(u => u.Id == updatedUser.Id);
+        public void UpdateUser(TokenUser updatedUser) {
+            var existingUser = _users.FirstOrDefault(u => u.Id == updatedUser.User.Id);
             if (existingUser != null) {
-                existingUser.Area = updatedUser.Area;
-                existingUser.UserName = updatedUser.UserName;
-                existingUser.Role = updatedUser.Role;
-                existingUser.Country = updatedUser.Country;
-                existingUser.Password = updatedUser.Password;
+                existingUser.Area = updatedUser.User.Area;
+                existingUser.UserName = updatedUser.User.UserName;
+                existingUser.Role = updatedUser.User.Role;
+                existingUser.Country = updatedUser.User.Country;
+                existingUser.Password = updatedUser.User.Password;
             }
         }
 

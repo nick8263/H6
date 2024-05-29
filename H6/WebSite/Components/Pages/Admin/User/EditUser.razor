@@ -64,6 +64,7 @@
     public string Id { get; set; }
 
     public User user;
+    private string token;
 
     private List<Country> countries { get; set; } = new List<Country>();
     private List<Area> areas { get; set; } = new List<Area>();
@@ -78,6 +79,7 @@
         countries = Data.GetCountries();
         areas = Data.GetAreas();
         roles = Data.GetRoles();
+        token = SessionManager.GetToken();
     }
 
     void SaveChanges() {
@@ -85,7 +87,12 @@
         user.Area = areas.FirstOrDefault(a => a.Id == user.Area.Id);
         user.Country = countries.FirstOrDefault(c => c.Id == user.Country.Id);
         user.Role = roles.FirstOrDefault(r => r.Id == user.Role.Id);
-        Data.UpdateUser(user);
+        TokenUser toUpdate = new TokenUser
+        {
+            Token = token,
+            User = user
+        };
+        Data.UpdateUser(toUpdate);
         NavigationManager.NavigateTo("/useradministration");
     }
 }

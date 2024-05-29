@@ -51,7 +51,7 @@ namespace WebSite.Components {
         }
 
         public List<AnswerGroup> GetAnswerGroup(int areaId, int countryId) {
-            return HomeAccess.ReadAnswerGroup(areaId, countryId).Result.Item1;
+            return HomeAccess.ReadAnswerGroup(new GroupAccessModel { AreaId = areaId, CountryId = countryId}).Result.Item1;
         }
 
         public Area GetArea(int id) {
@@ -86,7 +86,7 @@ namespace WebSite.Components {
             return HomeAccess.ReadAllRoles().Result.Item1;
         }
 
-        public User GetUser(string username, string password) {
+        public TokenUser GetUser(string username, string password) {
             LoginModel loginModel = new LoginModel { Password = password, UserName = username};
             return UserAccess.Login(loginModel).Result.Item1;
         }
@@ -99,7 +99,7 @@ namespace WebSite.Components {
             return UserAccess.ReadAllUser().Result.Item1;
         }
 
-        public void UpdateUser(User updatedUser) {
+        public void UpdateUser(TokenUser updatedUser) {
             UserAccess.UpdateUser(updatedUser);
         }
     }

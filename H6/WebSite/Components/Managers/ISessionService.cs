@@ -12,8 +12,9 @@ namespace WebSite.Components.Managers {
         string GetRole();
         QuestionGroup GetQuestionGroup();
         void ChangeGroup(QuestionGroup questionGroup);
-        void MarkUserAsAuthenticated(User user, QuestionGroup questionGroup);
+        void MarkUserAsAuthenticated(User user, QuestionGroup questionGroup, string Token);
         void MarkUserAsLoggedOut();
         User GetUser();
+        String GetToken();
     }
 }

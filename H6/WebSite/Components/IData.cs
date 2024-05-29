@@ -13,7 +13,7 @@ namespace WebSite.Components {
         Country GetCountry(int id);
         QuestionGroup GetQuestionGroup(int areaId, int countryId);
         List<Question> GetQuestions();        
-        User GetUser(string username, string password);
+        TokenUser GetUser(string username, string password);
         User GetUser(int id);
         List<User> GetUsers();
         void AddQuestion(Question question);
@@ -24,7 +24,7 @@ namespace WebSite.Components {
         void DeleteArea(int areaId);
         void AddCountry(Country country);
         void DeleteCountry(int countryId);
-        void UpdateUser(User updatedUser);
+        void UpdateUser(TokenUser updatedUser);
         void DeleteUser(int userId);
     }
 }

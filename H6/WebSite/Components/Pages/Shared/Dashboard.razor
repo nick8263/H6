@@ -60,9 +60,11 @@
     private string newPassword = string.Empty;
     private string confirmPassword = string.Empty;
     private string errorMessage = string.Empty;
+    private string token;
 
     protected override async Task OnInitializedAsync() {
         user = SessionManager.GetUser();
+        token = SessionManager.GetToken();
     }
 
     private void ToggleChangePasswordFields() {
@@ -75,8 +77,13 @@
         } else {
             errorMessage = string.Empty;
             // Add logic to change the password here
-            // For example, SessionManager.ChangePassword(user.Id, newPassword);
-            Data.UpdateUser(user);
+            user.Password = newPassword;
+            TokenUser toUpdate = new TokenUser
+            {
+                Token = token,
+                User = user
+            };
+            Data.UpdateUser(toUpdate);
             showChangePasswordFields = false;
             // Notify the user that the password has been changed successfully
         }
