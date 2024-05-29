@@ -44,16 +44,18 @@
 }
 
 @code {
-    List<User> users;
-    bool isAdmin;
+    private List<User> users;
+    private bool isAdmin;
+    private string token;
 
     protected override async Task OnInitializedAsync() {
+        token = SessionManager.GetToken();
         isAdmin = SessionManager.IsAdmin();
-        users = await Data.GetUsers();
+        users = await Data.GetUsers(token);
     }
 
     void DeleteUser(User user) {
-        Data.DeleteUser(user.Id);
+        Data.DeleteUser(user.Id, token);
     }
 
     void EditUser(User user) {

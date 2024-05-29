@@ -48,10 +48,12 @@
     private bool isHse;
     private int columnCount, rowcount;
     private User user;
+    private string token;
 
     protected override async Task OnInitializedAsync() {
+        token = SessionManager.GetToken();
         user = SessionManager.GetUser();
         isHse = SessionManager.IsHSEAdmin();
-        answerGroups = await Data.GetAnswerGroup(user.Area.Id, user.Country.Id);
+        answerGroups = await Data.GetAnswerGroup(user.Area.Id, user.Country.Id, token);
     }
 }

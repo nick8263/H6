@@ -266,15 +266,15 @@ namespace WebSite.Components {
             }
         }
 
-        public async Task<List<AnswerGroup>> GetAnswerGroup(int areaId, int countryId) {
+        public async Task<List<AnswerGroup>> GetAnswerGroup(int areaId, int countryId, string token) {
             return await Task.Run(() => _answerGroups.Where(a => a.Area.Id == areaId && a.Country.Id == countryId).ToList());
         }
 
-        public async Task<List<RoleModel>> GetRoles() {
+        public async Task<List<RoleModel>> GetRoles(string token) {
             return await Task.FromResult(_roles);
         }
 
-        public async Task DeleteRole(int roleId) {
+        public async Task DeleteRole(int roleId, string token) {
             await Task.Run(() => {
                 var roleToRemove = _roles.FirstOrDefault(r => r.Id == roleId);
                 if (roleToRemove != null) {
@@ -283,42 +283,42 @@ namespace WebSite.Components {
             });
         }
 
-        public async Task AddRole(RoleModel role) {
+        public async Task AddRole(RoleModel role, string token) {
             await Task.Run(() => {
                 role.Id = _roles.Any() ? _roles.Max(r => r.Id) + 1 : 1;
                 _roles.Add(role);
             });
         }
 
-        public async Task<List<Area>> GetAreas() {
+        public async Task<List<Area>> GetAreas(string token) {
             return await Task.FromResult(_areas);
         }
 
-        public async Task<List<Country>> GetCountries() {
+        public async Task<List<Country>> GetCountries(string token) {
             return await Task.FromResult(_countries);
         }
 
-        public async Task<Question> GetQuestion(int id) {
+        public async Task<Question> GetQuestion(int id, string token) {
             return await Task.Run(() => _questions.FirstOrDefault(q => q.Id == id));
         }
 
-        public async Task<Area> GetArea(int id) {
+        public async Task<Area> GetArea(int id, string token) {
             return await Task.Run(() => _areas.FirstOrDefault(a => a.Id == id));
         }
 
-        public async Task<Country> GetCountry(int id) {
+        public async Task<Country> GetCountry(int id, string token) {
             return await Task.Run(() => _countries.FirstOrDefault(c => c.Id == id));
         }
 
-        public async Task<QuestionGroup> GetQuestionGroup(int areaId, int countryId) {
+        public async Task<QuestionGroup> GetQuestionGroup(int areaId, int countryId, string token) {
             return await Task.Run(() => _groups.FirstOrDefault(g => g.Area.Id == areaId && g.Country.Id == countryId));
         }
 
-        public async Task<List<Question>> GetQuestions() {
+        public async Task<List<Question>> GetQuestions(string token) {
             return await Task.FromResult(_questions);
         }
 
-        public async Task<List<Question>> GetQuestionsForID(int id) {
+        public async Task<List<Question>> GetQuestionsForID(int id, string token) {
             return await Task.Run(() => _groups.FirstOrDefault(g => g.Id == id)?.Questions);
         }
 
@@ -326,15 +326,15 @@ namespace WebSite.Components {
             return await Task.Run(() => _tokens.FirstOrDefault(u => u.User.UserName == username && u.User.Password == password));
         }
 
-        public async Task<User> GetUser(int id) {
+        public async Task<User> GetUser(int id, string token) {
             return await Task.Run(() => _users.FirstOrDefault(u => u.Id == id));
         }
 
-        public async Task<List<User>> GetUsers() {
+        public async Task<List<User>> GetUsers(string token) {
             return await Task.FromResult(_users);
         }
 
-        public async Task AddQuestion(Question question) {
+        public async Task AddQuestion(Question question, string token) {
             await Task.Run(() => {
                 // Assign a unique Id to the new question
                 question.Id = _questions.Any() ? _questions.Max(q => q.Id) + 1 : 1;
@@ -342,7 +342,7 @@ namespace WebSite.Components {
             });
         }
 
-        public async Task EditQuestion(Question editedQuestion) {
+        public async Task EditQuestion(Question editedQuestion, string token) {
             await Task.Run(() => {
                 var existingQuestion = _questions.FirstOrDefault(q => q.Id == editedQuestion.Id);
                 if (existingQuestion != null) {
@@ -352,7 +352,7 @@ namespace WebSite.Components {
             });
         }
 
-        public async Task DeleteQuestion(int questionId) {
+        public async Task DeleteQuestion(int questionId, string token) {
             await Task.Run(() => {
                 var questionToRemove = _questions.FirstOrDefault(q => q.Id == questionId);
                 if (questionToRemove != null) {
@@ -361,21 +361,21 @@ namespace WebSite.Components {
             });
         }
 
-        public async Task AddUser(User user) {
+        public async Task AddUser(User user, string token) {
             await Task.Run(() => {
                 user.Id = _users.Any() ? _users.Max(u => u.Id) + 1 : 1;
                 _users.Add(user);
             });
         }
 
-        public async Task AddArea(Area area) {
+        public async Task AddArea(Area area, string token) {
             await Task.Run(() => {
                 area.Id = _areas.Any() ? _areas.Max(a => a.Id) + 1 : 1;
                 _areas.Add(area);
             });
         }
 
-        public async Task DeleteArea(int areaId) {
+        public async Task DeleteArea(int areaId, string token) {
             await Task.Run(() => {
                 var areaToDelete = _areas.FirstOrDefault(a => a.Id == areaId);
                 if (areaToDelete != null) {
@@ -384,14 +384,14 @@ namespace WebSite.Components {
             });
         }
 
-        public async Task AddCountry(Country country) {
+        public async Task AddCountry(Country country, string token) {
             await Task.Run(() => {
                 country.Id = _countries.Any() ? _countries.Max(c => c.Id) + 1 : 1;
                 _countries.Add(country);
             });
         }
 
-        public async Task DeleteCountry(int countryId) {
+        public async Task DeleteCountry(int countryId, string token) {
             await Task.Run(() => {
                 var countryToDelete = _countries.FirstOrDefault(c => c.Id == countryId);
                 if (countryToDelete != null) {
@@ -413,11 +413,24 @@ namespace WebSite.Components {
             });
         }
 
-        public async Task DeleteUser(int userId) {
+        public async Task DeleteUser(int userId, string token) {
             await Task.Run(() => {
                 var userToRemove = _users.FirstOrDefault(u => u.Id == userId);
                 if (userToRemove != null) {
                     _users.Remove(userToRemove);
+                }
+            });
+        }
+
+        public async Task<QuestionGroup> GetQuestionGroups(int areaId, int countryId, string token) {
+            return await Task.Run(() => _groups.FirstOrDefault(g => g.Area.Id == areaId && g.Country.Id == countryId));
+        }
+
+        public async Task UpdateQuestionGroup(QuestionGroup questionGroup, string token) {
+            await Task.Run(() => {
+                var existingGroup = _groups.FirstOrDefault(g => g.Id == questionGroup.Id);
+                if (existingGroup != null) {
+                    existingGroup = questionGroup;
                 }
             });
         }

@@ -63,15 +63,17 @@
     private List<Area> areas { get; set; } = new List<Area>();
     private List<RoleModel> roles { get; set; } = new List<RoleModel>();
     private bool isAdmin;
+    private string token;
 
     protected override async Task OnInitializedAsync() {
+        token = SessionManager.GetToken();
         isAdmin = SessionManager.IsAdmin();
         newUser.Area = new Area();
         newUser.Country = new Country();
         newUser.Role = new RoleModel();
-        countries = await Data.GetCountries();
-        areas = await Data.GetAreas();
-        roles = await Data.GetRoles();
+        countries = await Data.GetCountries(token);
+        areas = await Data.GetAreas(token);
+        roles = await Data.GetRoles(token);
     }
 
     private void CreateUser()
@@ -79,7 +81,7 @@
         newUser.Country = countries.FirstOrDefault(c => c.Id == newUser.Country.Id);
         newUser.Area = areas.FirstOrDefault(a => a.Id == newUser.Area.Id);
         newUser.Role = roles.FirstOrDefault(r => r.Id == newUser.Role.Id);
-        Data.AddUser(newUser);
+        Data.AddUser(newUser, token);
         NavigationManager.NavigateTo("/useradministration");
     }
 }

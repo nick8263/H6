@@ -41,14 +41,15 @@
 }
 
 @code {
-    List<Question> questions;
-    List<Question> allQuestions;
-    bool isHSE;
+    private List<Question> questions;
+    private List<Question> allQuestions;
+    private bool isHSE;
+    private string token;
 
     protected override async Task OnInitializedAsync() {
-        // Initialize with mock data
+        token = SessionManager.GetToken();
         questions = SessionManager.GetQuestionGroup().Questions;
-        allQuestions = await Data.GetQuestions();
+        allQuestions = await Data.GetQuestions(token);
         isHSE = SessionManager.IsHSEAdmin();
     }
 

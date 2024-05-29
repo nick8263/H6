@@ -40,13 +40,14 @@
 }
 
 @code {
-    List<Question> questions;
-
-    bool isAdmin;
+    private List<Question> questions;
+    private bool isAdmin;
+    private string token;
 
     protected override async Task OnInitializedAsync() {
+        token = SessionManager.GetToken();
         isAdmin = SessionManager.IsAdmin();
-        questions = await Data.GetQuestions();
+        questions = await Data.GetQuestions(token);
     } 
 
     void EditQuestion(Question question) {
@@ -55,7 +56,7 @@
 
 
     void DeleteQuestion(Question question) {
-        Data.DeleteQuestion(question.Id);
+        Data.DeleteQuestion(question.Id, token);
     }
 
     void CreateQuestion() {

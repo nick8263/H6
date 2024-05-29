@@ -26,13 +26,15 @@
 @code {
     private bool isAdmin;
     private RoleModel newRole = new RoleModel();
+    private string token;
 
     protected override async Task OnInitializedAsync() {
         isAdmin = SessionManager.IsAdmin();
+        token = SessionManager.GetToken();
     }
 
     private void HandleValidSubmitRole() {
-        Data.AddRole(newRole);
+        Data.AddRole(newRole, token);
         NavigationManager.NavigateTo("/roleadministration");
     }
 }

@@ -39,16 +39,18 @@
 }
 
 @code {
-    List<RoleModel> roles;
-    bool isAdmin;
+    private List<RoleModel> roles;
+    private bool isAdmin;
+    private string token;
 
     protected override async Task OnInitializedAsync() {
+        token = SessionManager.GetToken();
         isAdmin = SessionManager.IsAdmin();
-        roles = await Data.GetRoles();
+        roles = await Data.GetRoles(token);
     }
 
     void DeleteRole(RoleModel role) {
-        Data.DeleteRole(role.Id);
+        Data.DeleteRole(role.Id, token);
     }
 
     void CreateRole() {
