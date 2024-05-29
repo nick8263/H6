@@ -44,7 +44,7 @@
 
     protected override async Task OnInitializedAsync() {
         isAdmin = SessionManager.IsAdmin();
-        roles = Data.GetRoles();
+        roles = await Data.GetRoles();
     }
 
     void DeleteRole(RoleModel role) {

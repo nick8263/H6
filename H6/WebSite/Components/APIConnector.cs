@@ -6,101 +6,114 @@ namespace WebSite.Components {
         private static HomeAccess HomeAccess = new HomeAccess();
         private static UserAccess UserAccess = new UserAccess();
 
-        public void AddArea(Area area) {
-            HomeAccess.CreateArea(area);
+        public async Task AddArea(Area area) {
+            await HomeAccess.CreateArea(area);
         }
 
-        public void AddCountry(Country country) {
-            HomeAccess.CreateCountry(country);
+        public async Task AddCountry(Country country) {
+            await HomeAccess.CreateCountry(country);
         }
 
-        public void AddQuestion(Question question) {
-            HomeAccess.CreateQuestion(question);
+        public async Task AddQuestion(Question question) {
+            await HomeAccess.CreateQuestion(question);
         }
 
-        public void AddRole(RoleModel role) {
-            HomeAccess.CreateRole(role);
+        public async Task AddRole(RoleModel role) {
+            await HomeAccess.CreateRole(role);
         }
 
-        public void AddUser(User user) {
-                UserAccess.CreateUser(user);
+        public async Task AddUser(User user) {
+            await UserAccess.CreateUser(user);
         }
 
-        public void DeleteArea(int areaId) {
-            HomeAccess.DeleteArea(areaId);
+        public async Task DeleteArea(int areaId) {
+            await HomeAccess.DeleteArea(areaId);
         }
 
-        public void DeleteCountry(int countryId) {
-            HomeAccess.DeleteCountry(countryId);
+        public async Task DeleteCountry(int countryId) {
+            await HomeAccess.DeleteCountry(countryId);
         }
 
-        public void DeleteQuestion(int questionId) {
-            HomeAccess.DeleteQuestion(questionId);
+        public async Task DeleteQuestion(int questionId) {
+            await HomeAccess.DeleteQuestion(questionId);
         }
 
-        public void DeleteRole(int roleId) {
-            HomeAccess.DeleteRole(roleId);
+        public async Task DeleteRole(int roleId) {
+            await HomeAccess.DeleteRole(roleId);
         }
 
-        public void DeleteUser(int userId) {
-            UserAccess.DeleteUser(userId);
+        public async Task DeleteUser(int userId) {
+            await UserAccess.DeleteUser(userId);
         }
 
-        public void EditQuestion(Question editedQuestion) {
-            HomeAccess.UpdateQuestion(editedQuestion);
+        public async Task EditQuestion(Question editedQuestion) {
+            await HomeAccess.UpdateQuestion(editedQuestion);
         }
 
-        public List<AnswerGroup> GetAnswerGroup(int areaId, int countryId) {
-            return HomeAccess.ReadAnswerGroup(areaId, countryId).Result.Item1;
+        public async Task<List<AnswerGroup>> GetAnswerGroup(int areaId, int countryId) {
+            var result = await HomeAccess.ReadAnswerGroup(new GroupAccessModel { AreaId = areaId, CountryId = countryId });
+            return result.Item1;
         }
 
-        public Area GetArea(int id) {
-            return HomeAccess.ReadArea(id).Result.Item1;
+        public async Task<Area> GetArea(int id) {
+            var result = await HomeAccess.ReadArea(id);
+            return result.Item1;
         }
 
-        public List<Area> GetAreas() {
-            return HomeAccess.ReadAllAreas().Result.Item1;
+        public async Task<List<Area>> GetAreas() {
+            var result = await HomeAccess.ReadAllAreas();
+            return result.Item1;
         }
 
-        public List<Country> GetCountries() {
-            return HomeAccess.ReadAllCountries().Result.Item1;
+        public async Task<List<Country>> GetCountries() {
+            var result = await HomeAccess.ReadAllCountries();
+            return result.Item1;
         }
 
-        public Country GetCountry(int id) {
-            return HomeAccess.ReadCountry(id).Result.Item1;
+        public async Task<Country> GetCountry(int id) {
+            var result = await HomeAccess.ReadCountry(id);
+            return result.Item1;
         }
 
-        public Question GetQuestion(int id) {
-            return HomeAccess.ReadQuestion(id).Result.Item1;
+        public async Task<Question> GetQuestion(int id) {
+            var result = await HomeAccess.ReadQuestion(id);
+            return result.Item1;
         }
 
-            public QuestionGroup GetQuestionGroup(int areaId, int countryId) {
-                return HomeAccess.ReadQuestionGroup(new GroupAccessModel { AreaId = areaId, CountryId = countryId}).Result.Item1;
-            }
-
-        public List<Question> GetQuestions() {
-            return HomeAccess.ReadAllQuestions().Result.Item1;
+        public async Task<QuestionGroup> GetQuestionGroup(int areaId, int countryId) {
+            var result = await HomeAccess.ReadQuestionGroup(new GroupAccessModel { AreaId = areaId, CountryId = countryId });
+            return result.Item1;
         }
 
-        public List<RoleModel> GetRoles() {
-            return HomeAccess.ReadAllRoles().Result.Item1;
+        public async Task<List<Question>> GetQuestions() {
+            var result = await HomeAccess.ReadAllQuestions();
+            return result.Item1;
         }
 
-        public User GetUser(string username, string password) {
-            LoginModel loginModel = new LoginModel { Password = password, UserName = username};
-            return UserAccess.Login(loginModel).Result.Item1;
+        public async Task<List<RoleModel>> GetRoles() {
+            var result = await HomeAccess.ReadAllRoles();
+            return result.Item1;
         }
 
-        public User GetUser(int id) {
-            return UserAccess.ReadUser(id).Result.Item1;
+        public async Task<TokenUser> GetUser(string username, string password) {
+            LoginModel loginModel = new LoginModel { Password = password, UserName = username };
+            var result = await UserAccess.Login(loginModel);
+            return result.Item1;
         }
 
-        public List<User> GetUsers() {
-            return UserAccess.ReadAllUser().Result.Item1;
+        public async Task<User> GetUser(int id) {
+            var result = await UserAccess.ReadUser(id);
+            return result.Item1;
         }
 
-        public void UpdateUser(User updatedUser) {
-            UserAccess.UpdateUser(updatedUser);
+        public async Task<List<User>> GetUsers() {
+            var result = await UserAccess.ReadAllUser();
+            return result.Item1;
+        }
+
+        public async Task UpdateUser(TokenUser updatedUser) {
+            await UserAccess.UpdateUser(updatedUser);
         }
     }
+
 }

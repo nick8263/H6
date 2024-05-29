@@ -11,11 +11,11 @@
     <form>
         <div class="form-group">
             <label for="username">Username:</label>
-            <input type="text" id="email" class="form-control" @bind="user.UserName" />
+            <input type="text" id="email" class="form-control" @bind="user.User.UserName" />
         </div>
         <div class="form-group">
             <label for="password">Password:</label>
-            <input type="password" id="password" class="form-control" @bind="user.Password" />
+            <input type="password" id="password" class="form-control" @bind="user.User.Password" />
         </div>
         @if (!isAuthenticated && !string.IsNullOrEmpty(errorMessage)) {
             <div class="alert alert-danger" role="alert">
@@ -29,19 +29,20 @@
 @code {
     private bool isAuthenticated { get; set; } = false;
     private string errorMessage { get; set; }
-    private User user { get; set; }
+    private TokenUser user { get; set; }
 
     [Inject]
     ISessionService SessionManager { get; set; }
 
     protected override async Task OnInitializedAsync() {
-        user = new User {
-            Area = new Area(),
-            Country = new Country(),
-            Password = "",
-            Id = 0,
-            Role = new RoleModel(),
-            UserName = ""
+        user = new TokenUser { User = new User {
+                    Area = new Area(),
+                    Country = new Country(),
+                    Password = "",
+                    Id = 0,
+                    Role = new RoleModel(),
+                    UserName = ""
+        }            
         };    
         if (isAuthenticated) {
             // Redirect to another page if the user is already authenticated
@@ -52,7 +53,7 @@
     }
 
     private async Task Submit() {
-        if (user.UserName == "admin" && user.Password == "admin") {
+        if (user.User.UserName == "admin" && user.User.Password == "admin") {
             Area _area = new Area { Id = 1, PossibleArea = "Test Area" };
             Country _country = new Country { Id = 1, PossibleCountry = "Test Country" };
             List <Question> _questions = new List<Question> {
@@ -82,26 +83,32 @@
                     Id = 1,
                     Name = "admin"
                 };
-            user.Area = _area;
-            user.Country = _country;
-            user.Role = _role;
-            SessionManager.MarkUserAsAuthenticated(user, q);
+            user.User.Area = _area;
+            user.User.Country = _country;
+            user.User.Role = _role;
+            user.Token = "AdminTestToken";
+            SessionManager.MarkUserAsAuthenticated(user.User, q, user.Token);
+            if (SessionManager.GetAuthenticationState()) {
+                NavigationManager.NavigateTo("/dashboard");
+            }
         }
 
-        user = Data.GetUser(user.UserName, user.Password);
+        user = await Data.GetUser(user.User.UserName, user.User.Password);
         if (user == null) {            
-            user = new User {
-                    Area = new Area(),
-                    Country = new Country(),
-                    Password = "",
-                    Id = 0,
-                    Role = new RoleModel(),
-                    UserName = ""
-                };
+            user = new TokenUser { User = new User {
+                        Area = new Area(),
+                        Country = new Country(),
+                        Password = "",
+                        Id = 0,
+                        Role = new RoleModel(),
+                        UserName = ""
+            }                    
+            };
+            errorMessage = "Invalid Login";
             return; // Implement error handling
         }
-        QuestionGroup questionGroup = Data.GetQuestionGroup(user.Area.Id, user.Country.Id);
-        SessionManager.MarkUserAsAuthenticated(user, questionGroup);
+        QuestionGroup questionGroup = await Data.GetQuestionGroup(user.User.Area.Id, user.User.Country.Id);
+        SessionManager.MarkUserAsAuthenticated(user.User, questionGroup, user.Token);
         if (SessionManager.GetAuthenticationState()) {
             NavigationManager.NavigateTo("/dashboard");
         }

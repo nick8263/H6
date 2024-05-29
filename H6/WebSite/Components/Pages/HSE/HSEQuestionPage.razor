@@ -48,7 +48,7 @@
     protected override async Task OnInitializedAsync() {
         // Initialize with mock data
         questions = SessionManager.GetQuestionGroup().Questions;
-        allQuestions = Data.GetQuestions();
+        allQuestions = await Data.GetQuestions();
         isHSE = SessionManager.IsHSEAdmin();
     }
 

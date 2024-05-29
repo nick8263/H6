@@ -12,6 +12,7 @@ namespace WebSite.Components.Managers {
         private static bool isAdmin = false;
         private static User loggenInUser;  
         private static QuestionGroup QuestionGroup;
+        private static string Token;
 
         public event Action AuthenticationStateChanged;
 
@@ -58,7 +59,11 @@ namespace WebSite.Components.Managers {
             return loggenInUser;
         }
 
-        public void MarkUserAsAuthenticated(User user, QuestionGroup questionGroup) {
+        public string GetToken() { 
+            return Token;
+        }
+
+        public void MarkUserAsAuthenticated(User user, QuestionGroup questionGroup, string token) {
             User temp = user;   
             if (temp != null) {
                 loggenInUser = user;
@@ -66,6 +71,7 @@ namespace WebSite.Components.Managers {
                 isAdmin = user.Role.Name == "admin";
                 isHSEAdmin = user.Role.Name == "hse";
                 QuestionGroup = questionGroup;
+                Token = token;
             }
             NotifyStateChanged();
         }

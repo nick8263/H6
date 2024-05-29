@@ -46,7 +46,7 @@
 
     protected override async Task OnInitializedAsync() {
         isAdmin = SessionManager.IsAdmin();
-        questions = Data.GetQuestions();
+        questions = await Data.GetQuestions();
     } 
 
     void EditQuestion(Question question) {

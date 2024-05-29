@@ -11,6 +11,7 @@ namespace WebSite.Components {
         private static List<Question> _questions;
         private static List<QuestionGroup> _groups = new List<QuestionGroup>();
         private static List<User> _users = new List<User>();
+        private static List<TokenUser> _tokens = new List<TokenUser>();
         private static List<Area> _areas = new List<Area>();
         private static List<Country> _countries = new List<Country>();
         private static List<RoleModel> _roles = new List<RoleModel>();
@@ -61,6 +62,7 @@ namespace WebSite.Components {
                 UserName = "admin"
             };
             _users.Add(user);
+            _tokens.Add(new TokenUser { Token = "Token1", User = user });
 
             List<Answer> answers = new List<Answer>();
 
@@ -115,6 +117,7 @@ namespace WebSite.Components {
                 UserName = "hse"
             };
             _users.Add(user);
+            _tokens.Add(new TokenUser { Token = "Token2", User = user });
 
             role = new RoleModel {
                 Id = 3,
@@ -130,6 +133,7 @@ namespace WebSite.Components {
                 UserName = "regular"
             };
             _users.Add(user);
+            _tokens.Add(new TokenUser { Token = "Token3", User = user });
 
             List<Question> temp = new List<Question> {
             new Question {
@@ -262,137 +266,160 @@ namespace WebSite.Components {
             }
         }
 
-        public List<AnswerGroup> GetAnswerGroup(int areaId, int countryId) {
-            return _answerGroups.Where(a => a.Area.Id == areaId && a.Country.Id == countryId).ToList();
+        public async Task<List<AnswerGroup>> GetAnswerGroup(int areaId, int countryId) {
+            return await Task.Run(() => _answerGroups.Where(a => a.Area.Id == areaId && a.Country.Id == countryId).ToList());
         }
 
-
-        public List<RoleModel> GetRoles() { 
-            return _roles; 
+        public async Task<List<RoleModel>> GetRoles() {
+            return await Task.FromResult(_roles);
         }
 
-        public void DeleteRole(int roleId) {
-            var roleToRemove = _roles.FirstOrDefault(r => r.Id == roleId);
-            if (roleToRemove != null) {
-                _roles.Remove(roleToRemove);
-            }
+        public async Task DeleteRole(int roleId) {
+            await Task.Run(() => {
+                var roleToRemove = _roles.FirstOrDefault(r => r.Id == roleId);
+                if (roleToRemove != null) {
+                    _roles.Remove(roleToRemove);
+                }
+            });
         }
 
-        public void AddRole(RoleModel role) {
-            role.Id = _roles.Any() ? _roles.Max(r => r.Id) + 1 : 1;
-            _roles.Add(role);
+        public async Task AddRole(RoleModel role) {
+            await Task.Run(() => {
+                role.Id = _roles.Any() ? _roles.Max(r => r.Id) + 1 : 1;
+                _roles.Add(role);
+            });
         }
 
-        public List<Area> GetAreas() {
-            return _areas;
+        public async Task<List<Area>> GetAreas() {
+            return await Task.FromResult(_areas);
         }
 
-        public List<Country> GetCountries() {
-            return _countries;
+        public async Task<List<Country>> GetCountries() {
+            return await Task.FromResult(_countries);
         }
 
-        public Question GetQuestion(int id) {
-            return _questions.FirstOrDefault(q => q.Id == id);
+        public async Task<Question> GetQuestion(int id) {
+            return await Task.Run(() => _questions.FirstOrDefault(q => q.Id == id));
         }
 
-        public Area GetArea(int id) {
-            return _areas.FirstOrDefault(a => a.Id == id);
+        public async Task<Area> GetArea(int id) {
+            return await Task.Run(() => _areas.FirstOrDefault(a => a.Id == id));
         }
 
-        public Country GetCountry(int id) {
-            return _countries.FirstOrDefault(c => c.Id == id);
+        public async Task<Country> GetCountry(int id) {
+            return await Task.Run(() => _countries.FirstOrDefault(c => c.Id == id));
         }
 
-        public QuestionGroup GetQuestionGroup(int areaId, int countryId) {
-            return _groups.FirstOrDefault(g => g.Area.Id == areaId && g.Country.Id == countryId);
+        public async Task<QuestionGroup> GetQuestionGroup(int areaId, int countryId) {
+            return await Task.Run(() => _groups.FirstOrDefault(g => g.Area.Id == areaId && g.Country.Id == countryId));
         }
 
-        public List<Question> GetQuestions() {
-            return _questions;
+        public async Task<List<Question>> GetQuestions() {
+            return await Task.FromResult(_questions);
         }
 
-        public List<Question> GetQuestionsForID(int id) {
-            return _groups.FirstOrDefault(g => g.Id == id).Questions;
+        public async Task<List<Question>> GetQuestionsForID(int id) {
+            return await Task.Run(() => _groups.FirstOrDefault(g => g.Id == id)?.Questions);
         }
 
-        public User GetUser(string username, string password) {
-            return _users.FirstOrDefault(u => u.UserName == username && u.Password == password);
+        public async Task<TokenUser> GetUser(string username, string password) {
+            return await Task.Run(() => _tokens.FirstOrDefault(u => u.User.UserName == username && u.User.Password == password));
         }
 
-        public User GetUser(int id) {
-            return _users.FirstOrDefault(u => u.Id == id);
+        public async Task<User> GetUser(int id) {
+            return await Task.Run(() => _users.FirstOrDefault(u => u.Id == id));
         }
 
-        public List<User> GetUsers() {
-            return _users;
+        public async Task<List<User>> GetUsers() {
+            return await Task.FromResult(_users);
         }
 
-        public void AddQuestion(Question question) {
-            // Assign a unique Id to the new question
-            question.Id = _questions.Any() ? _questions.Max(q => q.Id) + 1 : 1;
-            _questions.Add(question);
+        public async Task AddQuestion(Question question) {
+            await Task.Run(() => {
+                // Assign a unique Id to the new question
+                question.Id = _questions.Any() ? _questions.Max(q => q.Id) + 1 : 1;
+                _questions.Add(question);
+            });
         }
 
-        public void EditQuestion(Question editedQuestion) {
-            var existingQuestion = _questions.FirstOrDefault(q => q.Id == editedQuestion.Id);
-            if (existingQuestion != null) {
-                existingQuestion.PossibleQuestion = editedQuestion.PossibleQuestion;
-                existingQuestion.Options = editedQuestion.Options;
-            }
+        public async Task EditQuestion(Question editedQuestion) {
+            await Task.Run(() => {
+                var existingQuestion = _questions.FirstOrDefault(q => q.Id == editedQuestion.Id);
+                if (existingQuestion != null) {
+                    existingQuestion.PossibleQuestion = editedQuestion.PossibleQuestion;
+                    existingQuestion.Options = editedQuestion.Options;
+                }
+            });
         }
 
-        public void DeleteQuestion(int questionId) {
-            var questionToRemove = _questions.FirstOrDefault(q => q.Id == questionId);
-            if (questionToRemove != null) {
-                _questions.Remove(questionToRemove);
-            }
+        public async Task DeleteQuestion(int questionId) {
+            await Task.Run(() => {
+                var questionToRemove = _questions.FirstOrDefault(q => q.Id == questionId);
+                if (questionToRemove != null) {
+                    _questions.Remove(questionToRemove);
+                }
+            });
         }
 
-        public void AddUser(User user) {
-            user.Id = _users.Any() ? _users.Max(u => u.Id) + 1 : 1;
-            _users.Add(user);
+        public async Task AddUser(User user) {
+            await Task.Run(() => {
+                user.Id = _users.Any() ? _users.Max(u => u.Id) + 1 : 1;
+                _users.Add(user);
+            });
         }
 
-        public void AddArea(Area area) {
-            area.Id = _areas.Any() ? _areas.Max(a => a.Id) + 1 : 1;
-            _areas.Add(area);
+        public async Task AddArea(Area area) {
+            await Task.Run(() => {
+                area.Id = _areas.Any() ? _areas.Max(a => a.Id) + 1 : 1;
+                _areas.Add(area);
+            });
         }
 
-        public void DeleteArea(int areaId) {
-            var areaToDelete = _areas.FirstOrDefault(a => a.Id == areaId);
-            if (areaToDelete != null) {
-                _areas.Remove(areaToDelete);
-            }
+        public async Task DeleteArea(int areaId) {
+            await Task.Run(() => {
+                var areaToDelete = _areas.FirstOrDefault(a => a.Id == areaId);
+                if (areaToDelete != null) {
+                    _areas.Remove(areaToDelete);
+                }
+            });
         }
 
-        public void AddCountry(Country country) {
-            country.Id = _countries.Any() ? _countries.Max(c => c.Id) + 1 : 1;
-            _countries.Add(country);
+        public async Task AddCountry(Country country) {
+            await Task.Run(() => {
+                country.Id = _countries.Any() ? _countries.Max(c => c.Id) + 1 : 1;
+                _countries.Add(country);
+            });
         }
 
-        public void DeleteCountry(int countryId) {
-            var countryToDelete = _countries.FirstOrDefault(c => c.Id == countryId);
-            if (countryToDelete != null) {
-                _countries.Remove(countryToDelete);
-            }
+        public async Task DeleteCountry(int countryId) {
+            await Task.Run(() => {
+                var countryToDelete = _countries.FirstOrDefault(c => c.Id == countryId);
+                if (countryToDelete != null) {
+                    _countries.Remove(countryToDelete);
+                }
+            });
         }
 
-        public void UpdateUser(User updatedUser) {
-            var existingUser = _users.FirstOrDefault(u => u.Id == updatedUser.Id);
-            if (existingUser != null) {
-                existingUser.Area = updatedUser.Area;
-                existingUser.UserName = updatedUser.UserName;
-                existingUser.Role = updatedUser.Role;
-                existingUser.Country = updatedUser.Country;
-                existingUser.Password = updatedUser.Password;
-            }
+        public async Task UpdateUser(TokenUser updatedUser) {
+            await Task.Run(() => {
+                var existingUser = _users.FirstOrDefault(u => u.Id == updatedUser.User.Id);
+                if (existingUser != null) {
+                    existingUser.Area = updatedUser.User.Area;
+                    existingUser.UserName = updatedUser.User.UserName;
+                    existingUser.Role = updatedUser.User.Role;
+                    existingUser.Country = updatedUser.User.Country;
+                    existingUser.Password = updatedUser.User.Password;
+                }
+            });
         }
 
-        public void DeleteUser(int userId) {
-            var UserToRemove = _users.FirstOrDefault(u => u.Id == userId);
-            if (UserToRemove != null) {
-                _users.Remove(UserToRemove);
-            }
+        public async Task DeleteUser(int userId) {
+            await Task.Run(() => {
+                var userToRemove = _users.FirstOrDefault(u => u.Id == userId);
+                if (userToRemove != null) {
+                    _users.Remove(userToRemove);
+                }
+            });
         }
     }
 }
