@@ -68,8 +68,8 @@ namespace WebSite.Components.Managers {
             if (temp != null) {
                 loggenInUser = user;
                 isAuthenticated = true;
-                isAdmin = user.Role.Name == "admin";
-                isHSEAdmin = user.Role.Name == "hse";
+                isAdmin = user.Role.Name == "Admin";
+                isHSEAdmin = user.Role.Name == "HSE";
                 QuestionGroup = questionGroup;
                 Token = token;
             }

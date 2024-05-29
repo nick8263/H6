@@ -53,7 +53,7 @@
     }
 
     private async Task Submit() {
-        if (user.User.UserName == "admin" && user.User.Password == "admin") {
+        /*if (user.User.UserName == "admin" && user.User.Password == "admin") {
             Area _area = new Area { Id = 1, PossibleArea = "Test Area" };
             Country _country = new Country { Id = 1, PossibleCountry = "Test Country" };
             List <Question> _questions = new List<Question> {
@@ -86,12 +86,12 @@
             user.User.Area = _area;
             user.User.Country = _country;
             user.User.Role = _role;
-            user.Token = "AdminTestToken";
+            user.Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTY5OTIxMTEsImlzcyI6IlRlc3QuY29tIiwiYXVkIjoiVGVzdC5jb20ifQ.UmNpoAlVeqyvstS_xnjbUk7UwkKasYvZOP3XTm9mkzQ";
             SessionManager.MarkUserAsAuthenticated(user.User, q, user.Token);
             if (SessionManager.GetAuthenticationState()) {
                 NavigationManager.NavigateTo("/dashboard");
             }
-        }
+        }*/
 
         user = await Data.GetUser(user.User.UserName, user.User.Password);
         if (user == null) {            
