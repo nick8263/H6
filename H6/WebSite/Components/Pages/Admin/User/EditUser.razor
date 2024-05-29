@@ -75,10 +75,10 @@
     protected override async Task OnInitializedAsync() {
         isAdmin = SessionManager.IsAdmin();
         int userId = Int32.Parse(Id);
-        user = Data.GetUser(userId);
-        countries = Data.GetCountries();
-        areas = Data.GetAreas();
-        roles = Data.GetRoles();
+        user = await Data.GetUser(userId);
+        countries = await Data.GetCountries();
+        areas = await Data.GetAreas();
+        roles = await Data.GetRoles();
         token = SessionManager.GetToken();
     }
 

@@ -62,9 +62,15 @@
     private bool isAdmin;
 
     protected override async Task OnInitializedAsync() {
-        areas = Data.GetAreas();
-        countries = Data.GetCountries();
+        areas = await Data.GetAreas();
+        countries = await Data.GetCountries();
         isAdmin = SessionManager.IsAdmin();
+        if (areas == null) {
+            areas = new List<Area>();
+        }
+        if (countries == null) {
+            countries = new List<Country>();
+        }
     }
 
     private void HandleValidSubmitArea() {

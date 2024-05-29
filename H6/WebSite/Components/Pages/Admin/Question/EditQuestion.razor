@@ -49,7 +49,7 @@
     protected override async Task OnInitializedAsync() {
         isAdmin = SessionManager.IsAdmin();
         int id = Int32.Parse(QuestionId);
-        question = Data.GetQuestion(id);
+        question = await Data.GetQuestion(id);
     }
 
     void ToggleOptions(ChangeEventArgs e) {
