@@ -127,7 +127,7 @@ namespace API.Controllers
             return Ok();
         }
 
-        [AllowAnonymous]
+       
         [HttpPost("CreateAnswerGroup")]
         public async Task<IActionResult> CreateAnswerGroup(AnswerGroup answerGroup)
         {
@@ -137,9 +137,16 @@ namespace API.Controllers
 
             foreach (Answer i in answerGroup.Answers)
             {
+                var sa = i.Question.Options;
                 i.Question = await context.Questions.FindAsync(i.Question.Id);
-            }
 
+                if (i.Question.IsMultiple)
+                {                   
+
+                    i.SelectedAnswer = string.Join(", ", sa.GroupBy(x => x.PossibleOption).Where(x => x.Count() > 1).Select(x => x.Key));
+                }
+            }
+            
             answerGroup.user = await context.Users.FindAsync(answerGroup.user.Id);
 
             // Add the new QuestionGroup to the context
@@ -416,7 +423,7 @@ namespace API.Controllers
             
         }
 
-        [HttpGet("ReadAnswerGroup")]
+        [HttpPost("ReadAnswerGroup")]
         public async Task<IActionResult> ReadAnswerGroup(GroupAccessModel groupAccess)
         {
             try
@@ -457,17 +464,21 @@ namespace API.Controllers
             
         }
 
-        [HttpGet("ReadQuestionGroup")]
+        [HttpPost("ReadQuestionGroup")]
         public async Task<IActionResult> ReadQuestionGroup(GroupAccessModel groupAccess)
         {
             try
             {
-                return Ok(await context.QuestionGroups
+
+                QuestionGroup question = await context.QuestionGroups
                     .Include(x => x.Area)
                     .Include(x => x.Country)
                     .Include(x => x.Questions)
                     .ThenInclude(x => x.Options)
-                    .FirstOrDefaultAsync(x => x.Country.Id == groupAccess.CountryId && x.Area.Id == groupAccess.AreaId));
+                    .FirstOrDefaultAsync(x => x.Country.Id == groupAccess.CountryId && x.Area.Id == groupAccess.AreaId);
+
+                
+                return Ok(question);
             }
             catch
             {

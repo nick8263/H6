@@ -18,7 +18,7 @@ namespace ApiAccess
     {
         private HttpClient _httpClient;
         //string connectionString = "https://localhost:7089/api/User/";
-        string connectionString = "https://f5de-212-98-98-74.ngrok-free.app/api/User/";
+        string connectionString = "https://7595-212-98-98-74.ngrok-free.app/api/User/";
 
         public UserAccess()
         {
@@ -66,10 +66,12 @@ namespace ApiAccess
         }
 
         
-        public async Task<(bool, string)> CreateUser(User user)
+        public async Task<(bool, string)> CreateUser(User user, string token)
         {           
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Serialize the user object to JSON
                 string serializedId = JsonConvert.SerializeObject(user);
 
@@ -101,10 +103,11 @@ namespace ApiAccess
             }
         }
 
-        public async Task<(List<User>, string)> ReadAllUser()
+        public async Task<(List<User>, string)> ReadAllUser(string token)
         {
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 // Make a POST request to the API endpoint
                 HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"ReadAllUser");
 
@@ -134,10 +137,12 @@ namespace ApiAccess
 
         }
 
-        public async Task<(User, string)> ReadUser(int id)
+        public async Task<(User, string)> ReadUser(int id, string token)
         {            
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Make a POST request to the API endpoint
                 HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"ReadUser?id={id}");
 
@@ -204,10 +209,12 @@ namespace ApiAccess
             }
         }
 
-        public async Task<(bool, string)> DeleteUser(int id)
+        public async Task<(bool, string)> DeleteUser(int id, string token)
         {          
             try
-            {                
+            {
+
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 // Make a POST request to the API endpoint
                 HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"DeleteUser?id={id}");

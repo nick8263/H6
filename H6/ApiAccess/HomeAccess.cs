@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,7 +14,7 @@ namespace ApiAccess
     {
         private HttpClient _httpClient;
         //string connectionString = "https://localhost:7089/api/Home/";
-        string connectionString = "https://localhost:7012/api/Home/";
+        string connectionString = "https://7595-212-98-98-74.ngrok-free.app/api/Home/";
 
         public HomeAccess()
         {
@@ -23,10 +24,12 @@ namespace ApiAccess
 
         #region Create
         
-        public async Task<(bool, string)> CreateQuestion(Question question)
+        public async Task<(bool, string)> CreateQuestion(Question question, string token)
         {            
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Serialize the user object to JSON
                 string serializedId = JsonConvert.SerializeObject(question);
 
@@ -58,10 +61,12 @@ namespace ApiAccess
             }
         }
 
-        public async Task<(bool, string)> CreateCountry(Country country)
+        public async Task<(bool, string)> CreateCountry(Country country, string token)
         {            
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Serialize the user object to JSON
                 string serializedId = JsonConvert.SerializeObject(country);
 
@@ -93,10 +98,12 @@ namespace ApiAccess
             }
         }
 
-        public async Task<(bool, string)> CreateArea(Area area)
+        public async Task<(bool, string)> CreateArea(Area area, string token)
         {            
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Serialize the user object to JSON
                 string serializedId = JsonConvert.SerializeObject(area);
 
@@ -128,10 +135,12 @@ namespace ApiAccess
             }
         }
 
-        public async Task<(bool, string)> CreateOption(Option option)
+        public async Task<(bool, string)> CreateOption(Option option, string token)
         {           
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Serialize the user object to JSON
                 string serializedId = JsonConvert.SerializeObject(option);
 
@@ -163,10 +172,12 @@ namespace ApiAccess
             }
         }
 
-        public async Task<(bool, string)> CreateAnswer(Answer answer)
+        public async Task<(bool, string)> CreateAnswer(Answer answer, string token)
         {            
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Serialize the user object to JSON
                 string serializedId = JsonConvert.SerializeObject(answer);
 
@@ -198,10 +209,12 @@ namespace ApiAccess
             }
         }
 
-        public async Task<(bool, string)> CreateAnswerGroup(AnswerGroup answerGroup)
+        public async Task<(bool, string)> CreateAnswerGroup(AnswerGroup answerGroup, string token)
         {            
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Serialize the user object to JSON
                 string serializedId = JsonConvert.SerializeObject(answerGroup);
 
@@ -233,11 +246,13 @@ namespace ApiAccess
             }
         }
 
-        public async Task<(bool, string)> CreateQuestionGroup(QuestionGroup questionGroup)
+        public async Task<(bool, string)> CreateQuestionGroup(QuestionGroup questionGroup, string token)
         {
             
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Serialize the user object to JSON
                 string serializedId = JsonConvert.SerializeObject(questionGroup);
 
@@ -269,10 +284,12 @@ namespace ApiAccess
             }
         }
 
-        public async Task<(bool, string)> CreateRole(RoleModel role)
+        public async Task<(bool, string)> CreateRole(RoleModel role, string token)
         {          
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Serialize the user object to JSON
                 string serializedId = JsonConvert.SerializeObject(role);
 
@@ -310,10 +327,12 @@ namespace ApiAccess
 
         #region Question
         
-        public async Task<(List<Question>, string)> ReadAllQuestions()
+        public async Task<(List<Question>, string)> ReadAllQuestions(string token)
         {
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Make a POST request to the API endpoint
                 HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"ReadAllQuestions");
 
@@ -344,10 +363,12 @@ namespace ApiAccess
         }
 
         
-        public async Task<(Question, string)> ReadQuestion(int id)
+        public async Task<(Question, string)> ReadQuestion(int id, string token)
         {
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Make a POST request to the API endpoint
                 HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"ReadQuestion?id={id}");
 
@@ -380,10 +401,12 @@ namespace ApiAccess
 
         #region Country
        
-        public async Task<(List<Country>, string)> ReadAllCountries()
+        public async Task<(List<Country>, string)> ReadAllCountries(string token)
         {
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Make a POST request to the API endpoint
                 HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"ReadAllCountries");
 
@@ -414,10 +437,12 @@ namespace ApiAccess
         }
 
        
-        public async Task<(Country, string)> ReadCountry(int id)
+        public async Task<(Country, string)> ReadCountry(int id, string token)
         {
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Make a POST request to the API endpoint
                 HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"ReadCountry?id={id}");
 
@@ -450,10 +475,12 @@ namespace ApiAccess
 
         #region Area
        
-        public async Task<(List<Area>, string)> ReadAllAreas()
+        public async Task<(List<Area>, string)> ReadAllAreas(string token)
         {
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Make a POST request to the API endpoint
                 HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"ReadAllAreas");
 
@@ -484,10 +511,12 @@ namespace ApiAccess
         }
 
        
-        public async Task<(Area, string)> ReadArea(int id)
+        public async Task<(Area, string)> ReadArea(int id, string token)
         {
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Make a POST request to the API endpoint
                 HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"ReadArea?id={id}");
 
@@ -520,10 +549,12 @@ namespace ApiAccess
 
         #region Option
         
-        public async Task<(List<Option>, string)> ReadAllOptions()
+        public async Task<(List<Option>, string)> ReadAllOptions(string token)
         {
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Make a POST request to the API endpoint
                 HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"ReadAllOptions");
 
@@ -554,10 +585,12 @@ namespace ApiAccess
         }
 
        
-        public async Task<(Option, string)> ReadOption(int id)
+        public async Task<(Option, string)> ReadOption(int id, string token)
         {
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Make a POST request to the API endpoint
                 HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"ReadOption?id={id}");
 
@@ -590,10 +623,12 @@ namespace ApiAccess
 
         #region Answer
        
-        public async Task<(List<Answer>, string)> ReadAllAnswers()
+        public async Task<(List<Answer>, string)> ReadAllAnswers(string token)
         {
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Make a POST request to the API endpoint
                 HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"ReadAllAnswers");
 
@@ -624,10 +659,12 @@ namespace ApiAccess
         }
 
        
-        public async Task<(Answer, string)> ReadAnswer(int id)
+        public async Task<(Answer, string)> ReadAnswer(int id, string token)
         {
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Make a POST request to the API endpoint
                 HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"ReadAnswer?id={id}");
 
@@ -660,10 +697,12 @@ namespace ApiAccess
 
         #region AnswerGroup
         
-        public async Task<(List<AnswerGroup>, string)> ReadAllAnswerGroups()
+        public async Task<(List<AnswerGroup>, string)> ReadAllAnswerGroups(string token)
         {
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Make a POST request to the API endpoint
                 HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"ReadAllAnswerGroups");
 
@@ -694,12 +733,14 @@ namespace ApiAccess
         }
 
     
-        public async Task<(List<AnswerGroup>, string)> ReadAnswerGroup(GroupAccessModel groupAccess)
+        public async Task<(List<AnswerGroup>, string)> ReadAnswerGroup(GroupAccessModel groupAccess, string token)
         {
             // Serialize the user object to JSON
             string serializedId = JsonConvert.SerializeObject(groupAccess);
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Make a POST request to the API endpoint
                 HttpResponseMessage response = await _httpClient.PostAsync(connectionString + "ReadAnswerGroup", new StringContent(serializedId, Encoding.UTF8, "application/json"));
 
@@ -732,10 +773,12 @@ namespace ApiAccess
 
         #region QuestionGroup
        
-        public async Task<(List<QuestionGroup>, string)> ReadAllQuestionGroups()
+        public async Task<(List<QuestionGroup>, string)> ReadAllQuestionGroups(string token)
         {
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Make a POST request to the API endpoint
                 HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"ReadAllQuestionGroups");
 
@@ -766,11 +809,13 @@ namespace ApiAccess
         }
 
         
-        public async Task<(QuestionGroup, string)> ReadQuestionGroup(GroupAccessModel groupAccess)
+        public async Task<(QuestionGroup, string)> ReadQuestionGroup(GroupAccessModel groupAccess, string token)
         {
             string serializedId = JsonConvert.SerializeObject(groupAccess);
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Make a POST request to the API endpoint
                 HttpResponseMessage response = await _httpClient.PostAsync(connectionString + "ReadQuestionGroup", new StringContent(serializedId, Encoding.UTF8, "application/json"));
 
@@ -803,10 +848,12 @@ namespace ApiAccess
 
         #region Role
         
-        public async Task<(List<RoleModel>, string)> ReadAllRoles()
+        public async Task<(List<RoleModel>, string)> ReadAllRoles(string token)
         {
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Make a POST request to the API endpoint
                 HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"ReadAllRoles");
 
@@ -837,10 +884,12 @@ namespace ApiAccess
         }
 
        
-        public async Task<(RoleModel, string)> ReadRole(int id)
+        public async Task<(RoleModel, string)> ReadRole(int id, string token)
         {
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Make a POST request to the API endpoint
                 HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"ReadRole?id={id}");
 
@@ -875,10 +924,12 @@ namespace ApiAccess
 
         #region Update
       
-        public async Task<(bool, string)> UpdateQuestion(Question question)
+        public async Task<(bool, string)> UpdateQuestion(Question question, string token)
         {           
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Serialize the user object to JSON
                 string serializedId = JsonConvert.SerializeObject(question);
 
@@ -911,10 +962,12 @@ namespace ApiAccess
         }
 
         
-        public async Task<(bool, string)> UpdateCountry(Country country)
+        public async Task<(bool, string)> UpdateCountry(Country country, string token)
         {
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Serialize the user object to JSON
                 string serializedId = JsonConvert.SerializeObject(country);
 
@@ -946,10 +999,12 @@ namespace ApiAccess
             }
         }
 
-        public async Task<(bool, string)> UpdateArea(Area area)
+        public async Task<(bool, string)> UpdateArea(Area area, string token)
         {
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Serialize the user object to JSON
                 string serializedId = JsonConvert.SerializeObject(area);
 
@@ -982,10 +1037,12 @@ namespace ApiAccess
         }
 
        
-        public async Task<(bool, string)> UpdateOption(Option option)
+        public async Task<(bool, string)> UpdateOption(Option option, string token)
         {
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Serialize the user object to JSON
                 string serializedId = JsonConvert.SerializeObject(option);
 
@@ -1018,10 +1075,12 @@ namespace ApiAccess
         }
 
        
-        public async Task<(bool, string)> UpdateAnswer(Answer answer)
+        public async Task<(bool, string)> UpdateAnswer(Answer answer, string token)
         {
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Serialize the user object to JSON
                 string serializedId = JsonConvert.SerializeObject(answer);
 
@@ -1054,10 +1113,12 @@ namespace ApiAccess
         }
 
       
-        public async Task<(bool, string)> UpdateAnswerGroup(AnswerGroup answerGroup)
+        public async Task<(bool, string)> UpdateAnswerGroup(AnswerGroup answerGroup, string token)
         {
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Serialize the user object to JSON
                 string serializedId = JsonConvert.SerializeObject(answerGroup);
 
@@ -1090,10 +1151,12 @@ namespace ApiAccess
         }
 
         
-        public async Task<(bool, string)> UpdateQuestionGroup(QuestionGroup questionGroup)
+        public async Task<(bool, string)> UpdateQuestionGroup(QuestionGroup questionGroup, string token)
         {
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Serialize the user object to JSON
                 string serializedId = JsonConvert.SerializeObject(questionGroup);
 
@@ -1126,10 +1189,12 @@ namespace ApiAccess
         }
 
         
-        public async Task<(bool, string)> UpdateRole(RoleModel role)
+        public async Task<(bool, string)> UpdateRole(RoleModel role, string token)
         {
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 // Serialize the user object to JSON
                 string serializedId = JsonConvert.SerializeObject(role);
 
@@ -1164,10 +1229,11 @@ namespace ApiAccess
 
         #region Delete
         
-        public async Task<(bool, string)> DeleteQuestion(int id)
+        public async Task<(bool, string)> DeleteQuestion(int id, string token)
         {
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 // Make a POST request to the API endpoint
                 HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"DeleteQuestion?id={id}");
@@ -1198,10 +1264,11 @@ namespace ApiAccess
         }
 
        
-        public async Task<(bool, string)> DeleteCountry(int id)
+        public async Task<(bool, string)> DeleteCountry(int id, string token)
         {
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 // Make a POST request to the API endpoint
                 HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"DeleteCountry?id={id}");
@@ -1232,10 +1299,11 @@ namespace ApiAccess
         }
 
        
-        public async Task<(bool, string)> DeleteArea(int id)
+        public async Task<(bool, string)> DeleteArea(int id, string token)
         {
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 // Make a POST request to the API endpoint
                 HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"DeleteArea?id={id}");
@@ -1266,10 +1334,11 @@ namespace ApiAccess
         }
 
         
-        public async Task<(bool, string)> DeleteOption(int id)
+        public async Task<(bool, string)> DeleteOption(int id, string token)
         {
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 // Make a POST request to the API endpoint
                 HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"DeleteOption?id={id}");
@@ -1300,10 +1369,11 @@ namespace ApiAccess
         }
 
         
-        public async Task<(bool, string)> DeleteAnswer(int id)
+        public async Task<(bool, string)> DeleteAnswer(int id, string token)
         {
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 // Make a POST request to the API endpoint
                 HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"DeleteAnswer?id={id}");
@@ -1334,10 +1404,11 @@ namespace ApiAccess
         }
 
         
-        public async Task<(bool, string)> DeleteAnswerGroup(int id)
+        public async Task<(bool, string)> DeleteAnswerGroup(int id, string token)
         {
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 // Make a POST request to the API endpoint
                 HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"DeleteAnswerGroup?id={id}");
@@ -1368,10 +1439,11 @@ namespace ApiAccess
         }
 
        
-        public async Task<(bool, string)> DeleteQuestionGroup(int id)
+        public async Task<(bool, string)> DeleteQuestionGroup(int id, string token)
         {
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 // Make a POST request to the API endpoint
                 HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"DeleteQuestionGroup?id={id}");
@@ -1402,10 +1474,11 @@ namespace ApiAccess
         }
 
        
-        public async Task<(bool, string)> DeleteRole(int id)
+        public async Task<(bool, string)> DeleteRole(int id, string token)
         {
             try
             {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 // Make a POST request to the API endpoint
                 HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"DeleteRole?id={id}");

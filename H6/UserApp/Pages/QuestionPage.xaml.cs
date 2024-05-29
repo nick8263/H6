@@ -1,16 +1,21 @@
 namespace UserApp.Pages;
 
+using ApiAccess;
 using Models;
 public partial class QuestionPage : ContentPage
 {
     private readonly SurveyViewModel _viewModel;
 
-    public QuestionPage(QuestionGroup questionGroup)
+    HomeAccess homeAccess = new HomeAccess();
+
+    TokenUser user = new TokenUser();
+
+    public QuestionPage(QuestionGroup questionGroup, TokenUser _user)
     {
         InitializeComponent();
         _viewModel = new SurveyViewModel(questionGroup);
         BindingContext = _viewModel;
-
+        user = _user;
         CreateSurvey();
     }
 
@@ -53,7 +58,7 @@ public partial class QuestionPage : ContentPage
                         }
                         else
                         {
-                            _viewModel.AnswerGroup.Answers[Convert.ToInt32(checkBox.ClassId)].Question.Options.Remove(selectedOption);
+                            _viewModel.AnswerGroup.Answers[Convert.ToInt32(checkBox.ClassId)].Question.Options.Remove(option);
                         }
                     };
 
@@ -97,6 +102,8 @@ public partial class QuestionPage : ContentPage
     {
         if (_viewModel.ValidateAnswers(out string validationMessage))
         {
+            _viewModel.AnswerGroup.user = user.User;
+            await homeAccess.CreateAnswerGroup(_viewModel.AnswerGroup, user.Token);
             // Proceed with submission
             await DisplayAlert("Success", "Survey submitted successfully!", "OK");            
         }
