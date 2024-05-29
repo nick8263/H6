@@ -52,6 +52,6 @@
     protected override async Task OnInitializedAsync() {
         user = SessionManager.GetUser();
         isHse = SessionManager.IsHSEAdmin();
-        answerGroups = Data.GetAnswerGroup(user.Area.Id, user.Country.Id);
+        answerGroups = await Data.GetAnswerGroup(user.Area.Id, user.Country.Id);
     }
 }

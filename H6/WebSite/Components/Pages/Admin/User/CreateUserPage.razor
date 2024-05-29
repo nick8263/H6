@@ -69,9 +69,9 @@
         newUser.Area = new Area();
         newUser.Country = new Country();
         newUser.Role = new RoleModel();
-        countries = Data.GetCountries();
-        areas = Data.GetAreas();
-        roles = Data.GetRoles();
+        countries = await Data.GetCountries();
+        areas = await Data.GetAreas();
+        roles = await Data.GetRoles();
     }
 
     private void CreateUser()
