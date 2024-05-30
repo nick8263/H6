@@ -411,6 +411,7 @@ namespace API.Controllers
                 return Ok(context.AnswerGroups
                     .Include(x => x.Country)
                     .Include(x => x.Area)
+                    .Include(x => x.user)
                     .Include(x => x.Answers)
                     .ThenInclude(x => x.Question)
                     .ThenInclude(x => x.Options)
@@ -431,6 +432,7 @@ namespace API.Controllers
                 return Ok(await context.AnswerGroups
                     .Include(x => x.Country)
                     .Include(x => x.Area)
+                    .Include(x => x.user)
                     .Include(x => x.Answers)
                     .ThenInclude(x => x.Question)
                     .ThenInclude(x => x.Options)
