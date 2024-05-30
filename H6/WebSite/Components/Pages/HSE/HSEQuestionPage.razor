@@ -62,10 +62,16 @@
 
     void AddQuestion(Question question) {
         questions.Add(question);
+        QuestionGroup qg = SessionManager.GetQuestionGroup();
+        qg.Questions = questions;
+        Data.UpdateQuestionGroup(qg, token);
     }
 
     void RemoveQuestion(Question question) {
         questions.Remove(question);
+        QuestionGroup qg = SessionManager.GetQuestionGroup();
+        qg.Questions = questions;
+        Data.UpdateQuestionGroup(qg, token);
     }
 }
 

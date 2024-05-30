@@ -23,7 +23,7 @@
                     @foreach (var answerGroup in answerGroups) {
                         <tr>
                             @foreach (var answer in answerGroup.Answers) {
-                                @if (answer.Question.Options != null) {
+                                @if (answer.Question.Options != null && answer.Question.Options.Count > 0) {
                                     <td>@answer.SelectedAnswer</td>
                                 } else {
                                     <td>@answer.FreeTextAnswer</td>
