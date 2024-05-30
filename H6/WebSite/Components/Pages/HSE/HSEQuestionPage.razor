@@ -41,8 +41,8 @@
 }
 
 @code {
-    private List<Question> questions;
-    private List<Question> allQuestions;
+    private List<Question> questions = new List<Question>();
+    private List<Question> allQuestions = new List<Question>();
     private bool isHSE;
     private string token;
 
@@ -51,6 +51,13 @@
         questions = SessionManager.GetQuestionGroup().Questions;
         allQuestions = await Data.GetQuestions(token);
         isHSE = SessionManager.IsHSEAdmin();
+
+        if (questions == null) {
+            questions = new List<Question>();
+        }
+        if (allQuestions == null) {
+            allQuestions = new List<Question>();
+        }
     }
 
     void AddQuestion(Question question) {

@@ -17,8 +17,9 @@ namespace ApiAccess
     public class UserAccess
     {
         private HttpClient _httpClient;
-        //string connectionString = "https://localhost:7089/api/User/";
-        string connectionString = "https://7595-212-98-98-74.ngrok-free.app/api/User/";
+        string connectionString = "https://localhost:7012/api/User/";
+        //string connectionString = "https://7595-212-98-98-74.ngrok-free.app/api/User/";
+        //string connectionString = "https://755d-212-98-98-74.ngrok-free.app";
 
         public UserAccess()
         {

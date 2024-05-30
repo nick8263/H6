@@ -73,6 +73,9 @@ namespace WebSite.Components.Managers {
                 QuestionGroup = questionGroup;
                 Token = token;
             }
+            if (questionGroup == null) {
+                QuestionGroup = new QuestionGroup();
+            }
             NotifyStateChanged();
         }
 
