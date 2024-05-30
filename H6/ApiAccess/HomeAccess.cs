@@ -13,8 +13,8 @@ namespace ApiAccess
     public class HomeAccess
     {
         private HttpClient _httpClient;
-        //string connectionString = "https://localhost:7089/api/Home/";
-        string connectionString = "https://7595-212-98-98-74.ngrok-free.app/api/Home/";
+        string connectionString = "https://localhost:7012/api/Home/";
+        //string connectionString = "https://7595-212-98-98-74.ngrok-free.app/api/Home/";
 
         public HomeAccess()
         {
