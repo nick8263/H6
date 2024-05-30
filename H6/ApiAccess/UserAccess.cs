@@ -18,7 +18,7 @@ namespace ApiAccess
     {
         private HttpClient _httpClient;
         //string connectionString = "https://localhost:7089/api/User/";
-        string connectionString = "https://7595-212-98-98-74.ngrok-free.app/api/User/";
+        string connectionString = "https://localhost:7012/api/User/";
 
         public UserAccess()
         {
@@ -217,7 +217,7 @@ namespace ApiAccess
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 // Make a POST request to the API endpoint
-                HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"DeleteUser?id={id}");
+                HttpResponseMessage response = await _httpClient.DeleteAsync(connectionString + $"DeleteUser?id={id}");
 
                 // Read the response content as a string
                 string responseContent = await response.Content.ReadAsStringAsync();

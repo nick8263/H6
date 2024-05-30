@@ -934,7 +934,7 @@ namespace ApiAccess
                 string serializedId = JsonConvert.SerializeObject(question);
 
                 // Make a POST request to the API endpoint
-                HttpResponseMessage response = await _httpClient.PostAsync(connectionString + "UpdateQuestion", new StringContent(serializedId, Encoding.UTF8, "application/json"));
+                HttpResponseMessage response = await _httpClient.PutAsync(connectionString + "UpdateQuestion", new StringContent(serializedId, Encoding.UTF8, "application/json"));
 
                 // Read the response content as a string
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -972,7 +972,7 @@ namespace ApiAccess
                 string serializedId = JsonConvert.SerializeObject(country);
 
                 // Make a POST request to the API endpoint
-                HttpResponseMessage response = await _httpClient.PostAsync(connectionString + "UpdateCountry", new StringContent(serializedId, Encoding.UTF8, "application/json"));
+                HttpResponseMessage response = await _httpClient.PutAsync(connectionString + "UpdateCountry", new StringContent(serializedId, Encoding.UTF8, "application/json"));
 
                 // Read the response content as a string
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -1009,7 +1009,7 @@ namespace ApiAccess
                 string serializedId = JsonConvert.SerializeObject(area);
 
                 // Make a POST request to the API endpoint
-                HttpResponseMessage response = await _httpClient.PostAsync(connectionString + "UpdateArea", new StringContent(serializedId, Encoding.UTF8, "application/json"));
+                HttpResponseMessage response = await _httpClient.PutAsync(connectionString + "UpdateArea", new StringContent(serializedId, Encoding.UTF8, "application/json"));
 
                 // Read the response content as a string
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -1047,7 +1047,7 @@ namespace ApiAccess
                 string serializedId = JsonConvert.SerializeObject(option);
 
                 // Make a POST request to the API endpoint
-                HttpResponseMessage response = await _httpClient.PostAsync(connectionString + "UpdateOption", new StringContent(serializedId, Encoding.UTF8, "application/json"));
+                HttpResponseMessage response = await _httpClient.PutAsync(connectionString + "UpdateOption", new StringContent(serializedId, Encoding.UTF8, "application/json"));
 
                 // Read the response content as a string
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -1085,7 +1085,7 @@ namespace ApiAccess
                 string serializedId = JsonConvert.SerializeObject(answer);
 
                 // Make a POST request to the API endpoint
-                HttpResponseMessage response = await _httpClient.PostAsync(connectionString + "UpdateAnswer", new StringContent(serializedId, Encoding.UTF8, "application/json"));
+                HttpResponseMessage response = await _httpClient.PutAsync(connectionString + "UpdateAnswer", new StringContent(serializedId, Encoding.UTF8, "application/json"));
 
                 // Read the response content as a string
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -1123,7 +1123,7 @@ namespace ApiAccess
                 string serializedId = JsonConvert.SerializeObject(answerGroup);
 
                 // Make a POST request to the API endpoint
-                HttpResponseMessage response = await _httpClient.PostAsync(connectionString + "UpdateAnswerGroup", new StringContent(serializedId, Encoding.UTF8, "application/json"));
+                HttpResponseMessage response = await _httpClient.PutAsync(connectionString + "UpdateAnswerGroup", new StringContent(serializedId, Encoding.UTF8, "application/json"));
 
                 // Read the response content as a string
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -1161,7 +1161,7 @@ namespace ApiAccess
                 string serializedId = JsonConvert.SerializeObject(questionGroup);
 
                 // Make a POST request to the API endpoint
-                HttpResponseMessage response = await _httpClient.PostAsync(connectionString + "UpdateQuestionGroup", new StringContent(serializedId, Encoding.UTF8, "application/json"));
+                HttpResponseMessage response = await _httpClient.PutAsync(connectionString + "UpdateQuestionGroup", new StringContent(serializedId, Encoding.UTF8, "application/json"));
 
                 // Read the response content as a string
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -1199,7 +1199,7 @@ namespace ApiAccess
                 string serializedId = JsonConvert.SerializeObject(role);
 
                 // Make a POST request to the API endpoint
-                HttpResponseMessage response = await _httpClient.PostAsync(connectionString + "UpdateRole", new StringContent(serializedId, Encoding.UTF8, "application/json"));
+                HttpResponseMessage response = await _httpClient.PutAsync(connectionString + "UpdateRole", new StringContent(serializedId, Encoding.UTF8, "application/json"));
 
                 // Read the response content as a string
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -1236,7 +1236,7 @@ namespace ApiAccess
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 // Make a POST request to the API endpoint
-                HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"DeleteQuestion?id={id}");
+                HttpResponseMessage response = await _httpClient.DeleteAsync(connectionString + $"DeleteQuestion?id={id}");
 
                 // Read the response content as a string
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -1271,7 +1271,7 @@ namespace ApiAccess
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 // Make a POST request to the API endpoint
-                HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"DeleteCountry?id={id}");
+                HttpResponseMessage response = await _httpClient.DeleteAsync(connectionString + $"DeleteCountry?id={id}");
 
                 // Read the response content as a string
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -1306,7 +1306,7 @@ namespace ApiAccess
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 // Make a POST request to the API endpoint
-                HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"DeleteArea?id={id}");
+                HttpResponseMessage response = await _httpClient.DeleteAsync(connectionString + $"DeleteArea?id={id}");
 
                 // Read the response content as a string
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -1341,7 +1341,7 @@ namespace ApiAccess
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 // Make a POST request to the API endpoint
-                HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"DeleteOption?id={id}");
+                HttpResponseMessage response = await _httpClient.DeleteAsync(connectionString + $"DeleteOption?id={id}");
 
                 // Read the response content as a string
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -1376,7 +1376,7 @@ namespace ApiAccess
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 // Make a POST request to the API endpoint
-                HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"DeleteAnswer?id={id}");
+                HttpResponseMessage response = await _httpClient.DeleteAsync(connectionString + $"DeleteAnswer?id={id}");
 
                 // Read the response content as a string
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -1411,7 +1411,7 @@ namespace ApiAccess
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 // Make a POST request to the API endpoint
-                HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"DeleteAnswerGroup?id={id}");
+                HttpResponseMessage response = await _httpClient.DeleteAsync(connectionString + $"DeleteAnswerGroup?id={id}");
 
                 // Read the response content as a string
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -1446,7 +1446,7 @@ namespace ApiAccess
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 // Make a POST request to the API endpoint
-                HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"DeleteQuestionGroup?id={id}");
+                HttpResponseMessage response = await _httpClient.DeleteAsync(connectionString + $"DeleteQuestionGroup?id={id}");
 
                 // Read the response content as a string
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -1481,7 +1481,7 @@ namespace ApiAccess
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 // Make a POST request to the API endpoint
-                HttpResponseMessage response = await _httpClient.GetAsync(connectionString + $"DeleteRole?id={id}");
+                HttpResponseMessage response = await _httpClient.DeleteAsync(connectionString + $"DeleteRole?id={id}");
 
                 // Read the response content as a string
                 string responseContent = await response.Content.ReadAsStringAsync();
