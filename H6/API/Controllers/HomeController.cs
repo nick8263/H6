@@ -408,13 +408,14 @@ namespace API.Controllers
         {
             try
             {
-                return Ok(context.AnswerGroups
+                return Ok(await context.AnswerGroups
                     .Include(x => x.Country)
                     .Include(x => x.Area)
                     .Include(x => x.user)
                     .Include(x => x.Answers)
                     .ThenInclude(x => x.Question)
                     .ThenInclude(x => x.Options)
+                    .ToListAsync()
                     );
             }
             catch
@@ -436,7 +437,9 @@ namespace API.Controllers
                     .Include(x => x.Answers)
                     .ThenInclude(x => x.Question)
                     .ThenInclude(x => x.Options)
-                    .FirstOrDefaultAsync(x => x.Country.Id == groupAccess.CountryId && x.Area.Id == groupAccess.AreaId));
+                    .Where(x => x.Country.Id == groupAccess.CountryId && x.Area.Id == groupAccess.AreaId)
+                    .ToListAsync()
+                    );
             }
             catch
             {
