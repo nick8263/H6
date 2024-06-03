@@ -25,7 +25,7 @@
                 @foreach (var question in questions) {
                     <tr>
                         <td>@question.PossibleQuestion</td>
-                        <td>@(question.Options != null ? "Predefined" : "Free Text")</td>
+                        <td>@(question.Options.Any() ? "Predefined" : "Free Text")</td>
                         <td><button class="btn btn-primary" @onclick="() => EditQuestion(question)">Edit</button></td>
                         <td><button class="btn btn-danger" @onclick="() => DeleteQuestion(question)">Delete</button></td>
                     </tr>
