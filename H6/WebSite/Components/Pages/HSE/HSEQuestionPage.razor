@@ -21,7 +21,7 @@
                 @foreach (var question in allQuestions) {
                     <tr>
                         <td>
-                            @if (questions.Contains(question)) {
+                            @if (questions.Find(q => q.Id == question.Id) != null) {
                                 <button class="btn btn-danger" @onclick="() => RemoveQuestion(question)">Remove</button>
                             } else {
                                 <button class="btn btn-primary" @onclick="() => AddQuestion(question)">Add</button>
@@ -48,6 +48,7 @@
 
     protected override async Task OnInitializedAsync() {
         token = SessionManager.GetToken();
+        User user = SessionManager.GetUser();
         questions = SessionManager.GetQuestionGroup().Questions;
         allQuestions = await Data.GetQuestions(token);
         isHSE = SessionManager.IsHSEAdmin();
@@ -62,10 +63,16 @@
 
     void AddQuestion(Question question) {
         questions.Add(question);
+        QuestionGroup qg = SessionManager.GetQuestionGroup();
+        qg.Questions = questions;
+        Data.UpdateQuestionGroup(qg, token);
     }
 
     void RemoveQuestion(Question question) {
         questions.Remove(question);
+        QuestionGroup qg = SessionManager.GetQuestionGroup();
+        qg.Questions = questions;
+        Data.UpdateQuestionGroup(qg, token);
     }
 }
 
