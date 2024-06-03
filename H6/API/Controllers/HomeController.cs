@@ -9,6 +9,7 @@ using Microsoft.Identity.Client;
 using NuGet.Protocol;
 using System.Diagnostics.Metrics;
 using Microsoft.CodeAnalysis.Elfie.Serialization;
+using System.Data;
 
 namespace API.Controllers
 {
@@ -22,9 +23,9 @@ namespace API.Controllers
         public HomeController(DBCon _context)
         {
             context = _context;
-        }       
+        }
 
-       
+
 
         #region Create
         [HttpPost("CreateQuestion")]
@@ -43,7 +44,7 @@ namespace API.Controllers
             {
                 return BadRequest("Error CQuestion");
             }
-            
+
             return Ok();
         }
 
@@ -63,7 +64,7 @@ namespace API.Controllers
             {
                 return BadRequest("Error CCountry");
             }
-            
+
             return Ok();
         }
 
@@ -83,7 +84,7 @@ namespace API.Controllers
             {
                 return BadRequest("Error CArea");
             }
-           
+
             return Ok();
         }
 
@@ -103,7 +104,7 @@ namespace API.Controllers
             {
                 return BadRequest("Error COption");
             }
-            
+
             return Ok();
         }
 
@@ -123,11 +124,11 @@ namespace API.Controllers
             {
                 return BadRequest("Error CAnswer");
             }
-            
+
             return Ok();
         }
 
-       
+
         [HttpPost("CreateAnswerGroup")]
         public async Task<IActionResult> CreateAnswerGroup(AnswerGroup answerGroup)
         {
@@ -141,12 +142,12 @@ namespace API.Controllers
                 i.Question = await context.Questions.FindAsync(i.Question.Id);
 
                 if (i.Question.IsMultiple)
-                {                   
+                {
 
                     i.SelectedAnswer = string.Join(", ", sa.GroupBy(x => x.PossibleOption).Where(x => x.Count() > 1).Select(x => x.Key));
                 }
             }
-            
+
             answerGroup.user = await context.Users.FindAsync(answerGroup.user.Id);
 
             // Add the new QuestionGroup to the context
@@ -167,7 +168,7 @@ namespace API.Controllers
             return Ok();
         }
 
-        
+
         [HttpPost("CreateQuestionGroup")]
         public async Task<IActionResult> CreateQuestionGroup(QuestionGroup questionGroup)
         {
@@ -264,7 +265,7 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-            
+
         }
 
         [HttpGet("ReadQuestion")]
@@ -278,7 +279,7 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-            
+
         }
         #endregion
 
@@ -294,7 +295,7 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-            
+
         }
 
         [HttpGet("ReadCountry")]
@@ -308,7 +309,7 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-           
+
         }
         #endregion
 
@@ -324,7 +325,7 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-           
+
         }
 
         [HttpGet("ReadArea")]
@@ -338,7 +339,7 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-            
+
         }
         #endregion
 
@@ -354,7 +355,7 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-            
+
         }
 
         [HttpGet("ReadOption")]
@@ -368,7 +369,7 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-            
+
         }
         #endregion
 
@@ -384,7 +385,7 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-            
+
         }
 
         [HttpGet("ReadAnswer")]
@@ -396,9 +397,9 @@ namespace API.Controllers
             }
             catch
             {
-                return BadRequest();    
+                return BadRequest();
             }
-            
+
         }
         #endregion
 
@@ -422,7 +423,7 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-            
+
         }
 
         [HttpPost("ReadAnswerGroup")]
@@ -445,7 +446,7 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-            
+
         }
         #endregion
 
@@ -466,7 +467,7 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-            
+
         }
 
         [HttpPost("ReadQuestionGroup")]
@@ -482,14 +483,14 @@ namespace API.Controllers
                     .ThenInclude(x => x.Options)
                     .FirstOrDefaultAsync(x => x.Country.Id == groupAccess.CountryId && x.Area.Id == groupAccess.AreaId);
 
-                
+
                 return Ok(question);
             }
             catch
             {
                 return BadRequest();
             }
-            
+
         }
         #endregion
 
@@ -531,7 +532,8 @@ namespace API.Controllers
         {
             try
             {
-                await Task.Run(() => {
+                await Task.Run(() =>
+                {
                     context.Questions.Update(question);
                 });
 
@@ -545,7 +547,7 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-            
+
             return Ok();
         }
 
@@ -554,7 +556,8 @@ namespace API.Controllers
         {
             try
             {
-                await Task.Run(() => {
+                await Task.Run(() =>
+                {
                     context.Countrys.Update(country);
                 });
 
@@ -568,7 +571,7 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-           
+
             return Ok();
         }
 
@@ -577,7 +580,8 @@ namespace API.Controllers
         {
             try
             {
-                await Task.Run(() => {
+                await Task.Run(() =>
+                {
                     context.Areas.Update(area);
                 });
 
@@ -591,7 +595,7 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-            
+
             return Ok();
         }
 
@@ -600,7 +604,8 @@ namespace API.Controllers
         {
             try
             {
-                await Task.Run(() => {
+                await Task.Run(() =>
+                {
                     context.Options.Update(option);
                 });
 
@@ -614,7 +619,7 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-           
+
             return Ok();
         }
 
@@ -623,7 +628,8 @@ namespace API.Controllers
         {
             try
             {
-                await Task.Run(() => {
+                await Task.Run(() =>
+                {
                     context.Answers.Update(answer);
                 });
 
@@ -637,7 +643,7 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-           
+
             return Ok();
         }
 
@@ -646,7 +652,8 @@ namespace API.Controllers
         {
             try
             {
-                await Task.Run(() => {
+                await Task.Run(() =>
+                {
                     context.AnswerGroups.Update(answerGroup);
                 });
 
@@ -660,30 +667,58 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-            
+
             return Ok();
         }
 
         [HttpPut("UpdateQuestionGroup")]
         public async Task<IActionResult> UpdateQuestionGroup(QuestionGroup questionGroup)
         {
+
             try
             {
-                await Task.Run(() => {
-                    context.QuestionGroups.Update(questionGroup);
-                });
+                var existingQuestionGroup = await context.QuestionGroups
+                    .Include(x => x.Area)
+                    .Include(x => x.Country)
+                    .Include(x => x.Questions)
+                        .ThenInclude(q => q.Options)
+                    .FirstOrDefaultAsync(qg => qg.Id == questionGroup.Id);
 
-
-                if (await context.SaveChangesAsync() == 0)
+                if (existingQuestionGroup == null)
                 {
-                    return BadRequest();
+                    return NotFound();
                 }
+
+                // Update the simple properties of the QuestionGroup
+                context.Entry(existingQuestionGroup).CurrentValues.SetValues(questionGroup);
+
+                // Update the related Questions without modifying their properties or Options
+                existingQuestionGroup.Questions.Clear();
+                foreach (var updatedQuestion in questionGroup.Questions)
+                {
+                    var existingQuestion = await context.Questions
+                        .Include(q => q.Options)
+                        .FirstOrDefaultAsync(q => q.Id == updatedQuestion.Id);
+
+                    if (existingQuestion != null)
+                    {
+                        existingQuestionGroup.Questions.Add(existingQuestion);
+                    }
+                    else
+                    {
+                        // If the question does not exist, you might want to handle this case.
+                        // For this example, let's assume questions must already exist.
+                        return BadRequest("Question not found.");
+                    }
+                }
+
+                await context.SaveChangesAsync();
             }
-            catch
+            catch (Exception e)
             {
-                return BadRequest();
+                return BadRequest(e.Message); // Return the exception message for debugging purposes
             }
-           
+
             return Ok();
         }
 
@@ -692,7 +727,8 @@ namespace API.Controllers
         {
             try
             {
-                await Task.Run(() => {
+                await Task.Run(() =>
+                {
                     context.Roles.Update(role);
                 });
 
@@ -730,7 +766,7 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-            
+
             return Ok();
         }
 
@@ -752,7 +788,7 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-            
+
             return Ok();
         }
 
@@ -774,7 +810,7 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-           
+
             return Ok();
         }
 
@@ -796,7 +832,7 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-            
+
             return Ok();
         }
 
@@ -818,7 +854,7 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-            
+
             return Ok();
         }
 
@@ -840,7 +876,7 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-            
+
             return Ok();
         }
 
@@ -862,7 +898,7 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-            
+
             return Ok();
         }
 
@@ -891,3 +927,6 @@ namespace API.Controllers
 
     }
 }
+
+
+
