@@ -22,7 +22,7 @@
                     <tr>
                         <td>
                             @if (questions.Find(q => q.Id == question.Id) != null) {
-                                <button class="btn btn-danger" @onclick="() => RemoveQuestion(question)">Remove</button>
+                                <button class="btn btn-danger" @onclick="() => RemoveQuestion(question.Id)">Remove</button>
                             } else {
                                 <button class="btn btn-primary" @onclick="() => AddQuestion(question)">Add</button>
                             }
@@ -65,13 +65,16 @@
         questions.Add(question);
         QuestionGroup qg = SessionManager.GetQuestionGroup();
         qg.Questions = questions;
+        SessionManager.ChangeGroup(qg);
         Data.UpdateQuestionGroup(qg, token);
     }
 
-    void RemoveQuestion(Question question) {
-        questions.Remove(question);
+    void RemoveQuestion(int questionId) {
+        Question toDelete = questions.FirstOrDefault(q => q.Id == questionId);
+        questions.Remove(toDelete);
         QuestionGroup qg = SessionManager.GetQuestionGroup();
         qg.Questions = questions;
+        SessionManager.ChangeGroup(qg);
         Data.UpdateQuestionGroup(qg, token);
     }
 }
