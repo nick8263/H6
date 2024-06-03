@@ -45,54 +45,13 @@
         }            
         };    
         if (isAuthenticated) {
-            // Redirect to another page if the user is already authenticated
+            // Redirect to dashboard page if the user is already authenticated
             NavigationManager.NavigateTo("/dashboard");
         }
-
         base.OnInitialized();
     }
 
     private async Task Submit() {
-        /*if (user.User.UserName == "admin" && user.User.Password == "admin") {
-            Area _area = new Area { Id = 1, PossibleArea = "Test Area" };
-            Country _country = new Country { Id = 1, PossibleCountry = "Test Country" };
-            List <Question> _questions = new List<Question> {
-            new Question {
-                Id = 1,
-                PossibleQuestion = "What is your favorite color?",
-                Options = new List<Option>
-                {
-                    new Option { Id = 1, PossibleOption = "Red" },
-                    new Option { Id = 2, PossibleOption = "Blue" },
-                    new Option { Id = 3, PossibleOption = "Green" }
-                }
-            },
-            new Question {
-                Id = 2,
-                PossibleQuestion = "How old are you?",
-                Options = null // No predefined options for this question
-            }
-            };
-            QuestionGroup q = new QuestionGroup() {
-                    Id = 1,
-                    Questions = _questions,
-                    Area = _area,
-                    Country = _country
-                };
-            RoleModel _role = new RoleModel {
-                    Id = 1,
-                    Name = "admin"
-                };
-            user.User.Area = _area;
-            user.User.Country = _country;
-            user.User.Role = _role;
-            user.Token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTY5OTIxMTEsImlzcyI6IlRlc3QuY29tIiwiYXVkIjoiVGVzdC5jb20ifQ.UmNpoAlVeqyvstS_xnjbUk7UwkKasYvZOP3XTm9mkzQ";
-            SessionManager.MarkUserAsAuthenticated(user.User, q, user.Token);
-            if (SessionManager.GetAuthenticationState()) {
-                NavigationManager.NavigateTo("/dashboard");
-            }
-        }*/
-
         user = await Data.GetUser(user.User.UserName, user.User.Password);
         if (user == null) {            
             user = new TokenUser { User = new User {
@@ -113,5 +72,4 @@
             NavigationManager.NavigateTo("/dashboard");
         }
     }
-
 }

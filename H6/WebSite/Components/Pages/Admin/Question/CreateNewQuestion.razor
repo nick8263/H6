@@ -15,15 +15,23 @@
         <input type="text" class="form-control" @bind="newQuestion.PossibleQuestion">
     </div>
     <div class="form-check">
-        <input class="form-check-input" type="radio" name="optionsRadios" id="predefinedOptions" @bind="selectedPredefined">
+        <input class="form-check-input" type="radio" name="optionsRadios" id="predefinedOptions" @onclick="SetPredefined">
         <label class="form-check-label" for="predefinedOptions">Predefined Options</label>
     </div>
     <div class="form-check">
-        <input class="form-check-input" type="radio" name="optionsRadios" id="freeTextAnswer" @bind="selectedFreeText">
+        <input class="form-check-input" type="radio" name="optionsRadios" id="freeTextAnswer" @onclick="SetFreeText">
         <label class="form-check-label" for="freeTextAnswer">Free Text Answer</label>
     </div>
 
     @if (selectedPredefined == "on") {
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="multipleRadio" id="allowMultiple" @onclick="SetMultiple">
+            <label class="form-check-label" for="freeTextAnswer">Allow Multiple Answers</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="multipleRadio" id="singleAnswer" @onclick="SetSingleAnswer">
+            <label class="form-check-label" for="freeTextAnswer">Single Answer</label>
+        </div>
         foreach (Option o in newOptions) {
             <div class="form-group">
                 <label for="option">Option:</label>
@@ -50,6 +58,8 @@
     private Option newOption = new Option();
     private string selectedPredefined;
     private string selectedFreeText;
+    private string selectedMultiple;
+    private string singleAnswer;
     private bool isAdmin;
     private string token;
 
@@ -64,6 +74,12 @@
         }
 
         if (selectedPredefined == "on") {
+            if (selectedMultiple == "on") {
+                newQuestion.IsMultiple = true;
+            } else {
+                newQuestion.IsMultiple = false;
+            }
+
             newQuestion.Options = newOptions;
         }
 
@@ -79,5 +95,25 @@
 
     void AddOption() {
         newOptions.Add(new Option());
+    }
+
+    void SetSingleAnswer() {
+        selectedMultiple = "";
+        singleAnswer = "on";
+    }
+
+    void SetMultiple() {
+        selectedMultiple = "on";
+        singleAnswer = "";
+    }
+
+    void SetPredefined() {
+        selectedPredefined = "on";
+        selectedFreeText = "";
+    }
+
+    void SetFreeText() {
+        selectedFreeText = "on";
+        selectedPredefined = "";
     }
 }
