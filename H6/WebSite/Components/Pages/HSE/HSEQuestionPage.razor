@@ -28,7 +28,7 @@
                             }
                         </td>
                         <td>@question.PossibleQuestion</td>
-                        <td>@(question.Options != null ? "Predefined" : "Free Text")</td>
+                        <td>@(question.Options.Count > 0 ? "Predefined" : "Free Text")</td>
                     </tr>
                 }
             </tbody>

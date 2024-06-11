@@ -75,7 +75,6 @@
             errorMessage = "Passwords do not match.";
         } else {
             errorMessage = string.Empty;
-            // Add logic to change the password here
             user.Password = newPassword;
             TokenUser toUpdate = new TokenUser
             {
@@ -84,7 +83,6 @@
             };
             Data.UpdateUser(toUpdate);
             showChangePasswordFields = false;
-            // Notify the user that the password has been changed successfully
         }
     }
 }

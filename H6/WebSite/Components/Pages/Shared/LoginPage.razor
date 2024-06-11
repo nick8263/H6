@@ -35,6 +35,7 @@
     ISessionService SessionManager { get; set; }
 
     protected override async Task OnInitializedAsync() {
+        isAuthenticated = SessionManager.GetAuthenticationState();
         user = new TokenUser { User = new User {
                     Area = new Area(),
                     Country = new Country(),
@@ -64,7 +65,7 @@
             }                    
             };
             errorMessage = "Invalid Login";
-            return; // Implement error handling
+            return; 
         }
         QuestionGroup questionGroup = await Data.GetQuestionGroup(user.User.Area.Id, user.User.Country.Id, user.Token);
         SessionManager.MarkUserAsAuthenticated(user.User, questionGroup, user.Token);
