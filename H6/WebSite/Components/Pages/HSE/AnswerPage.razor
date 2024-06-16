@@ -63,7 +63,6 @@
     private User user;
     private string token;
     private List<Question> questions;
-    private int counter;
 
     protected override async Task OnInitializedAsync() {
         token = SessionManager.GetToken();
@@ -78,7 +77,6 @@
                 }
             }
         }
-        counter = 0;
     }
 
     private void Delete(AnswerGroup answer) {
