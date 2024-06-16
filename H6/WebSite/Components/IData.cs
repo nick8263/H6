@@ -3,6 +3,7 @@
 namespace WebSite.Components {
     public interface IData {
         Task<List<AnswerGroup>> GetAnswerGroup(int areaId, int countryId, string token);
+        Task DeleteAnswer(int answerId, string token);
 
         Task<QuestionGroup> GetQuestionGroups(int areaId, int countryId, string token);
         Task UpdateQuestionGroup(QuestionGroup questionGroup, string token);

@@ -2,9 +2,12 @@
 
 @using Models
 @using Components.Managers
+@using WebSite.Components.Examples
 
 @inject ISessionService SessionManager
 @inject IData Data
+
+@inject IEngine Engine
 
 @if (isHse) {
     <h3>AnswerPage</h3>
@@ -14,21 +17,31 @@
             <table class="table">
                 <thead>
                     <tr>
-                        @foreach (var a in answerGroups.First().Answers) {
+                        @* @foreach (var a in answerGroups.First().Answers) {
                             <th>@a.Question.PossibleQuestion</th>
+                        } *@
+                        @foreach (var q in questions) {
+                            <th>@q.PossibleQuestion</th>
                         }
+                        <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var answerGroup in answerGroups) {
                         <tr>
-                            @foreach (var answer in answerGroup.Answers) {
-                                @if (answer.Question.Options != null && answer.Question.Options.Count > 0) {
-                                    <td>@answer.SelectedAnswer</td>
+                            @foreach (var q in questions) {
+                                var answer = answerGroup.Answers.FirstOrDefault(a => a.Question.Id == q.Id);
+                                if (answer != null) {
+                                    if (answer.Question.Options != null && answer.Question.Options.Count > 0) {
+                                        <td>@answer.SelectedAnswer</td>
+                                    } else {
+                                        <td>@answer.FreeTextAnswer</td>
+                                    }
                                 } else {
-                                    <td>@answer.FreeTextAnswer</td>
+                                    <td></td>
                                 }
                             }
+                            <td><button class="btn btn-danger" @onclick="() => Delete(answerGroup)">Delete</button></td>
                         </tr>
                     }
                 </tbody>
@@ -49,11 +62,26 @@
     private int columnCount, rowcount;
     private User user;
     private string token;
+    private List<Question> questions;
+    private int counter;
 
     protected override async Task OnInitializedAsync() {
         token = SessionManager.GetToken();
         user = SessionManager.GetUser();
         isHse = SessionManager.IsHSEAdmin();
         answerGroups = await Data.GetAnswerGroup(user.Area.Id, user.Country.Id, token);
+        questions = new List<Question>();
+        foreach (var answerGroup in answerGroups) {
+            foreach (var answer in answerGroup.Answers) {
+                if (questions.FirstOrDefault(q => q.Id == answer.Question.Id) == null ) {
+                    questions.Add(answer.Question);
+                }
+            }
+        }
+        counter = 0;
+    }
+
+    private void Delete(AnswerGroup answer) {
+        Data.DeleteAnswer(answer.Id, token);
     }
 }

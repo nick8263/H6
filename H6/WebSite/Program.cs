@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using WebSite.Components;
+using WebSite.Components.Examples;
 using WebSite.Components.Managers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,7 @@ builder.Services.AddRazorComponents()
 //builder.Services.AddSingleton<IData, MockData>();
 builder.Services.AddSingleton<IData, APIConnector>();
 builder.Services.AddSingleton<ISessionService, SessionManager>();
+builder.Services.AddScoped<IEngine, Engine>();
 
 var app = builder.Build();
 

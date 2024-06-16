@@ -434,5 +434,9 @@ namespace WebSite.Components {
                 }
             });
         }
+
+        public Task DeleteAnswer(int answerId, string token) {
+            throw new NotImplementedException();
+        }
     }
 }

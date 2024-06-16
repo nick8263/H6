@@ -26,6 +26,10 @@ namespace WebSite.Components {
             await UserAccess.CreateUser(user, token);
         }
 
+        public async Task DeleteAnswer(int answerGroupId, string token) {
+            await HomeAccess.DeleteAnswerGroup(answerGroupId, token);
+        }
+
         public async Task DeleteArea(int areaId, string token) {
             await HomeAccess.DeleteArea(areaId, token);
         }
