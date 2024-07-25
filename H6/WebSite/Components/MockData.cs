@@ -102,6 +102,13 @@ namespace WebSite.Components {
             area = new Area { Id = 2, PossibleArea = "Test Area 2" };
             _areas.Add(area);
             country = new Country { Id = 2, PossibleCountry = "Test Country 2" };
+            country.setTest(1);
+            country.getTest();
+            country.Id = 3;
+            Country country2  = new Country { Id = 2, PossibleCountry = "Test Country 2" };
+            country2.id = 4;
+            Area area3 = new Area { Id = 2, PossibleArea = "Test Area 2" };
+            area.Id = 5;
             _countries.Add(country);
             role = new RoleModel {
                 Id = 2,

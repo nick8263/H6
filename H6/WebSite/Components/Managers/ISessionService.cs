@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Components.Authorization;
 
 namespace WebSite.Components.Managers {
     public interface ISessionService {
+
+        public int a { get; set; }
+
         event Action AuthenticationStateChanged;
         bool GetAuthenticationState();
         bool IsHSEAdmin();

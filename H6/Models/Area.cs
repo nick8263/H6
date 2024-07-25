@@ -2,7 +2,7 @@
 {
     public class Area
     {
-        public int Id { get; set; }
+        public int Id;
         public string? PossibleArea { get; set; }
     }
 }
