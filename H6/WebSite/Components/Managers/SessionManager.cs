@@ -27,13 +27,12 @@ namespace WebSite.Components.Managers {
             }
         }
 
+        public int a { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         public void ChangeGroup(QuestionGroup questionGroup) {
             QuestionGroup = questionGroup;
         }
 
-        public Area GetArea() {
-            return loggenInUser.Area;
-        }
 
         public bool IsAdmin() {
             return isAdmin;
@@ -92,5 +91,9 @@ namespace WebSite.Components.Managers {
             return QuestionGroup;
         }
 
+        public Area GetArea()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
